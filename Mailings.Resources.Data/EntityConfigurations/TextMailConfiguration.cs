@@ -1,0 +1,13 @@
+﻿using Mailings.Resources.Domen.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+namespace Mailings.Resources.Data.EntityConfigurations;
+
+public class TextMailConfiguration : IEntityTypeConfiguration<TextMail>
+{
+    public void Configure(EntityTypeBuilder<TextMail> builder)
+    {
+        builder.Property(t => t.StringContent).IsRequired(false);
+    }
+}

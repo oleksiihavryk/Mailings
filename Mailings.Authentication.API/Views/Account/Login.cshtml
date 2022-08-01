@@ -1,0 +1,12 @@
+﻿@model string
+@section Content
+{
+    <h2 class="main-text">Choose an authentication type</h2>
+    <div class="authentication-types-container">
+        <a class="authentication-type" asp-action="SignIn" asp-controller="Account">
+            Mailings authentication
+        </a>
+        <a class="authentication-type" href="#">Facebook authentication</a>
+        <a class="authentication-type" href="#">Gmail authentication</a>
+    </div>
+}

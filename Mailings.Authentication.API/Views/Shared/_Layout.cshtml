@@ -1,0 +1,24 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" charset="utf-8"/>
+    <title>Mailings | Authentication</title>
+    <environment names="development">
+        <link rel="stylesheet" type="text/css" asp-href-include="/css/**.css"/>
+    </environment>
+    <environment names="staging, production">
+        <link rel="stylesheet" type="text/css" asp-href-include="/css/**.min.css"/>
+    </environment>
+    @await RenderSectionAsync("Links", false)
+</head>
+<body>
+    @await Html.PartialAsync("_Header")
+    <div class="content">
+        @await RenderSectionAsync("Content")
+    </div>
+    @await RenderSectionAsync("Scripts", false)
+</body>
+</html>
