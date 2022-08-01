@@ -18,7 +18,7 @@ public class MailingServiceTests
         {
             Host = "smtp.gmail.com",
             Mail = "mailings.sender@gmail.com",
-            Password = "mailingsservicepassword",
+            Password = "cgfvfmveysmxtedy",
             Port = "587"
         };
 

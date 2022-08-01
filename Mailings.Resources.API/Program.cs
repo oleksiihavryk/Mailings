@@ -7,6 +7,7 @@ using Mailings.Resources.Domen.MailingService;
 using Mailings.Resources.Shared.StaticData;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerUI;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -61,7 +62,14 @@ services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 services.AddEndpointsApiExplorer();
-services.AddSwaggerGen();
+services.AddSwaggerGen(opt =>
+{
+    opt.SwaggerDoc("v1", new OpenApiInfo()
+    {
+        Title = "Mailings",
+        Version = "v1",
+    });
+});
 
 var app = builder.Build();
 
@@ -74,12 +82,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(opt =>
     {
+        opt.SwaggerEndpoint(url: "/swagger/v1/swagger.json", name: "My API V1");
         opt.DocumentTitle = "Mailings API";
         opt.HeadContent = "Mailings API";
-        opt.OAuthConfigObject = new OAuthConfigObject()
-        {
-            AppName = "Mailings",
-        };
         opt.RoutePrefix = string.Empty;
     });
 }
@@ -99,9 +104,9 @@ app.UseCors("Any");
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseEndpoints(config =>
+app.UseEndpoints(endpoints =>
 {
-    config.MapControllers();
+    endpoints.MapControllers();
 });
 
 app.Run();

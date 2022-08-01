@@ -46,7 +46,6 @@ public class MailingService : IMailingService
                 message: "Address from which email is sending is incorrect!" +
                 "Please, check email format before sending mail");
 
-        MailboxAddress fromMail = MailboxAddress.Parse(parsedMail.Address);
         List<MailboxAddress> toMails = new List<MailboxAddress>();
 
         foreach (var toAddress in request.Group
@@ -61,7 +60,7 @@ public class MailingService : IMailingService
             toMails.Add(MailboxAddress.Parse(toMail.Address));
         }
 
-        var mail = BuildMail(request, toMails, fromMail);
+        var mail = BuildMail(request, toMails, request.Group.From);
 
         try
         {
@@ -99,7 +98,7 @@ public class MailingService : IMailingService
 
         mail.Sender = MailboxAddress.Parse(_mailSettings.Mail);
         mail.To.AddRange(toMails);
-        mail.Subject = $"From: {fromMail.Address} ({fromMail.Name}). " +
+        mail.Subject = $"From: {fromMail.Address.Address} ({fromMail.Name}). " +
                        $"Theme: {request.Group.Mail.Theme}";
 
         var builder = new BodyBuilder();
@@ -120,6 +119,8 @@ public class MailingService : IMailingService
         else if (request.MailType.Equals(MailType.Text))
             builder.TextBody = request.Group.Mail.Content;
 
-        return (MimeMessage)mail;
+        mail.Body = builder.ToMessageBody();
+
+        return mail;
     }
 }
