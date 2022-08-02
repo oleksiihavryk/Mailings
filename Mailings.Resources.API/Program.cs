@@ -69,6 +69,18 @@ services.AddSwaggerGen(opt =>
         Title = "Mailings",
         Version = "v1",
     });
+    opt.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme()
+    {
+        Type = SecuritySchemeType.OAuth2,
+        Flows = new OpenApiOAuthFlows()
+        {
+            AuthorizationCode = new OpenApiOAuthFlow()
+            {
+                AuthorizationUrl = new Uri(Servers.Authentication + "/connect/authorize"),
+                TokenUrl = new Uri(Servers.Authentication + "token/connect")
+            }
+        }
+    });
 });
 
 var app = builder.Build();

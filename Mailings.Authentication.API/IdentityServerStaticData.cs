@@ -91,6 +91,7 @@ public static class IdentityServerStaticData
                 },
                 PostLogoutRedirectUris =
                     { IdentityClients.ClientServer + "/signout-callback-oidc" },
+
                 AllowAccessTokensViaBrowser = true,
             }
         };

@@ -4,7 +4,7 @@ namespace Mailings.Resources.Shared.Dto;
 
 public class HtmlMailDto : MailDto
 {
-    private readonly Encoding _encoding;
+    private readonly Encoding _encoding = Encoding.UTF8;
 
     public byte[] ByteContent { get; set; } = Array.Empty<byte>();
     public override string Content
@@ -15,15 +15,9 @@ public class HtmlMailDto : MailDto
             return result;
         }
     }
-    public Encoding Encoding => _encoding;
 
     public HtmlMailDto(string theme, string userId)
-        : this(theme, userId, Encoding.UTF8)
-    {
-    }
-    public HtmlMailDto(string theme, string userId, Encoding encoding)
         : base(theme, userId)
     {
-        _encoding = encoding;
     }
 }

@@ -5,7 +5,13 @@ public interface IResponseFactory
     public ResponseDto EmptySuccess { get; }
     public ResponseDto EmptyInternalServerError { get; }
 
-    public ResponseDto CreateSuccess(object? result = null);
-    public ResponseDto CreateFailedResponse(int statusCode, string message);
-    public ResponseDto CreateFailedResponse(int statusCode, string[] message);
+    public ResponseDto CreateSuccess(
+        SuccessResponseType successType = SuccessResponseType.Ok,
+        object? result = null);
+    public ResponseDto CreateFailedResponse(
+        FailedResponseType failedType = FailedResponseType.BadRequest,
+        string? message = null);
+    public ResponseDto CreateFailedResponse(
+        FailedResponseType failedType = FailedResponseType.BadRequest,
+        string[]? messages = null);
 }

@@ -27,11 +27,11 @@ namespace Mailings.Resources.API.Controllers
         public IActionResult GetAllHtmlMails()
         {
             var mails = _htmlMailsRepository.GetAll();
-            var result = _responseFactory.CreateSuccess(mails);
+            var result = _responseFactory.CreateSuccess(result: mails);
 
             return Ok(result);
         }
-        [HttpGet("/user-id/{userId}")]
+        [HttpGet("user-id/{userId}")]
         public IActionResult GetAllHtmlMailsByUserId([FromRoute]string? userId)
         {
             ResponseDto? result = null;
@@ -42,21 +42,20 @@ namespace Mailings.Resources.API.Controllers
                 mails = mails.Where(x => x.UserId == userId);
 
                 if (mails.Any())
-                    result = _responseFactory.CreateSuccess(mails);
+                    result = _responseFactory.CreateSuccess(result: mails);
                 else result = _responseFactory.CreateFailedResponse(
-                        statusCode: StatusCodes.Status204NoContent,
+                        failedType: FailedResponseType.MissingResult,
                         message: "User with current is is not have any mails in system");
             }
             else
             {
                 result = _responseFactory.CreateFailedResponse(
-                    statusCode: StatusCodes.Status400BadRequest,
                     message: "User id field in route is cannot be empty");
             }
 
             return Ok(result);
         }
-        [HttpGet("/id/{id}")]
+        [HttpGet("id/{id}")]
         public async Task<IActionResult> GetHtmlMailById([FromRoute]string id)
         {
             ResponseDto? result = null;
@@ -66,19 +65,18 @@ namespace Mailings.Resources.API.Controllers
                 try
                 {
                     var htmlMail = await _htmlMailsRepository.GetByKeyAsync(key: guid);
-                    result = _responseFactory.CreateSuccess(htmlMail);
+                    result = _responseFactory.CreateSuccess(result: htmlMail);
                 }
                 catch (ObjectNotFoundInDatabaseException)
                 {
                     result = _responseFactory.CreateFailedResponse(
-                        statusCode: StatusCodes.Status404NotFound,
+                        failedType: FailedResponseType.NotFound,
                         message: "Mail with current id is not found in system");
                 }
             }
             else
             {
                 result = _responseFactory.CreateFailedResponse(
-                    statusCode: StatusCodes.Status400BadRequest,
                     message: "Id field in route is cannot be empty");
             }
 
@@ -90,7 +88,7 @@ namespace Mailings.Resources.API.Controllers
         {
             var updatedEntity = await _htmlMailsRepository
                 .SaveIntoDbAsync(entity: mail);
-            var result = _responseFactory.CreateSuccess(updatedEntity);
+            var result = _responseFactory.CreateSuccess(result: updatedEntity);
 
             return Ok(result);
         }
@@ -100,11 +98,11 @@ namespace Mailings.Resources.API.Controllers
         {
             var updatedEntity = await _htmlMailsRepository
                 .SaveIntoDbAsync(entity: mail);
-            var result = _responseFactory.CreateSuccess(updatedEntity);
+            var result = _responseFactory.CreateSuccess(result: updatedEntity);
 
             return Ok(result);
         }
-        [HttpDelete("/id/{id}")]
+        [HttpDelete("id/{id}")]
         public async Task<IActionResult> DeleteMail(
             [FromRoute] string id)
         {
@@ -115,19 +113,18 @@ namespace Mailings.Resources.API.Controllers
                 try
                 {
                     await _htmlMailsRepository.DeleteFromDbByKey(key: guid);
-                    result = _responseFactory.CreateSuccess();
+                    result = _responseFactory.EmptySuccess;
                 }
                 catch (ObjectNotFoundInDatabaseException)
                 {
                     result = _responseFactory.CreateFailedResponse(
-                        statusCode: StatusCodes.Status404NotFound,
+                        FailedResponseType.NotFound,
                         message: "Mail with current id is not found in system");
                 }
             }
             else
             {
                 result = _responseFactory.CreateFailedResponse(
-                    statusCode: StatusCodes.Status400BadRequest,
                     message: "Id field in route is cannot be empty");
             }
 
