@@ -4,18 +4,27 @@ namespace Mailings.Resources.API.Middleware;
 public class GlobalExceptionHandler : IMiddleware
 {
     private readonly IResponseFactory _responseFactory;
+    private readonly ILogger<GlobalExceptionHandler> _logger;
 
-    public GlobalExceptionHandler(IResponseFactory responseFactory)
-        => _responseFactory = responseFactory;
-    
+    public GlobalExceptionHandler(
+        IResponseFactory responseFactory, 
+        ILogger<GlobalExceptionHandler> logger)
+    {
+        _responseFactory = responseFactory;
+        _logger = logger;
+    }
+
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
         try
         {
             await next(context);
         }
-        catch
+        catch (Exception ex)
         {
+            _logger.LogError(
+                exception: ex,
+                message: "Exception is handled by global exception handler middleware");
             await HandleException(context);
         }
     }

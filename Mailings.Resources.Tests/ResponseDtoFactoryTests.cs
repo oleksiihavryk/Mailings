@@ -23,7 +23,7 @@ public class ResponseDtoFactoryTests
             IsSuccess = true,
             Messages = Array.Empty<string>(),
             Result = null,
-            StatusCode = StatusCodes.Status200OK
+            StatusCode = StatusCodes.Status204NoContent
         }, emptySuccess, _comparer);
     }
     [Fact]
@@ -45,7 +45,7 @@ public class ResponseDtoFactoryTests
     [Theory]
     [InlineData("i love paris")]
     [InlineData(11, SuccessResponseType.Ok)]
-    [InlineData(null, SuccessResponseType.Ok)]
+    [InlineData(null, SuccessResponseType.MissingResult)]
     public void ResponseDtoFactoryTests_CreatingSuccessResponse(
         object result,
         SuccessResponseType successType = SuccessResponseType.Unknown)
@@ -73,6 +73,7 @@ public class ResponseDtoFactoryTests
                 StatusCode = successType switch
                 {
                     SuccessResponseType.Ok => StatusCodes.Status200OK,
+                    SuccessResponseType.MissingResult => StatusCodes.Status204NoContent,
                     _ => throw new InvalidOperationException(
                         "Impossible exception if test and program working correct")
                 }
@@ -85,7 +86,7 @@ public class ResponseDtoFactoryTests
         FailedResponseType.BadRequest)]
     [InlineData(
         "11",
-        FailedResponseType.MissingResult)]
+        FailedResponseType.NotFound)]
     [InlineData("")]
     public void ResponseDtoFactoryTests_CreatingFailedResponseWithSingleMessage(
         string message,
@@ -114,7 +115,6 @@ public class ResponseDtoFactoryTests
                 {
                     FailedResponseType.BadRequest => StatusCodes.Status400BadRequest,
                     FailedResponseType.NotFound => StatusCodes.Status404NotFound,
-                    FailedResponseType.MissingResult => StatusCodes.Status204NoContent,
                     _ => throw new InvalidOperationException(
                         "Impossible exception if test and program works well")
                 }
@@ -127,7 +127,7 @@ public class ResponseDtoFactoryTests
         FailedResponseType.BadRequest)]
     [InlineData(
         new [] { "11" },
-        FailedResponseType.MissingResult)]
+        FailedResponseType.NotFound)]
     [InlineData(
         new[] { "" },
         FailedResponseType.NotFound)]
@@ -158,7 +158,6 @@ public class ResponseDtoFactoryTests
                 {
                     FailedResponseType.BadRequest => StatusCodes.Status400BadRequest,
                     FailedResponseType.NotFound => StatusCodes.Status404NotFound,
-                    FailedResponseType.MissingResult => StatusCodes.Status204NoContent,
                     _ => throw new InvalidOperationException(
                         "Impossible exception if test and program works well")
                 }

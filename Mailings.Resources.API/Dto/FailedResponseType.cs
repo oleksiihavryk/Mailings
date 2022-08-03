@@ -4,6 +4,5 @@ public enum FailedResponseType
 {
     Unknown,
     BadRequest,
-    MissingResult,
     NotFound
 }

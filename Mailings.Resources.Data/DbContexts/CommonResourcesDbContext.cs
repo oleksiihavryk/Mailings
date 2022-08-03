@@ -10,6 +10,7 @@ public class CommonResourcesDbContext : DbContext
     public DbSet<HtmlMail> HtmlMails { get; set; } = null!;
     public DbSet<TextMail> TextMails { get; set; } = null!;
     public DbSet<HistoryNoteMailingGroup> MailingHistory { get; set; } = null!;
+    public DbSet<UserMails> UserMails { get; set; } = null!;
 
     public CommonResourcesDbContext(
         DbContextOptions<CommonResourcesDbContext> options)
@@ -27,5 +28,6 @@ public class CommonResourcesDbContext : DbContext
         builder.ApplyConfiguration(new TextMailConfiguration());
         builder.ApplyConfiguration(new HtmlMailConfiguration());
         builder.ApplyConfiguration(new HistoryNoteConfiguration());
+        builder.ApplyConfiguration(new UserMailsConfiguration());
     }
 }

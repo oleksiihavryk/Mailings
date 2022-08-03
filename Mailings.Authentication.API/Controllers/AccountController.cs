@@ -24,7 +24,7 @@ public sealed class AccountController : Controller
 
     [HttpGet]
     [Route("[action]")]
-    public ViewResult Login(string returnUrl) => View(returnUrl);
+    public ViewResult Login(string returnUrl) => View((object)returnUrl);
     [HttpGet]
     [Route("[action]")]
     public ViewResult SignIn(string returnUrl)
@@ -37,8 +37,9 @@ public sealed class AccountController : Controller
     }
     [HttpGet]
     [Route("[action]")]
-    public ViewResult Register(string returnUrl)
+    public ViewResult Register()
     {
+        string returnUrl = ViewBag.ReturnUrl;
         var viewModel = new RegisterViewModel()
         {
             ReturnUrl = returnUrl

@@ -8,7 +8,7 @@ public class ResponseFactory : IResponseFactory
         Result = null,
         IsSuccess = true,
         Messages = Array.Empty<string>(),
-        StatusCode = StatusCodes.Status200OK
+        StatusCode = StatusCodes.Status204NoContent
     };
     public ResponseDto EmptyInternalServerError => new ResponseDto()
     {
@@ -29,6 +29,7 @@ public class ResponseFactory : IResponseFactory
             StatusCode = successType switch
             {
                 SuccessResponseType.Ok => StatusCodes.Status200OK,
+                SuccessResponseType.MissingResult => StatusCodes.Status204NoContent,
                 _ => throw new UnknownResponseTypeException()
             }
         };
@@ -44,7 +45,6 @@ public class ResponseFactory : IResponseFactory
             {
                 FailedResponseType.BadRequest => StatusCodes.Status400BadRequest,
                 FailedResponseType.NotFound => StatusCodes.Status404NotFound,
-                FailedResponseType.MissingResult => StatusCodes.Status204NoContent,
                 _ => throw new UnknownResponseTypeException()
             }
         };
@@ -60,7 +60,6 @@ public class ResponseFactory : IResponseFactory
             {
                 FailedResponseType.BadRequest => StatusCodes.Status400BadRequest,
                 FailedResponseType.NotFound => StatusCodes.Status404NotFound,
-                FailedResponseType.MissingResult => StatusCodes.Status204NoContent,
                 _ => throw new UnknownResponseTypeException()
             }
         };

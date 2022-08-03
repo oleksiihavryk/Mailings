@@ -6,4 +6,5 @@ public class EmailAddressFrom
     public MailingGroup Group { get; set; }
     public EmailAddress Address { get; set; }
     public string? Name { get; set; }
+    public bool IsConfirmed { get; set; }
 }

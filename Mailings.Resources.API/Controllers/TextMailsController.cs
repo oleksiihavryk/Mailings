@@ -6,27 +6,29 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Mailings.Resources.API.Controllers;
+
 [ApiController]
 [Authorize]
-[Route("/api/mails/html")]
-public sealed class HtmlMailsController : ControllerBase
+[Route("/api/mails/text")]
+public sealed class TextMailsController : ControllerBase
 {
-    private readonly IHtmlMailsRepository _htmlMailsRepository;
+    private readonly ITextMailsRepository _mailsRepository;
     private readonly IResponseFactory _responseFactory;
 
-    public HtmlMailsController(
-        IHtmlMailsRepository htmlMailsRepository, 
+    public TextMailsController(
+        ITextMailsRepository mailsRepository,
         IResponseFactory responseFactory)
     {
-        _htmlMailsRepository = htmlMailsRepository;
+        _mailsRepository = mailsRepository;
         _responseFactory = responseFactory;
     }
 
     [HttpGet]
-    public IActionResult GetAllHtmlMails()
+    public IActionResult GetAllTextMails()
     {
         ResponseDto? result = null;
-        var mails = _htmlMailsRepository.GetAll();
+
+        var mails = _mailsRepository.GetAll();
 
         if (mails.Any())
             result = _responseFactory.CreateSuccess(result: mails);
@@ -35,30 +37,31 @@ public sealed class HtmlMailsController : ControllerBase
         return Ok(result);
     }
     [HttpGet("user-id/{userId:required}")]
-    public IActionResult GetAllHtmlMailsByUserId([FromRoute]string userId)
+    public IActionResult GetAllTextMailsByUserId([FromRoute] string userId)
     {
         ResponseDto? result = null;
-        var mails = _htmlMailsRepository.GetAll();
-        
+        var mails = _mailsRepository.GetAll();
+
         mails = mails.Where(x => x.UserId == userId);
 
         if (mails.Any())
             result = _responseFactory.CreateSuccess(result: mails);
-        else result = _responseFactory.CreateFailedResponse(
-            FailedResponseType.NotFound,
-            message: TypicalTextResponses.UnknownUserIdOrMissingContentByUserId);
+        else 
+            result = _responseFactory.CreateFailedResponse(
+                FailedResponseType.NotFound,
+                message: TypicalTextResponses.UnknownUserIdOrMissingContentByUserId);
 
         return Ok(result);
     }
     [HttpGet("id/{id:guid}")]
-    public async Task<IActionResult> GetHtmlMailById([FromRoute]Guid id)
+    public async Task<IActionResult> GetTextMailById([FromRoute] Guid id)
     {
         ResponseDto? result = null;
 
         try
         {
-            var htmlMail = await _htmlMailsRepository.GetByKeyAsync(key: id);
-            result = _responseFactory.CreateSuccess(result: htmlMail);
+            var textMail = await _mailsRepository.GetByKeyAsync(key: id);
+            result = _responseFactory.CreateSuccess(result: textMail);
         }
         catch (ObjectNotFoundInDatabaseException)
         {
@@ -70,20 +73,20 @@ public sealed class HtmlMailsController : ControllerBase
         return Ok(result);
     }
     [HttpPost]
-    public async Task<IActionResult> SaveHtmlMail(
-        [FromBody][FromForm] HtmlMailDto mail)
+    public async Task<IActionResult> SaveTextMail(
+        [FromBody][FromForm] TextMailDto mail)
     {
-        var updatedEntity = await _htmlMailsRepository
+        var updatedEntity = await _mailsRepository
             .SaveIntoDbAsync(entity: mail);
         var result = _responseFactory.CreateSuccess(result: updatedEntity);
 
         return Ok(result);
     }
     [HttpPut]
-    public async Task<IActionResult> UpdateInDatabaseHtmlMail(
-        [FromBody][FromForm] HtmlMailDto mail)
+    public async Task<IActionResult> UpdateInDatabaseTextMail(
+        [FromBody][FromForm] TextMailDto mail)
     {
-        var updatedEntity = await _htmlMailsRepository
+        var updatedEntity = await _mailsRepository
             .SaveIntoDbAsync(entity: mail);
         var result = _responseFactory.CreateSuccess(result: updatedEntity);
 
@@ -97,13 +100,13 @@ public sealed class HtmlMailsController : ControllerBase
 
         try
         {
-            await _htmlMailsRepository.DeleteFromDbByKey(key: id);
+            await _mailsRepository.DeleteFromDbByKey(key: id);
             result = _responseFactory.EmptySuccess;
         }
         catch (ObjectNotFoundInDatabaseException)
         {
             result = _responseFactory.CreateFailedResponse(
-                failedType: FailedResponseType.NotFound,
+                FailedResponseType.NotFound,
                 message: TypicalTextResponses.EntityNotFoundById);
         }
 

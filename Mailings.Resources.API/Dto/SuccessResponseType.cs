@@ -4,4 +4,5 @@ public enum SuccessResponseType
 {
     Unknown,
     Ok,
+    MissingResult
 }

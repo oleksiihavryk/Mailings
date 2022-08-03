@@ -8,7 +8,6 @@ using Mailings.Resources.Shared.StaticData;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.SwaggerUI;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
@@ -77,8 +76,32 @@ services.AddSwaggerGen(opt =>
             AuthorizationCode = new OpenApiOAuthFlow()
             {
                 AuthorizationUrl = new Uri(Servers.Authentication + "/connect/authorize"),
-                TokenUrl = new Uri(Servers.Authentication + "token/connect")
+                TokenUrl = new Uri(Servers.Authentication + "/connect/token"),
+                Scopes = new Dictionary<string, string>()
+                {
+                    ["readSecured_resourceServer"] = 
+                        "Scope for read important and secured data on server side",
+                    ["writeDefault_resourceServer"] = 
+                        "Scope for write default data on server side"
+                },
             }
+        }
+    });
+    opt.AddSecurityRequirement(new OpenApiSecurityRequirement()
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "oauth2"
+                },
+                Scheme = "oauth2",
+                Name = "oauth2",
+                In = ParameterLocation.Header
+            },
+            new List<string>()
         }
     });
 });

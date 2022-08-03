@@ -80,14 +80,15 @@ public static class IdentityServerStaticData
                     "writeDefault_resourceServer"
                 },
 
-                ClientSecrets = {new Secret("_webClientSecret".ToSha256())},
+                ClientSecrets = {new Secret("webUser_Secret".ToSha256())},
 
                 RequirePkce = withPkce,
 
                 RedirectUris =
                 {
                     IdentityClients.ClientServer + "/signin-oidc",
-                    "https://oauth.pstmn.io/v1/browser-callback"
+                    "https://oauth.pstmn.io/v1/browser-callback",
+                    "https://localhost:9001/oauth2-redirect.html"
                 },
                 PostLogoutRedirectUris =
                     { IdentityClients.ClientServer + "/signout-callback-oidc" },
