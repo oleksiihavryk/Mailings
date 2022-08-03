@@ -2,7 +2,7 @@
 
 namespace Mailings.Resources.API.Dto;
 
-public class UnpreparedAddressToDto
+public class RawAddressToDto
 {
     public string Address { get; set; }
     public Guid AddressId { get; set; }

@@ -72,7 +72,7 @@ public class MailingGroupsController : ControllerBase
     }
     [HttpPost]
     public async Task<IActionResult> SaveMailingInDatabase(
-        [FromForm][FromBody] UnpreparedMailingGroupDto unpreparedMailingGroup)
+        [FromForm][FromBody] RawMailingGroupDto unpreparedMailingGroup)
     {
         var mailingGroup = CreatePreparedMailingGroupDto(unpreparedMailingGroup);
 
@@ -93,7 +93,7 @@ public class MailingGroupsController : ControllerBase
     }
     [HttpPut]
     public async Task<IActionResult> UpdateMailingInDatabase(
-        [FromForm][FromBody] UnpreparedMailingGroupDto unpreparedMailingGroup)
+        [FromForm][FromBody] RawMailingGroupDto unpreparedMailingGroup)
     {
         var mailingGroup = CreatePreparedMailingGroupDto(unpreparedMailingGroup);
 
@@ -126,7 +126,7 @@ public class MailingGroupsController : ControllerBase
     }
 
     private MailingGroupDto CreatePreparedMailingGroupDto(
-        UnpreparedMailingGroupDto unpreparedMailingGroup)
+        RawMailingGroupDto unpreparedMailingGroup)
     {
         var mailingGroup = new MailingGroupDto()
         {
