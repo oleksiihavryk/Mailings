@@ -1,4 +1,4 @@
-﻿namespace Mailings.Resources.Domen;
+﻿namespace Mailings.Resources.Domain;
 public class MailSettings
 {
     public string Mail { get; set; }

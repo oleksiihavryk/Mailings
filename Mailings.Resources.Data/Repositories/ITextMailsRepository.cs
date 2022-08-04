@@ -1,7 +1,7 @@
-﻿using Mailings.Resources.Shared.Dto;
+﻿using Mailings.Resources.Domain.MainModels;
 
 namespace Mailings.Resources.Data.Repositories;
 
-public interface ITextMailsRepository : IRepository<TextMailDto, Guid>
+public interface ITextMailsRepository : IRepository<TextMail, Guid>
 {
 }

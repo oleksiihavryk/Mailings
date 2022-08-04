@@ -1,4 +1,4 @@
-﻿using Mailings.Resources.Domen.Models;
+﻿using Mailings.Resources.Domain.MainModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

@@ -1,9 +1,9 @@
 using Mailings.Resources.API.Extensions;
 using Mailings.Resources.API.ResponseFactory;
+using Mailings.Resources.Application.MailingService;
 using Mailings.Resources.Data.DbContexts;
 using Mailings.Resources.Data.Repositories;
-using Mailings.Resources.Domen;
-using Mailings.Resources.Domen.MailingService;
+using Mailings.Resources.Domain;
 using Mailings.Resources.Shared.StaticData;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;

@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Net.Mail;
 using System.Text;
-using Mailings.Resources.Domen;
-using Mailings.Resources.Domen.Exceptions;
-using Mailings.Resources.Domen.MailingService;
-using Mailings.Resources.Domen.Models;
+using Mailings.Resources.Application.Exceptions;
+using Mailings.Resources.Application.MailingService;
+using Mailings.Resources.Domain;
+using Mailings.Resources.Domain.MainModels;
 using Microsoft.Extensions.Options;
-using MimeKit;
 using Xunit;
 using Moq;
 
@@ -84,7 +83,7 @@ public class MailingServiceTests
 
         mailingGroup.From = new EmailAddressFrom()
         {
-            Address = new EmailAddress() { Address = fromAddress },
+            Address = new EmailAddress() { AddressString = fromAddress },
             Name = fromName,
             Group = mailingGroup
         };
@@ -92,7 +91,7 @@ public class MailingServiceTests
         {
             new EmailAddressTo()
             {
-                Address = new EmailAddress() { Address = toAddress },
+                Address = new EmailAddress() { AddressString = toAddress },
                 Group = mailingGroup
             }
         };

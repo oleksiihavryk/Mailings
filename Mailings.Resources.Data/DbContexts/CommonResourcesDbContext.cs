@@ -1,6 +1,5 @@
 ﻿using Mailings.Resources.Data.EntityConfigurations;
-using Mailings.Resources.Domen.MailingService;
-using Mailings.Resources.Domen.Models;
+using Mailings.Resources.Domain.MainModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace Mailings.Resources.Data.DbContexts;

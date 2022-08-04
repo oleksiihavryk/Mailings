@@ -1,8 +1,8 @@
-﻿using Mailings.Resources.Shared.Dto;
+﻿using Mailings.Resources.Domain.MainModels;
 
 namespace Mailings.Resources.Data.Repositories;
 
-public interface IHtmlMailsRepository : IRepository<HtmlMailDto, Guid>
+public interface IHtmlMailsRepository : IRepository<HtmlMail, Guid>
 {
     
 }

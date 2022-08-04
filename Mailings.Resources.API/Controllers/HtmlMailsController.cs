@@ -1,9 +1,8 @@
-﻿using System.Text;
-using Mailings.Resources.API.RawDto;
+﻿using Mailings.Resources.API.Dto;
 using Mailings.Resources.API.ResponseFactory;
 using Mailings.Resources.Data.Exceptions;
 using Mailings.Resources.Data.Repositories;
-using Mailings.Resources.Shared.Dto;
+using Mailings.Resources.Domain.MainModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,6 +10,7 @@ namespace Mailings.Resources.API.Controllers;
 [ApiController]
 [Authorize]
 [Route("/api/mails/html")]
+//Todo: implement html mails controller later
 public sealed class HtmlMailsController : ControllerBase
 {
     private readonly IHtmlMailsRepository _htmlMailsRepository;
@@ -41,7 +41,7 @@ public sealed class HtmlMailsController : ControllerBase
     {
         Response? result = null;
         var mails = _htmlMailsRepository.GetAll();
-        
+
         mails = mails.Where(x => x.UserId == userId);
 
         if (mails.Any())
@@ -52,30 +52,39 @@ public sealed class HtmlMailsController : ControllerBase
 
         return Ok(result);
     }
-    [HttpGet("id/{id:guid}")]
-    public async Task<IActionResult> GetHtmlMailById([FromRoute]Guid id)
+    [HttpGet("id/{id}")]
+    public async Task<IActionResult> GetHtmlMailById([FromRoute]string id)
     {
         Response? result = null;
 
-        try
+        if (Guid.TryParse(id, out var guid))
         {
-            var htmlMail = await _htmlMailsRepository.GetByKeyAsync(key: id);
-            result = _responseFactory.CreateSuccess(result: htmlMail);
+            try
+            {
+                var htmlMail = await _htmlMailsRepository.GetByKeyAsync(key: guid);
+                result = _responseFactory.CreateSuccess(result: htmlMail);
+            }
+            catch (ObjectNotFoundInDatabaseException)
+            {
+                result = _responseFactory.CreateFailedResponse(
+                    failedType: FailedResponseType.NotFound,
+                    message: TypicalTextResponses.EntityNotFoundById);
+            }
         }
-        catch (ObjectNotFoundInDatabaseException)
+        else
         {
             result = _responseFactory.CreateFailedResponse(
-                failedType: FailedResponseType.NotFound,
-                message: TypicalTextResponses.EntityNotFoundById);
+                failedType: FailedResponseType.BadRequest,
+                message: TypicalTextResponses.IncorrectClientInput);
         }
 
         return Ok(result);
     }
     [HttpPost]
     public async Task<IActionResult> SaveHtmlMail(
-        [FromBody][FromForm] RawMailDto rawMail)
+        [FromBody][FromForm] HtmlMailDto mailDto)
     {
-        HtmlMailDto mail = PrepareDto(rawMail);
+        var mail = ConvertDto(dto: mailDto);
 
         var updatedEntity = await _htmlMailsRepository
             .SaveIntoDbAsync(entity: mail);
@@ -85,9 +94,9 @@ public sealed class HtmlMailsController : ControllerBase
     }
     [HttpPut]
     public async Task<IActionResult> UpdateInDatabaseHtmlMail(
-        [FromBody][FromForm] RawMailDto rawMail)
+        [FromBody][FromForm] HtmlMailDto mailDto)
     {
-        HtmlMailDto mail = PrepareDto(rawMail);
+        var mail = ConvertDto(dto: mailDto);
 
         var updatedEntity = await _htmlMailsRepository
             .SaveIntoDbAsync(entity: mail);
@@ -116,16 +125,8 @@ public sealed class HtmlMailsController : ControllerBase
         return Ok(result);
     }
 
-    private HtmlMailDto PrepareDto(RawMailDto rawData)
+    private HtmlMail ConvertDto(HtmlMailDto dto)
     {
-        var htmlDto = new HtmlMailDto(
-            theme: rawData.Theme,
-            userId: rawData.UserId)
-        {
-            ByteContent = Encoding.UTF8.GetBytes(rawData.Content),
-            Id = rawData.Id ?? Guid.Empty
-        };
 
-        return htmlDto;
     }
 }

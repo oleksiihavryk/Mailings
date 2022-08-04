@@ -1,7 +1,7 @@
-﻿using Mailings.Resources.Shared.Dto;
+﻿using Mailings.Resources.Domain.MainModels;
 
 namespace Mailings.Resources.Data.Repositories;
 
-public interface IHistoryNotesRepository : IRepository<HistoryNoteMailingGroupDto, Guid>
+public interface IHistoryNotesRepository : IRepository<HistoryNoteMailingGroup, Guid>
 {
 }

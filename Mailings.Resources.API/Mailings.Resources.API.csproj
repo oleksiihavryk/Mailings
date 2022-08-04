@@ -15,9 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Mailings.Resources.Data\Mailings.Resources.Data.csproj" />
-    <ProjectReference Include="..\Mailings.Resources.Domen\Mailings.Resources.Domen.csproj" />
-    <ProjectReference Include="..\Mailings.Resources.Shared\Mailings.Resources.Shared.csproj" />
+    <ProjectReference Include="..\Mailings.Resources.Application\Mailings.Resources.Application.csproj" />
   </ItemGroup>
 
 </Project>

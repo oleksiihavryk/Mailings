@@ -19,9 +19,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mailings.Resources.Shared",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mailings.Resources.Data", "Mailings.Resources.Data\Mailings.Resources.Data.csproj", "{0DA724FD-0EAD-4D13-B2B5-45637AC645E0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mailings.Resources.Domen", "Mailings.Resources.Domen\Mailings.Resources.Domen.csproj", "{D76BD9E2-EB3F-4F0C-B206-1BC8BD4E9849}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mailings.Resources.Domain", "Mailings.Resources.Domen\Mailings.Resources.Domain.csproj", "{D76BD9E2-EB3F-4F0C-B206-1BC8BD4E9849}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mailings.Resources.Tests", "Mailings.Resources.Tests\Mailings.Resources.Tests.csproj", "{C1A5D6B0-5C68-468A-8966-13E3325C019C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mailings.Resources.Tests", "Mailings.Resources.Tests\Mailings.Resources.Tests.csproj", "{C1A5D6B0-5C68-468A-8966-13E3325C019C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mailings.Resources.Application", "Mailings.Resources.Application\Mailings.Resources.Application.csproj", "{D31EBC9F-21C1-49E5-90E3-7A9A3ABAC90E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -61,6 +63,10 @@ Global
 		{C1A5D6B0-5C68-468A-8966-13E3325C019C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C1A5D6B0-5C68-468A-8966-13E3325C019C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C1A5D6B0-5C68-468A-8966-13E3325C019C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D31EBC9F-21C1-49E5-90E3-7A9A3ABAC90E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D31EBC9F-21C1-49E5-90E3-7A9A3ABAC90E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D31EBC9F-21C1-49E5-90E3-7A9A3ABAC90E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D31EBC9F-21C1-49E5-90E3-7A9A3ABAC90E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -74,6 +80,7 @@ Global
 		{0DA724FD-0EAD-4D13-B2B5-45637AC645E0} = {4B45F7EA-10AC-47E0-AB92-6DF34F1E92BC}
 		{D76BD9E2-EB3F-4F0C-B206-1BC8BD4E9849} = {4B45F7EA-10AC-47E0-AB92-6DF34F1E92BC}
 		{C1A5D6B0-5C68-468A-8966-13E3325C019C} = {4B45F7EA-10AC-47E0-AB92-6DF34F1E92BC}
+		{D31EBC9F-21C1-49E5-90E3-7A9A3ABAC90E} = {4B45F7EA-10AC-47E0-AB92-6DF34F1E92BC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2A59EDBE-7AC5-4EF6-85F1-12197FA2007F}

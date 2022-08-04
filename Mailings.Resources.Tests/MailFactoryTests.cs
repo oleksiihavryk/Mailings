@@ -1,5 +1,6 @@
 ﻿using System;
-using Mailings.Resources.Domen.Models;
+using Mailings.Resources.Domain.MailFactory;
+using Mailings.Resources.Domain.MainModels;
 using Mailings.Resources.Tests.TestClasses;
 using Xunit;
 

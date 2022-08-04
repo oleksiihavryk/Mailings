@@ -1,4 +1,4 @@
-﻿using Mailings.Resources.Domen.Models;
+﻿using Mailings.Resources.Domain.MainModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -10,6 +10,6 @@ public class EmailAddressConfiguration : IEntityTypeConfiguration<EmailAddress>
     {
         builder.HasKey(e => e.Id);
 
-        builder.Property(em => em.Address).IsRequired();
+        builder.Property(em => em.AddressString).IsRequired();
     }
 }
