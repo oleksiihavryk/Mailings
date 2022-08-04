@@ -1,24 +1,24 @@
 ﻿using System;
-using Mailings.Resources.API.Dto;
 using Mailings.Resources.API.Exceptions;
+using Mailings.Resources.API.ResponseFactory;
 using Mailings.Resources.Tests.Comparer;
 using Microsoft.AspNetCore.Http;
 using Xunit;
 
 namespace Mailings.Resources.Tests;
-public class ResponseDtoFactoryTests
+public class ResponseFactoryTests
 {
     private readonly IResponseDtoComparer _comparer = new ResponseDtoComparer();
 
     [Fact]
-    public void ResponseDtoFactoryTests_ReturningCorrectEmptySuccessResponse()
+    public void ResponseFactoryTests_ReturningCorrectEmptySuccessResponse()
     {
         //arrange
         var responseFactory = new ResponseFactory();
         //act
         var emptySuccess = responseFactory.EmptySuccess;
         //assert
-        Assert.Equal(new ResponseDto()
+        Assert.Equal(new Response()
         {
             IsSuccess = true,
             Messages = Array.Empty<string>(),
@@ -27,14 +27,14 @@ public class ResponseDtoFactoryTests
         }, emptySuccess, _comparer);
     }
     [Fact]
-    public void ResponseDtoFactoryTests_ReturningCorrectEmptyFailedResponse()
+    public void ResponseFactoryTests_ReturningCorrectEmptyFailedResponse()
     {
         //arrange
         var responseFactory = new ResponseFactory();
         //act
         var emptyFailed = responseFactory.EmptyInternalServerError;
         //assert
-        Assert.Equal(new ResponseDto()
+        Assert.Equal(new Response()
         {
             IsSuccess = false,
             Messages = Array.Empty<string>(),
@@ -46,7 +46,7 @@ public class ResponseDtoFactoryTests
     [InlineData("i love paris")]
     [InlineData(11, SuccessResponseType.Ok)]
     [InlineData(null, SuccessResponseType.MissingResult)]
-    public void ResponseDtoFactoryTests_CreatingSuccessResponse(
+    public void ResponseFactoryTests_CreatingSuccessResponse(
         object result,
         SuccessResponseType successType = SuccessResponseType.Unknown)
     {
@@ -65,7 +65,7 @@ public class ResponseDtoFactoryTests
             var successResult = responseFactory
                 .CreateSuccess(successType, result);
 
-            Assert.Equal(new ResponseDto()
+            Assert.Equal(new Response()
             {
                 IsSuccess = true,
                 Messages = Array.Empty<string>(),
@@ -88,7 +88,7 @@ public class ResponseDtoFactoryTests
         "11",
         FailedResponseType.NotFound)]
     [InlineData("")]
-    public void ResponseDtoFactoryTests_CreatingFailedResponseWithSingleMessage(
+    public void ResponseFactoryTests_CreatingFailedResponseWithSingleMessage(
         string message,
         FailedResponseType failedType = FailedResponseType.Unknown)
     {
@@ -106,7 +106,7 @@ public class ResponseDtoFactoryTests
         {
             var failedResult = responseFactory
                 .CreateFailedResponse(failedType, message);
-            Assert.Equal(new ResponseDto
+            Assert.Equal(new Response
             {
                 IsSuccess = false,
                 Messages = new[] { message },
@@ -131,7 +131,7 @@ public class ResponseDtoFactoryTests
     [InlineData(
         new[] { "" },
         FailedResponseType.NotFound)]
-    public void ResponseDtoFactoryTests_CreatingFailedResponseWithMultipleMessages(
+    public void ResponseFactoryTests_CreatingFailedResponseWithMultipleMessages(
         string[] messages,
         FailedResponseType failedType = FailedResponseType.Unknown)
     {
@@ -149,7 +149,7 @@ public class ResponseDtoFactoryTests
         {
             var failedResult = responseFactory
                 .CreateFailedResponse(failedType, messages);
-            Assert.Equal(new ResponseDto
+            Assert.Equal(new Response
             {
                 IsSuccess = false,
                 Messages = messages,

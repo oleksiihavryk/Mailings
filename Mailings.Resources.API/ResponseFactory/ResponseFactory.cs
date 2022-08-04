@@ -1,16 +1,16 @@
 ﻿using Mailings.Resources.API.Exceptions;
 
-namespace Mailings.Resources.API.Dto;
+namespace Mailings.Resources.API.ResponseFactory;
 public class ResponseFactory : IResponseFactory
 {
-    public ResponseDto EmptySuccess => new ResponseDto()
+    public Response EmptySuccess => new Response()
     {
         Result = null,
         IsSuccess = true,
         Messages = Array.Empty<string>(),
         StatusCode = StatusCodes.Status204NoContent
     };
-    public ResponseDto EmptyInternalServerError => new ResponseDto()
+    public Response EmptyInternalServerError => new Response()
     {
         Result = null,
         IsSuccess = false,
@@ -18,10 +18,10 @@ public class ResponseFactory : IResponseFactory
         StatusCode = StatusCodes.Status500InternalServerError
     };
 
-    public ResponseDto CreateSuccess(
+    public Response CreateSuccess(
         SuccessResponseType successType = SuccessResponseType.Ok,
         object? result = null)
-        => new ResponseDto()
+        => new Response()
         {
             Result = result,
             IsSuccess = true,
@@ -33,10 +33,10 @@ public class ResponseFactory : IResponseFactory
                 _ => throw new UnknownResponseTypeException()
             }
         };
-    public ResponseDto CreateFailedResponse(
+    public Response CreateFailedResponse(
         FailedResponseType failedType = FailedResponseType.BadRequest,
         string? message = null)
-        => new ResponseDto()
+        => new Response()
         {
             Result = null,
             Messages = new [] { message ?? string.Empty },
@@ -48,10 +48,10 @@ public class ResponseFactory : IResponseFactory
                 _ => throw new UnknownResponseTypeException()
             }
         };
-    public ResponseDto CreateFailedResponse(
+    public Response CreateFailedResponse(
         FailedResponseType failedType = FailedResponseType.BadRequest,
         string[]? messages = null)
-        => new ResponseDto()
+        => new Response()
         {
             Result = null,
             Messages = messages ?? Array.Empty<string>(),

@@ -1,17 +1,17 @@
-﻿namespace Mailings.Resources.API.Dto;
+﻿namespace Mailings.Resources.API.ResponseFactory;
 
 public interface IResponseFactory
 {
-    public ResponseDto EmptySuccess { get; }
-    public ResponseDto EmptyInternalServerError { get; }
+    public Response EmptySuccess { get; }
+    public Response EmptyInternalServerError { get; }
 
-    public ResponseDto CreateSuccess(
+    public Response CreateSuccess(
         SuccessResponseType successType = SuccessResponseType.Ok,
         object? result = null);
-    public ResponseDto CreateFailedResponse(
+    public Response CreateFailedResponse(
         FailedResponseType failedType = FailedResponseType.BadRequest,
         string? message = null);
-    public ResponseDto CreateFailedResponse(
+    public Response CreateFailedResponse(
         FailedResponseType failedType = FailedResponseType.BadRequest,
         string[]? messages = null);
 }

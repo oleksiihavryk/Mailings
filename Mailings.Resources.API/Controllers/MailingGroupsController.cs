@@ -1,4 +1,5 @@
-﻿using Mailings.Resources.API.Dto;
+﻿using Mailings.Resources.API.RawDto;
+using Mailings.Resources.API.ResponseFactory;
 using Mailings.Resources.Data.Exceptions;
 using Mailings.Resources.Data.Repositories;
 using Mailings.Resources.Shared.Dto;
@@ -26,7 +27,7 @@ public class MailingGroupsController : ControllerBase
     [HttpGet]
     public IActionResult GetAll()
     {
-        ResponseDto? result = null;
+        Response? result = null;
         var groups = _mailingRepository.GetAll();
 
         if (groups.Any())
@@ -38,7 +39,7 @@ public class MailingGroupsController : ControllerBase
     [HttpGet("user-id/{userId:required}")]
     public IActionResult GetByUserId([FromRoute]string userId)
     {
-        ResponseDto? result = null;
+        Response? result = null;
         var groups = _mailingRepository.GetAll();
 
         groups = groups.Where(mail => mail.UserId == userId);
@@ -54,7 +55,7 @@ public class MailingGroupsController : ControllerBase
     [HttpGet("id/{id:guid}")]
     public async Task<IActionResult> GetByMailingGroupIdAsync(Guid id)
     {
-        ResponseDto? result = null;
+        Response? result = null;
 
         try
         {
@@ -74,7 +75,7 @@ public class MailingGroupsController : ControllerBase
     public async Task<IActionResult> SaveMailingInDatabase(
         [FromForm][FromBody] RawMailingGroupDto unpreparedMailingGroup)
     {
-        var mailingGroup = CreatePreparedMailingGroupDto(unpreparedMailingGroup);
+        var mailingGroup = PrepareDto(unpreparedMailingGroup);
 
         var savedMailingGroup = await _mailingRepository
             .SaveIntoDbAsync(mailingGroup);
@@ -95,7 +96,7 @@ public class MailingGroupsController : ControllerBase
     public async Task<IActionResult> UpdateMailingInDatabase(
         [FromForm][FromBody] RawMailingGroupDto unpreparedMailingGroup)
     {
-        var mailingGroup = CreatePreparedMailingGroupDto(unpreparedMailingGroup);
+        var mailingGroup = PrepareDto(unpreparedMailingGroup);
 
         var savedMailingGroup = await _mailingRepository
             .SaveIntoDbAsync(mailingGroup);
@@ -108,7 +109,7 @@ public class MailingGroupsController : ControllerBase
     [HttpDelete("id/{id:guid}")]
     public async Task<IActionResult> DeleteMailingInDatabase(Guid id)
     {
-        ResponseDto? result = null;
+        Response? result = null;
 
         try
         {
@@ -125,7 +126,7 @@ public class MailingGroupsController : ControllerBase
         return Ok(result);
     }
 
-    private MailingGroupDto CreatePreparedMailingGroupDto(
+    private MailingGroupDto PrepareDto(
         RawMailingGroupDto unpreparedMailingGroup)
     {
         var mailingGroup = new MailingGroupDto()

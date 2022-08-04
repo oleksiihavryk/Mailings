@@ -1,5 +1,5 @@
-﻿namespace Mailings.Resources.API.Dto;
-public class ResponseDto
+﻿namespace Mailings.Resources.API.ResponseFactory;
+public class Response
 {
     public bool IsSuccess { get; set; } = false;
     public int StatusCode { get; set; } = StatusCodes.Status500InternalServerError;

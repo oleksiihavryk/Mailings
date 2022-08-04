@@ -1,6 +1,8 @@
-﻿using Mailings.Resources.API.Dto;
+﻿using Mailings.Resources.API.RawDto;
+using Mailings.Resources.API.ResponseFactory;
 using Mailings.Resources.Data.Exceptions;
 using Mailings.Resources.Data.Repositories;
+using Mailings.Resources.Domen.Models;
 using Mailings.Resources.Shared.Dto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -26,7 +28,7 @@ public sealed class TextMailsController : ControllerBase
     [HttpGet]
     public IActionResult GetAllTextMails()
     {
-        ResponseDto? result = null;
+        Response? result = null;
 
         var mails = _mailsRepository.GetAll();
 
@@ -39,7 +41,7 @@ public sealed class TextMailsController : ControllerBase
     [HttpGet("user-id/{userId:required}")]
     public IActionResult GetAllTextMailsByUserId([FromRoute] string userId)
     {
-        ResponseDto? result = null;
+        Response? result = null;
         var mails = _mailsRepository.GetAll();
 
         mails = mails.Where(x => x.UserId == userId);
@@ -56,7 +58,7 @@ public sealed class TextMailsController : ControllerBase
     [HttpGet("id/{id:guid}")]
     public async Task<IActionResult> GetTextMailById([FromRoute] Guid id)
     {
-        ResponseDto? result = null;
+        Response? result = null;
 
         try
         {
@@ -74,8 +76,10 @@ public sealed class TextMailsController : ControllerBase
     }
     [HttpPost]
     public async Task<IActionResult> SaveTextMail(
-        [FromBody][FromForm] TextMailDto mail)
+        [FromBody][FromForm] RawMailDto rawMail)
     {
+        var mail = PrepareDto(rawMail);
+
         var updatedEntity = await _mailsRepository
             .SaveIntoDbAsync(entity: mail);
         var result = _responseFactory.CreateSuccess(result: updatedEntity);
@@ -84,8 +88,10 @@ public sealed class TextMailsController : ControllerBase
     }
     [HttpPut]
     public async Task<IActionResult> UpdateInDatabaseTextMail(
-        [FromBody][FromForm] TextMailDto mail)
+        [FromBody][FromForm] RawMailDto rawMail)
     {
+        var mail = PrepareDto(rawMail);
+
         var updatedEntity = await _mailsRepository
             .SaveIntoDbAsync(entity: mail);
         var result = _responseFactory.CreateSuccess(result: updatedEntity);
@@ -96,7 +102,7 @@ public sealed class TextMailsController : ControllerBase
     public async Task<IActionResult> DeleteMail(
         [FromRoute] Guid id)
     {
-        ResponseDto? result = null;
+        Response? result = null;
 
         try
         {
@@ -111,5 +117,18 @@ public sealed class TextMailsController : ControllerBase
         }
 
         return Ok(result);
+    }
+
+    private TextMailDto PrepareDto(RawMailDto rawData)
+    {
+        var mail = new TextMailDto(
+            theme: rawData.Theme,
+            userId: rawData.UserId)
+        {
+            StringContent = rawData.Content,
+            Id = rawData.Id ?? Guid.Empty
+        };
+
+        return mail;
     }
 }

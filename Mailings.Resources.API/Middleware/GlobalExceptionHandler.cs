@@ -1,4 +1,4 @@
-﻿using Mailings.Resources.API.Dto;
+﻿using Mailings.Resources.API.ResponseFactory;
 
 namespace Mailings.Resources.API.Middleware;
 public class GlobalExceptionHandler : IMiddleware

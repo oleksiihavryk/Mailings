@@ -1,6 +1,4 @@
-﻿using Mailings.Resources.Shared.Dto;
-
-namespace Mailings.Resources.API.Dto;
+﻿namespace Mailings.Resources.API.RawDto;
 
 public class RawAddressToDto
 {

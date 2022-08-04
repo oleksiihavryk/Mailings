@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using Mailings.Resources.API.Dto;
+using Mailings.Resources.API.ResponseFactory;
 
 namespace Mailings.Resources.Tests.Comparer;
-public interface IResponseDtoComparer : IEqualityComparer<ResponseDto>
+public interface IResponseDtoComparer : IEqualityComparer<Response>
 {
 }

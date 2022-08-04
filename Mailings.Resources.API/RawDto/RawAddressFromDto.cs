@@ -1,8 +1,6 @@
-﻿using Mailings.Resources.Shared.Dto;
+﻿namespace Mailings.Resources.API.RawDto;
 
-namespace Mailings.Resources.API.Dto;
-
-public class UnpreparedAddressFromDto
+public class RawAddressFromDto
 {
     public Guid Id { get; set; }
     public Guid AddressId { get; set; }

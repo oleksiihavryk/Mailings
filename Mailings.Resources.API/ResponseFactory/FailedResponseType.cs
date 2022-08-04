@@ -1,4 +1,4 @@
-﻿namespace Mailings.Resources.API.Dto;
+﻿namespace Mailings.Resources.API.ResponseFactory;
 
 public enum FailedResponseType
 {

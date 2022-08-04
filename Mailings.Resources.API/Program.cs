@@ -1,5 +1,5 @@
-using Mailings.Resources.API.Dto;
 using Mailings.Resources.API.Extensions;
+using Mailings.Resources.API.ResponseFactory;
 using Mailings.Resources.Data.DbContexts;
 using Mailings.Resources.Data.Repositories;
 using Mailings.Resources.Domen;

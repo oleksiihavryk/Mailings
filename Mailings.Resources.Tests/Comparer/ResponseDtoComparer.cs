@@ -1,20 +1,20 @@
 ﻿using System;
-using Mailings.Resources.API.Dto;
+using Mailings.Resources.API.ResponseFactory;
 
 namespace Mailings.Resources.Tests.Comparer;
 
-public class ResponseDtoComparer : BaseComparer<ResponseDto>, IResponseDtoComparer
+public class ResponseDtoComparer : BaseComparer<Response>, IResponseDtoComparer
 {
     public ResponseDtoComparer()
         : base(Predicate)
     {
     }
-    public ResponseDtoComparer(Func<ResponseDto, ResponseDto, bool> predicate)
+    public ResponseDtoComparer(Func<Response, Response, bool> predicate)
         : base(predicate)
     {
     }
 
-    public override int GetHashCode(ResponseDto obj)
+    public override int GetHashCode(Response obj)
     {
         unchecked
         {
@@ -31,8 +31,8 @@ public class ResponseDtoComparer : BaseComparer<ResponseDto>, IResponseDtoCompar
     }
 
     private static bool Predicate(
-        ResponseDto x,
-        ResponseDto y)
+        Response x,
+        Response y)
     {
         bool isEquals = x.IsSuccess == y.IsSuccess && 
                         x.StatusCode == y.StatusCode && 

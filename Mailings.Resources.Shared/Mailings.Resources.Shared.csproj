@@ -15,8 +15,4 @@
     <ProjectReference Include="..\Mailings.Resources.Domen\Mailings.Resources.Domen.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="NewDto\" />
-  </ItemGroup>
-
 </Project>
