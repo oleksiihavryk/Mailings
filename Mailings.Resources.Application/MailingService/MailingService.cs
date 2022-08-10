@@ -108,8 +108,7 @@ public class MailingService : IMailingService
         mail.To.AddRange(toAddresses);
 
         var group = request.Group;
-        mail.Subject = $"Mailings From: {group.From.Address.AddressString} " +
-                       $"({group.From.Name}). " +
+        mail.Subject = $"Mailings From: {group.From.PseudoName}. " +
                        $"Theme: {group.Mail.Theme}";
 
         var builder = new BodyBuilder();
@@ -154,12 +153,6 @@ public class MailingService : IMailingService
                 sendRequest: request,
                 message: "Unknown mail type in mail request. " +
                          "Please, check assignment mail type to mail request.");
-
-        if (!MailAddress.TryCreate(request.Group.From.Address.AddressString, out var parsedMail))
-            throw new MailingRequestException(
-                sendRequest: request,
-                message: "Address from which email is sending is incorrect!" +
-                "Please, check email format before sending mail");
 
         List<MailboxAddress> toMails = new List<MailboxAddress>();
 

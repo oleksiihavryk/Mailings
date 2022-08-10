@@ -12,8 +12,8 @@ public class MailingGroupConfiguration : IEntityTypeConfiguration<MailingGroup>
         builder.Property(m => m.UserId).IsRequired();
         builder.Property(m => m.Name).IsRequired();
 
-        builder.HasOne(m => m.Mail)
-            .WithOne()
-            .HasForeignKey<MailingGroup>();
+        builder.HasOne<Mail>(m => m.Mail)
+            .WithMany()
+            .OnDelete(DeleteBehavior.NoAction);
     }
 }

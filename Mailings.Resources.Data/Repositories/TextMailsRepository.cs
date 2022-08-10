@@ -15,13 +15,16 @@ public class TextMailsRepository : ITextMailsRepository
 
     public IEnumerable<TextMail> GetAll()
     {
-        var entities = _dbContext.TextMails.ToArray();
+        var entities = _dbContext.TextMails
+            .Include(m => m.Attachments)
+            .ToArray();
 
         return entities;
     }
     public async Task<TextMail> GetByKeyAsync(Guid key)
     {
         var entity = await _dbContext.TextMails
+            .Include(m => m.Attachments)
             .FirstOrDefaultAsync(m => m.Id == key);
 
         return entity ?? throw new ObjectNotFoundInDatabaseException(

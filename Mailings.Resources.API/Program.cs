@@ -73,16 +73,14 @@ services.AddSwaggerGen(opt =>
         Type = SecuritySchemeType.OAuth2,
         Flows = new OpenApiOAuthFlows()
         {
-            AuthorizationCode = new OpenApiOAuthFlow()
+            ClientCredentials = new OpenApiOAuthFlow()
             {
                 AuthorizationUrl = new Uri(Servers.Authentication + "/connect/authorize"),
                 TokenUrl = new Uri(Servers.Authentication + "/connect/token"),
                 Scopes = new Dictionary<string, string>()
                 {
-                    ["readSecured_resourceServer"] = 
-                        "Scope for read important and secured data on server side",
-                    ["writeDefault_resourceServer"] = 
-                        "Scope for write default data on server side"
+                    ["fullAccess_resourceServer"] = 
+                        "Scope which provides full access to resource server."
                 },
             }
         }

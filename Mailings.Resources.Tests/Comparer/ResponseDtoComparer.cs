@@ -3,7 +3,7 @@ using Mailings.Resources.API.ResponseFactory;
 
 namespace Mailings.Resources.Tests.Comparer;
 
-public class ResponseDtoComparer : BaseComparer<Response>, IResponseDtoComparer
+internal class ResponseDtoComparer : BaseComparer<Response>, IResponseDtoComparer
 {
     public ResponseDtoComparer()
         : base(Predicate)

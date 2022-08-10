@@ -27,7 +27,6 @@ public class MailingServiceTests
         "textMessage",
         "I love antichrist",
         "aleksei.gavrik2004@gmail.com",
-        "provka@gmail.com",
         "names is not matter",
         MailType.Text)]
     [InlineData(
@@ -35,7 +34,6 @@ public class MailingServiceTests
         "htmlMessage", 
         "<h1>I love jesus</h1>", 
         "aleksei.gavrik2004gmail.com", 
-        "provka@gmail.com", 
         "names is not matter",
         MailType.Html)]
     [InlineData(
@@ -43,7 +41,6 @@ public class MailingServiceTests
         "htmlMessage",
         "<h1>I love jesus</h1>",
         "aleksei.gavrik2004@gmail.com",
-        "provkagmail.com",
         "names is not matter",
         MailType.Html)]
     [InlineData(
@@ -51,7 +48,6 @@ public class MailingServiceTests
         "unknownMessage", 
         "i love pariss", 
         "aleksei.gavrik2004@gmail.com",
-        "aleksei.notgavrik2004@gmail.com", 
         "parash",
         MailType.Unknown)]
     public void MailingService_SendingMails(
@@ -59,7 +55,6 @@ public class MailingServiceTests
         string theme, 
         string message,
         string toAddress,
-        string fromAddress, 
         string fromName,
         MailType type)
     {
@@ -83,15 +78,14 @@ public class MailingServiceTests
 
         mailingGroup.From = new EmailAddressFrom()
         {
-            Address = new EmailAddress() { AddressString = fromAddress },
-            Name = fromName,
+            PseudoName = fromName,
             Group = mailingGroup
         };
         mailingGroup.To = new List<EmailAddressTo>()
         {
             new EmailAddressTo()
             {
-                Address = new EmailAddress() { AddressString = toAddress },
+                Address = new EmailAddress() { AddressString = toAddress, UserId = userId },
                 Group = mailingGroup
             }
         };
@@ -107,7 +101,6 @@ public class MailingServiceTests
         MailingSendResponse? response = null;
 
         if (!MailAddress.TryCreate(toAddress, out o) ||
-            !MailAddress.TryCreate(fromAddress, out o) ||
             type == MailType.Unknown)
         {
             Assert.Throws<MailingRequestException>(() =>

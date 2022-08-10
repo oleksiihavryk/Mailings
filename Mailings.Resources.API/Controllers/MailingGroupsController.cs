@@ -1,6 +1,9 @@
-﻿using Mailings.Resources.API.RawDto;
+﻿using Mailings.Resources.API.Dto;
+using Mailings.Resources.API.Exceptions;
 using Mailings.Resources.API.ResponseFactory;
+using Mailings.Resources.Data.Exceptions;
 using Mailings.Resources.Data.Repositories;
+using Mailings.Resources.Domain.MainModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,164 +12,197 @@ namespace Mailings.Resources.API.Controllers;
 [ApiController]
 [Authorize]
 [Route("api/mailing-groups")]
-//Todo: implement mailing groups controller later
 public class MailingGroupsController : ControllerBase
 {
     private readonly IMailingGroupsRepository _mailingRepository;
     private readonly IResponseFactory _responseFactory;
-    private readonly IHtmlMailsRepository _htmlMails;
-    private readonly ITextMailsRepository _textMails;
+    private readonly IHtmlMailsRepository _htmlMailsRepository;
+    private readonly ITextMailsRepository _textMailsRepository;
 
     public MailingGroupsController(
         IMailingGroupsRepository mailingRepository, 
         IResponseFactory responseFactory, 
-        IHtmlMailsRepository htmlMails,
-        ITextMailsRepository textMails)
+        IHtmlMailsRepository htmlMailsRepository,
+        ITextMailsRepository textMailsRepository)
     {
         _mailingRepository = mailingRepository;
         _responseFactory = responseFactory;
-        _htmlMails = htmlMails;
-        _textMails = textMails;
+        _htmlMailsRepository = htmlMailsRepository;
+        _textMailsRepository = textMailsRepository;
     }
 
     [HttpGet]
     public IActionResult GetAll()
     {
-        //Response? result = null;
-        //var groups = _mailingRepository.GetAll();
+        Response? result = null;
+        var groups = _mailingRepository.GetAll();
+        var dtos = new List<MailingGroupDto>();
 
-        //if (groups.Any())
-        //    result = _responseFactory.CreateSuccess(result: groups);
-        //else result = _responseFactory.EmptySuccess;
+        foreach (var mail in groups)
+            dtos.Add(ConvertToDto(mail));
 
-        //return Ok(result);
-        throw new NotImplementedException();
+        if (groups.Any())
+            result = _responseFactory.CreateSuccess(result: dtos);
+        else result = _responseFactory.EmptySuccess;
+
+        return Ok(result);
     }
+
     [HttpGet("user-id/{userId:required}")]
     public IActionResult GetByUserId([FromRoute]string userId)
     {
-        //Response? result = null;
-        //var groups = _mailingRepository.GetAll();
+        Response? result = null;
+        var groups = _mailingRepository
+            .GetAll()
+            .Where(x => x.UserId == userId);
+        var dtos = new List<MailingGroupDto>();
 
-        //groups = groups.Where(mail => mail.UserId == userId);
+        foreach (var mail in groups)
+            dtos.Add(ConvertToDto(mail));
 
-        //if (groups.Any())
-        //    result = _responseFactory.CreateSuccess(result: groups);
-        //else result = _responseFactory.CreateFailedResponse(
-        //    failedType: FailedResponseType.NotFound,
-        //    message: TypicalTextResponses.UnknownUserIdOrMissingContentByUserId);
+        if (dtos.Any())
+            result = _responseFactory.CreateSuccess(result: dtos);
+        else result = _responseFactory.CreateFailedResponse(
+            FailedResponseType.NotFound,
+            message: TypicalTextResponses.UnknownUserIdOrMissingContentByUserId);
 
-        //return Ok(result);
-        throw new NotImplementedException();
+        return Ok(result);
     }
-    [HttpGet("id/{id:guid}")]
-    public async Task<IActionResult> GetByMailingGroupIdAsync(Guid id)
+    [HttpGet("id/{id:required}")]
+    public async Task<IActionResult> GetByMailingGroupIdAsync([FromRoute]string id)
     {
-        //Response? result = null;
+        Response? result = null;
 
-        //try
-        //{
-        //    var group = await _mailingRepository.GetByKeyAsync(key: id);
-        //    result = _responseFactory.CreateSuccess(result: group);
-        //}
-        //catch (ObjectNotFoundInDatabaseException)
-        //{
-        //    result = _responseFactory.CreateFailedResponse(
-        //        failedType: FailedResponseType.NotFound,
-        //        message: TypicalTextResponses.EntityNotFoundById);
-        //}
+        if (Guid.TryParse(id, out var guid))
+        {
+            try
+            {
+                var group = await _mailingRepository.GetByKeyAsync(key: guid);
+                var dto = ConvertToDto(group);
+                result = _responseFactory.CreateSuccess(result: dto);
+            }
+            catch (ObjectNotFoundInDatabaseException)
+            {
+                result = _responseFactory.CreateFailedResponse(
+                    failedType: FailedResponseType.NotFound,
+                    message: TypicalTextResponses.EntityNotFoundById);
+            }
+        }
+        else
+        {
+            result = _responseFactory.CreateFailedResponse(
+                failedType: FailedResponseType.BadRequest,
+                message: TypicalTextResponses.IncorrectClientInput);
+        }
 
-        //return Ok(result);
-        throw new NotImplementedException();
+        return Ok(result);
     }
     [HttpPost]
     public async Task<IActionResult> SaveMailingInDatabase(
-        [FromForm][FromBody] RawMailingGroupDto unpreparedMailingGroup)
+        [FromForm][FromBody] MailingGroupDto groupDto)
     {
-        //Response? result = null;
+        var group = await ConvertFromDtoAsync(dto: groupDto);
 
-        //try
-        //{
-        //    var mailingGroup = await PrepareDtoAsync(unpreparedMailingGroup);
+        var updatedEntity = await _mailingRepository
+            .SaveIntoDbAsync(entity: group);
+        
+        var dto = ConvertToDto(updatedEntity);
+        var result = _responseFactory.CreateSuccess(result: dto);
 
-        //    var savedMailingGroup = await _mailingRepository
-        //        .SaveIntoDbAsync(mailingGroup);
-        //    try
-        //    {
-        //        result = _responseFactory
-        //            .CreateSuccess(result: savedMailingGroup);
-        //    }
-        //    catch
-        //    {
-        //        await _mailingRepository.DeleteFromDbByKey(savedMailingGroup.Id);
-        //        throw;
-        //    }
-        //}
-        //catch (UnknownRequestMailTypeException)
-        //{
-        //    result = _responseFactory.CreateFailedResponse(
-        //        failedType: FailedResponseType.BadRequest,
-        //        message: "Unknown mail type.");
-        //}
-        //catch (ObjectNotFoundInDatabaseException)
-        //{
-        //    result = _responseFactory.CreateFailedResponse(
-        //        FailedResponseType.BadRequest,
-        //        message: "Mail with current id and mail type is not found in database.");
-        //}
-
-        //return Ok(result);
-        throw new NotImplementedException();
+        return Ok(result);
     }
     [HttpPut]
     public async Task<IActionResult> UpdateMailingInDatabase(
-        [FromForm][FromBody] RawMailingGroupDto unpreparedMailingGroup)
+        [FromForm][FromBody] MailingGroupDto groupDto)
     {
-        //Response? result = null;
+        var group = await ConvertFromDtoAsync(dto: groupDto);
 
-        //try
-        //{
-        //    var mailingGroup = await PrepareDtoAsync(unpreparedMailingGroup);
-        //    var savedMailingGroup = await _mailingRepository
-        //        .SaveIntoDbAsync(mailingGroup);
+        var updatedEntity = await _mailingRepository
+            .SaveIntoDbAsync(entity: group);
 
-        //    result = _responseFactory
-        //        .CreateSuccess(result: savedMailingGroup);
-        //}
-        //catch (UnknownRequestMailTypeException)
-        //{
-        //    result = _responseFactory.CreateFailedResponse(
-        //        failedType: FailedResponseType.BadRequest,
-        //        message: "Unknown mail type.");
-        //}
-        //catch (ObjectNotFoundInDatabaseException)
-        //{
-        //    result = _responseFactory.CreateFailedResponse(
-        //        FailedResponseType.BadRequest,
-        //        message: "Mail with current id and mail type is not found in database.");
-        //}
+        var dto = ConvertToDto(updatedEntity);
+        var result = _responseFactory.CreateSuccess(result: dto);
 
-        //return Ok(result);
-        throw new NotImplementedException();
+        return Ok(result);
     }
-    [HttpDelete("id/{id:guid}")]
-    public async Task<IActionResult> DeleteMailingInDatabase(Guid id)
+    [HttpDelete("id/{id:required}")]
+    public async Task<IActionResult> DeleteMailingInDatabase([FromRoute]string id)
     {
-        //Response? result = null;
+        Response? result = null;
 
-        //try
-        //{
-        //    await _mailingRepository.DeleteFromDbByKey(key: id);
-        //    result = _responseFactory.EmptySuccess;
-        //}
-        //catch (ObjectNotFoundInDatabaseException)
-        //{
-        //    result = _responseFactory.CreateFailedResponse(
-        //        failedType: FailedResponseType.NotFound,
-        //        message: TypicalTextResponses.EntityNotFoundById);
-        //}
+        if (Guid.TryParse(id, out var guid))
+        {
+            try
+            {
+                await _mailingRepository.DeleteFromDbByKey(key: guid);
+                result = _responseFactory.CreateSuccess();
+            }
+            catch (ObjectNotFoundInDatabaseException)
+            {
+                result = _responseFactory.CreateFailedResponse(
+                    failedType: FailedResponseType.NotFound,
+                    message: TypicalTextResponses.EntityNotFoundById);
+            }
+        }
+        else
+        {
+            result = _responseFactory.CreateFailedResponse(
+                failedType: FailedResponseType.BadRequest,
+                message: TypicalTextResponses.IncorrectClientInput);
+        }
 
-        //return Ok(result);
-        throw new NotImplementedException();
+        return Ok(result);
     }
+
+    private async Task<MailingGroup> ConvertFromDtoAsync(MailingGroupDto dto)
+    {
+        var mailingGroup = new MailingGroup(dto.Name, dto.UserId)
+        {
+            Id = dto.Id
+        };
+
+        mailingGroup.Mail = dto.MailType switch
+        {
+            "Html" => await _htmlMailsRepository.GetByKeyAsync(key: dto.MailId),
+            "Text" => await _textMailsRepository.GetByKeyAsync(key: dto.MailId),
+            _ => throw new UnknownRequestMailTypeException()
+        };
+
+        mailingGroup.To = new List<EmailAddressTo>();
+        foreach (var to in dto.To)
+        {
+            mailingGroup.To.Add(new EmailAddressTo()
+            {
+                Address = new EmailAddress()
+                {
+                    AddressString = to,
+                    UserId = dto.UserId
+                }
+            });
+        }
+
+        mailingGroup.From = new EmailAddressFrom()
+        {
+            PseudoName = string.IsNullOrWhiteSpace(dto.SenderPseudo) ? null : dto.SenderPseudo,
+        };
+
+        return mailingGroup;
+    }
+    private MailingGroupDto ConvertToDto(MailingGroup mail)
+        => new MailingGroupDto()
+        {
+            Id = mail.Id,
+            MailId = mail.Mail.Id,
+            MailType = mail.Mail switch
+            {
+                HtmlMail => Enum.GetName(MailType.Html) ?? string.Empty,
+                TextMail => Enum.GetName(MailType.Text) ?? string.Empty,
+                _ => throw new InvalidCastException(
+                    "Error by casting mail type in mailing group")
+            },
+            Name = mail.Name,
+            SenderPseudo = mail.From.PseudoName ?? string.Empty,
+            To = mail.To.Select(c => c.Address.AddressString),
+            UserId = mail.UserId,
+        };
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Mailings.Resources.Tests.Comparer;
 
-public abstract class BaseComparer<T> : IEqualityComparer<T>
+internal abstract class BaseComparer<T> : IEqualityComparer<T>
 {
     protected Func<T, T, bool> _predicate;
 

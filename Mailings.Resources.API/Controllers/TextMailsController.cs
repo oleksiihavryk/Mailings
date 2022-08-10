@@ -1,6 +1,8 @@
-﻿using Mailings.Resources.API.RawDto;
+﻿using Mailings.Resources.API.Dto;
 using Mailings.Resources.API.ResponseFactory;
+using Mailings.Resources.Data.Exceptions;
 using Mailings.Resources.Data.Repositories;
+using Mailings.Resources.Domain.MainModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,100 +28,115 @@ public sealed class TextMailsController : ControllerBase
     [HttpGet]
     public IActionResult GetAllTextMails()
     {
-        //Response? result = null;
+        Response? result = null;
+        var mails = _mailsRepository.GetAll();
+        var dtos = new List<MailDto>();
 
-        //var mails = _mailsRepository.GetAll();
+        foreach (var mail in mails)
+            dtos.Add(ConvertToDto(mail));
 
-        //if (mails.Any())
-        //    result = _responseFactory.CreateSuccess(result: mails);
-        //else result = _responseFactory.EmptySuccess;
+        if (mails.Any())
+            result = _responseFactory.CreateSuccess(result: dtos);
+        else result = _responseFactory.EmptySuccess;
 
-        //return Ok(result);
-        throw new NotImplementedException();
+        return Ok(result);
     }
     [HttpGet("user-id/{userId:required}")]
     public IActionResult GetAllTextMailsByUserId([FromRoute] string userId)
     {
-        //Response? result = null;
-        //var mails = _mailsRepository.GetAll();
+        Response? result = null;
+        var mails = _mailsRepository
+            .GetAll()
+            .Where(x => x.UserId == userId);
+        var dtos = new List<MailDto>();
 
-        //mails = mails.Where(x => x.UserId == userId);
+        foreach (var mail in mails)
+            dtos.Add(ConvertToDto(mail));
 
-        //if (mails.Any())
-        //    result = _responseFactory.CreateSuccess(result: mails);
-        //else 
-        //    result = _responseFactory.CreateFailedResponse(
-        //        FailedResponseType.NotFound,
-        //        message: TypicalTextResponses.UnknownUserIdOrMissingContentByUserId);
+        if (mails.Any())
+            result = _responseFactory.CreateSuccess(result: dtos);
+        else result = _responseFactory.CreateFailedResponse(
+            FailedResponseType.NotFound,
+            message: TypicalTextResponses.UnknownUserIdOrMissingContentByUserId);
 
-        //return Ok(result);
-        throw new NotImplementedException();
+        return Ok(result);
     }
-    [HttpGet("id/{id:guid}")]
-    public async Task<IActionResult> GetTextMailById([FromRoute] Guid id)
+    [HttpGet("id/{id:required}")]
+    public async Task<IActionResult> GetTextMailById([FromRoute] string id)
     {
-        //Response? result = null;
+        Response? result = null;
 
-        //try
-        //{
-        //    var textMail = await _mailsRepository.GetByKeyAsync(key: id);
-        //    result = _responseFactory.CreateSuccess(result: textMail);
-        //}
-        //catch (ObjectNotFoundInDatabaseException)
-        //{
-        //    result = _responseFactory.CreateFailedResponse(
-        //        failedType: FailedResponseType.NotFound,
-        //        message: TypicalTextResponses.EntityNotFoundById);
-        //}
+        if (Guid.TryParse(id, out var guid))
+        {
+            try
+            {
+                var htmlMail = await _mailsRepository.GetByKeyAsync(key: guid);
+                var dto = ConvertToDto(htmlMail);
+                result = _responseFactory.CreateSuccess(result: dto);
+            }
+            catch (ObjectNotFoundInDatabaseException)
+            {
+                result = _responseFactory.CreateFailedResponse(
+                    failedType: FailedResponseType.NotFound,
+                    message: TypicalTextResponses.EntityNotFoundById);
+            }
+        }
+        else
+        {
+            result = _responseFactory.CreateFailedResponse(
+                failedType: FailedResponseType.BadRequest,
+                message: TypicalTextResponses.IncorrectClientInput);
+        }
 
-        //return Ok(result);
-        throw new NotImplementedException();
+        return Ok(result);
     }
     [HttpPost]
     public async Task<IActionResult> SaveTextMail(
-        [FromBody][FromForm] RawMailDto rawMail)
+        [FromBody][FromForm] MailDto mailDto)
     {
-        //var mail = PrepareDto(rawMail);
+        var mail = ConvertFromDto(dto: mailDto);
 
-        //var updatedEntity = await _mailsRepository
-        //    .SaveIntoDbAsync(entity: mail);
-        //var result = _responseFactory.CreateSuccess(result: updatedEntity);
+        var updatedEntity = await _mailsRepository
+            .SaveIntoDbAsync(entity: mail);
+        var dto = ConvertToDto(updatedEntity);
+        var result = _responseFactory.CreateSuccess(result: dto);
 
-        //return Ok(result);
-        throw new NotImplementedException();
+        return Ok(result);
     }
     [HttpPut]
     public async Task<IActionResult> UpdateInDatabaseTextMail(
-        [FromBody][FromForm] RawMailDto rawMail)
+        [FromBody][FromForm] MailDto mailDto)
     {
-        //var mail = PrepareDto(rawMail);
+        var mail = ConvertFromDto(dto: mailDto);
 
-        //var updatedEntity = await _mailsRepository
-        //    .SaveIntoDbAsync(entity: mail);
-        //var result = _responseFactory.CreateSuccess(result: updatedEntity);
+        var updatedEntity = await _mailsRepository
+            .SaveIntoDbAsync(entity: mail);
+        var dto = ConvertToDto(updatedEntity);
+        var result = _responseFactory.CreateSuccess(result: dto);
 
-        //return Ok(result);
-        throw new NotImplementedException();
+        return Ok(result);
     }
     [HttpDelete("id/{id:guid}")]
     public async Task<IActionResult> DeleteMail(
         [FromRoute] Guid id)
     {
-        //Response? result = null;
+        Response? result = null;
 
-        //try
-        //{
-        //    await _mailsRepository.DeleteFromDbByKey(key: id);
-        //    result = _responseFactory.EmptySuccess;
-        //}
-        //catch (ObjectNotFoundInDatabaseException)
-        //{
-        //    result = _responseFactory.CreateFailedResponse(
-        //        FailedResponseType.NotFound,
-        //        message: TypicalTextResponses.EntityNotFoundById);
-        //}
+        try
+        {
+            await _mailsRepository.DeleteFromDbByKey(key: id);
+            result = _responseFactory.CreateSuccess();
+        }
+        catch (ObjectNotFoundInDatabaseException)
+        {
+            result = _responseFactory.CreateFailedResponse(
+                failedType: FailedResponseType.NotFound,
+                message: TypicalTextResponses.EntityNotFoundById);
+        }
 
-        //return Ok(result);
-        throw new NotImplementedException();
+        return Ok(result);
     }
+
+    private MailDto ConvertToDto(TextMail mail) => (MailDto)mail;
+    private TextMail ConvertFromDto(MailDto dto) => (TextMail)dto;
 }

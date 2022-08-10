@@ -1,4 +1,5 @@
-﻿using Mailings.Resources.Domain.MailFactory;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using Mailings.Resources.Domain.MailFactory;
 
 namespace Mailings.Resources.Domain.MainModels;
 
@@ -7,7 +8,8 @@ public abstract class Mail
     public Guid Id { get; set; }
     public string UserId { get; set; }
     public string Theme { get; set; }
-    public abstract string Content { get; }
+    [NotMapped]
+    public abstract string Content { get; set; }
     public IEnumerable<Attachment>? Attachments { get; set; } = null;
 
     protected Mail(string theme, string userId)
@@ -16,5 +18,6 @@ public abstract class Mail
         UserId = userId;
     }
 
-    public static IMailFactory GetFactory(string userId) => new MailFactory.MailFactory(userId);
+    public static IMailFactory GetFactory(string userId) 
+        => new MailFactory.MailFactory(userId);
 }

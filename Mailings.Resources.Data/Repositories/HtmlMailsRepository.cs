@@ -15,13 +15,16 @@ public class HtmlMailsRepository : IHtmlMailsRepository
 
     public IEnumerable<HtmlMail> GetAll()
     {
-        var entities = _dbContext.HtmlMails.ToArray();
+        var entities = _dbContext.HtmlMails
+            .Include(m => m.Attachments)
+            .ToArray();
 
         return entities;
     }
     public async Task<HtmlMail> GetByKeyAsync(Guid key)
     {
         var entity = await _dbContext.HtmlMails
+            .Include(m => m.Attachments)
             .FirstOrDefaultAsync(m => m.Id == key);
 
         return entity ?? throw new ObjectNotFoundInDatabaseException(

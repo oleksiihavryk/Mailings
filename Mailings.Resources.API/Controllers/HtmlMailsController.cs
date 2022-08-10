@@ -10,7 +10,6 @@ namespace Mailings.Resources.API.Controllers;
 [ApiController]
 [Authorize]
 [Route("/api/mails/html")]
-//Todo: implement html mails controller later
 public sealed class HtmlMailsController : ControllerBase
 {
     private readonly IHtmlMailsRepository _htmlMailsRepository;
@@ -29,9 +28,13 @@ public sealed class HtmlMailsController : ControllerBase
     {
         Response? result = null;
         var mails = _htmlMailsRepository.GetAll();
+        var dtos = new List<MailDto>();
+
+        foreach (var mail in mails)
+            dtos.Add(ConvertToDto(mail));
 
         if (mails.Any())
-            result = _responseFactory.CreateSuccess(result: mails);
+            result = _responseFactory.CreateSuccess(result: dtos);
         else result = _responseFactory.EmptySuccess;
 
         return Ok(result);
@@ -40,19 +43,23 @@ public sealed class HtmlMailsController : ControllerBase
     public IActionResult GetAllHtmlMailsByUserId([FromRoute]string userId)
     {
         Response? result = null;
-        var mails = _htmlMailsRepository.GetAll();
+        var mails = _htmlMailsRepository
+            .GetAll()
+            .Where(x => x.UserId == userId);
+        var dtos = new List<MailDto>();
 
-        mails = mails.Where(x => x.UserId == userId);
+        foreach (var mail in mails)
+            dtos.Add(ConvertToDto(mail));
 
         if (mails.Any())
-            result = _responseFactory.CreateSuccess(result: mails);
+            result = _responseFactory.CreateSuccess(result: dtos);
         else result = _responseFactory.CreateFailedResponse(
             FailedResponseType.NotFound,
             message: TypicalTextResponses.UnknownUserIdOrMissingContentByUserId);
 
         return Ok(result);
     }
-    [HttpGet("id/{id}")]
+    [HttpGet("id/{id:required}")]
     public async Task<IActionResult> GetHtmlMailById([FromRoute]string id)
     {
         Response? result = null;
@@ -62,7 +69,8 @@ public sealed class HtmlMailsController : ControllerBase
             try
             {
                 var htmlMail = await _htmlMailsRepository.GetByKeyAsync(key: guid);
-                result = _responseFactory.CreateSuccess(result: htmlMail);
+                var dto = ConvertToDto(htmlMail);
+                result = _responseFactory.CreateSuccess(result: dto);
             }
             catch (ObjectNotFoundInDatabaseException)
             {
@@ -82,25 +90,28 @@ public sealed class HtmlMailsController : ControllerBase
     }
     [HttpPost]
     public async Task<IActionResult> SaveHtmlMail(
-        [FromBody][FromForm] HtmlMailDto mailDto)
+        [FromBody][FromForm] MailDto mailDto)
     {
-        var mail = ConvertDto(dto: mailDto);
+        var mail = ConvertFromDto(dto: mailDto);
 
         var updatedEntity = await _htmlMailsRepository
             .SaveIntoDbAsync(entity: mail);
-        var result = _responseFactory.CreateSuccess(result: updatedEntity);
+
+        var dto = ConvertToDto(updatedEntity);
+        var result = _responseFactory.CreateSuccess(result: dto);
 
         return Ok(result);
     }
     [HttpPut]
     public async Task<IActionResult> UpdateInDatabaseHtmlMail(
-        [FromBody][FromForm] HtmlMailDto mailDto)
+        [FromBody][FromForm] MailDto mailDto)
     {
-        var mail = ConvertDto(dto: mailDto);
+        var mail = ConvertFromDto(dto: mailDto);
 
         var updatedEntity = await _htmlMailsRepository
             .SaveIntoDbAsync(entity: mail);
-        var result = _responseFactory.CreateSuccess(result: updatedEntity);
+        var dto = ConvertToDto(updatedEntity);
+        var result = _responseFactory.CreateSuccess(result: dto);
 
         return Ok(result);
     }
@@ -113,7 +124,7 @@ public sealed class HtmlMailsController : ControllerBase
         try
         {
             await _htmlMailsRepository.DeleteFromDbByKey(key: id);
-            result = _responseFactory.EmptySuccess;
+            result = _responseFactory.CreateSuccess();
         }
         catch (ObjectNotFoundInDatabaseException)
         {
@@ -125,8 +136,6 @@ public sealed class HtmlMailsController : ControllerBase
         return Ok(result);
     }
 
-    private HtmlMail ConvertDto(HtmlMailDto dto)
-    {
-
-    }
+    private HtmlMail ConvertFromDto(MailDto dto) => (HtmlMail)dto;
+    private MailDto ConvertToDto(HtmlMail htmlMail) => (MailDto)htmlMail;
 }

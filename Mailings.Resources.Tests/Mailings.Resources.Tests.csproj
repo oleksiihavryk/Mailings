@@ -25,4 +25,8 @@
     <ProjectReference Include="..\Mailings.Resources.API\Mailings.Resources.API.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ClassData\" />
+  </ItemGroup>
+
 </Project>

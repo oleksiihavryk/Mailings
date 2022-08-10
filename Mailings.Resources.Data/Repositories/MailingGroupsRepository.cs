@@ -15,14 +15,23 @@ public class MailingGroupsRepository : IMailingGroupsRepository
     }
     public IEnumerable<MailingGroup> GetAll()
     {
-        var entities = _dbContext.MailingGroups.ToArray();
+        var entities = _dbContext.MailingGroups
+            .Include(m => m.From)
+            .Include(m => m.Mail)
+            .Include(m => m.To)
+                .ThenInclude(t => t.Address)
+            .ToArray();
 
         return entities;
     }
     public async Task<MailingGroup> GetByKeyAsync(Guid key)
     {
         var entity = await _dbContext.MailingGroups
-            .FirstOrDefaultAsync(m => m.Id == key);
+            .Include(g => g.From)
+            .Include(g => g.Mail)
+            .Include(g => g.To)
+                .ThenInclude(t => t.Address)
+            .FirstOrDefaultAsync(g => g.Id == key);
 
         return entity ?? throw new ObjectNotFoundInDatabaseException(
             typeOfObject: typeof(MailingGroup),

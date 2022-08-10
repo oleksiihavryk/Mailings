@@ -1,5 +1,5 @@
 ﻿namespace Mailings.Resources.Domain.MainModels;
-public class UserMails
+public class UserMail
 {
     public Guid Id { get; set; }
     public EmailAddress Address { get; set; }

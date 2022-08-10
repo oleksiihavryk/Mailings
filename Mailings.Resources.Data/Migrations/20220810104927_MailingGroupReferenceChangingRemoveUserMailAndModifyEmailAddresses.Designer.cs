@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Mailings.Resources.Data.Migrations
 {
     [DbContext(typeof(CommonResourcesDbContext))]
-    [Migration("20220728151703_Init6.5")]
-    partial class Init65
+    [Migration("20220810104927_MailingGroupReferenceChangingRemoveUserMailAndModifyEmailAddresses")]
+    partial class MailingGroupReferenceChangingRemoveUserMailAndModifyEmailAddresses
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,7 +24,89 @@ namespace Mailings.Resources.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("Mailings.Resources.Domen.MailingService.HistoryNoteMailingGroup", b =>
+            modelBuilder.Entity("Mailings.Resources.Domain.MainModels.Attachment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ContentType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Data")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("MailId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MailId");
+
+                    b.ToTable("Attachment");
+                });
+
+            modelBuilder.Entity("Mailings.Resources.Domain.MainModels.EmailAddress", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AddressString")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EmailAddress");
+                });
+
+            modelBuilder.Entity("Mailings.Resources.Domain.MainModels.EmailAddressFrom", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("PseudoName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EmailSenders", (string)null);
+                });
+
+            modelBuilder.Entity("Mailings.Resources.Domain.MainModels.EmailAddressTo", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AddressId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("GroupId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AddressId");
+
+                    b.HasIndex("GroupId");
+
+                    b.ToTable("EmailReceivers", (string)null);
+                });
+
+            modelBuilder.Entity("Mailings.Resources.Domain.MainModels.HistoryNoteMailingGroup", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -46,59 +128,7 @@ namespace Mailings.Resources.Data.Migrations
                     b.ToTable("MailingHistory");
                 });
 
-            modelBuilder.Entity("Mailings.Resources.Domen.Models.EmailAddress", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("EmailAddress");
-                });
-
-            modelBuilder.Entity("Mailings.Resources.Domen.Models.EmailAddressFrom", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("AddressId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AddressId");
-
-                    b.ToTable("EmailAddressFrom");
-                });
-
-            modelBuilder.Entity("Mailings.Resources.Domen.Models.EmailAddressTo", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("AddressId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("GroupId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AddressId");
-
-                    b.HasIndex("GroupId");
-
-                    b.ToTable("EmailAddressTo");
-                });
-
-            modelBuilder.Entity("Mailings.Resources.Domen.Models.Mail", b =>
+            modelBuilder.Entity("Mailings.Resources.Domain.MainModels.Mail", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -123,12 +153,12 @@ namespace Mailings.Resources.Data.Migrations
                     b.HasDiscriminator<string>("Discriminator").HasValue("Mail");
                 });
 
-            modelBuilder.Entity("Mailings.Resources.Domen.Models.MailingGroup", b =>
+            modelBuilder.Entity("Mailings.Resources.Domain.MainModels.MailingGroup", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("MailId")
+                    b.Property<Guid>("MailId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
@@ -141,16 +171,14 @@ namespace Mailings.Resources.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MailId")
-                        .IsUnique()
-                        .HasFilter("[MailId] IS NOT NULL");
+                    b.HasIndex("MailId");
 
                     b.ToTable("MailingGroups");
                 });
 
-            modelBuilder.Entity("Mailings.Resources.Domen.Models.HtmlMail", b =>
+            modelBuilder.Entity("Mailings.Resources.Domain.MainModels.HtmlMail", b =>
                 {
-                    b.HasBaseType("Mailings.Resources.Domen.Models.Mail");
+                    b.HasBaseType("Mailings.Resources.Domain.MainModels.Mail");
 
                     b.Property<byte[]>("ByteContent")
                         .HasColumnType("varbinary(max)");
@@ -158,9 +186,9 @@ namespace Mailings.Resources.Data.Migrations
                     b.HasDiscriminator().HasValue("HtmlMail");
                 });
 
-            modelBuilder.Entity("Mailings.Resources.Domen.Models.TextMail", b =>
+            modelBuilder.Entity("Mailings.Resources.Domain.MainModels.TextMail", b =>
                 {
-                    b.HasBaseType("Mailings.Resources.Domen.Models.Mail");
+                    b.HasBaseType("Mailings.Resources.Domain.MainModels.Mail");
 
                     b.Property<string>("StringContent")
                         .HasColumnType("nvarchar(max)");
@@ -168,35 +196,26 @@ namespace Mailings.Resources.Data.Migrations
                     b.HasDiscriminator().HasValue("TextMail");
                 });
 
-            modelBuilder.Entity("Mailings.Resources.Domen.MailingService.HistoryNoteMailingGroup", b =>
+            modelBuilder.Entity("Mailings.Resources.Domain.MainModels.Attachment", b =>
                 {
-                    b.HasOne("Mailings.Resources.Domen.Models.MailingGroup", "Group")
-                        .WithMany()
-                        .HasForeignKey("GroupId");
+                    b.HasOne("Mailings.Resources.Domain.MainModels.Mail", "Mail")
+                        .WithMany("Attachments")
+                        .HasForeignKey("MailId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("Group");
+                    b.Navigation("Mail");
                 });
 
-            modelBuilder.Entity("Mailings.Resources.Domen.Models.EmailAddressFrom", b =>
+            modelBuilder.Entity("Mailings.Resources.Domain.MainModels.EmailAddressTo", b =>
                 {
-                    b.HasOne("Mailings.Resources.Domen.Models.EmailAddress", "Address")
+                    b.HasOne("Mailings.Resources.Domain.MainModels.EmailAddress", "Address")
                         .WithMany()
                         .HasForeignKey("AddressId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Address");
-                });
-
-            modelBuilder.Entity("Mailings.Resources.Domen.Models.EmailAddressTo", b =>
-                {
-                    b.HasOne("Mailings.Resources.Domen.Models.EmailAddress", "Address")
-                        .WithMany()
-                        .HasForeignKey("AddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Mailings.Resources.Domen.Models.MailingGroup", "Group")
+                    b.HasOne("Mailings.Resources.Domain.MainModels.MailingGroup", "Group")
                         .WithMany("To")
                         .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.NoAction)
@@ -207,30 +226,46 @@ namespace Mailings.Resources.Data.Migrations
                     b.Navigation("Group");
                 });
 
-            modelBuilder.Entity("Mailings.Resources.Domen.Models.MailingGroup", b =>
+            modelBuilder.Entity("Mailings.Resources.Domain.MainModels.HistoryNoteMailingGroup", b =>
                 {
-                    b.HasOne("Mailings.Resources.Domen.Models.EmailAddressFrom", "From")
+                    b.HasOne("Mailings.Resources.Domain.MainModels.MailingGroup", "Group")
+                        .WithMany()
+                        .HasForeignKey("GroupId");
+
+                    b.Navigation("Group");
+                });
+
+            modelBuilder.Entity("Mailings.Resources.Domain.MainModels.MailingGroup", b =>
+                {
+                    b.HasOne("Mailings.Resources.Domain.MainModels.EmailAddressFrom", "From")
                         .WithOne("Group")
-                        .HasForeignKey("Mailings.Resources.Domen.Models.MailingGroup", "Id")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .HasForeignKey("Mailings.Resources.Domain.MainModels.MailingGroup", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Mailings.Resources.Domen.Models.Mail", "Mail")
-                        .WithOne()
-                        .HasForeignKey("Mailings.Resources.Domen.Models.MailingGroup", "MailId");
+                    b.HasOne("Mailings.Resources.Domain.MainModels.Mail", "Mail")
+                        .WithMany()
+                        .HasForeignKey("MailId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.Navigation("From");
 
                     b.Navigation("Mail");
                 });
 
-            modelBuilder.Entity("Mailings.Resources.Domen.Models.EmailAddressFrom", b =>
+            modelBuilder.Entity("Mailings.Resources.Domain.MainModels.EmailAddressFrom", b =>
                 {
                     b.Navigation("Group")
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Mailings.Resources.Domen.Models.MailingGroup", b =>
+            modelBuilder.Entity("Mailings.Resources.Domain.MainModels.Mail", b =>
+                {
+                    b.Navigation("Attachments");
+                });
+
+            modelBuilder.Entity("Mailings.Resources.Domain.MainModels.MailingGroup", b =>
                 {
                     b.Navigation("To");
                 });

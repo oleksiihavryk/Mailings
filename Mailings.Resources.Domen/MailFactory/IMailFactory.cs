@@ -6,6 +6,12 @@ public interface IMailFactory
 {
     public string ForUser { get; set; }
 
-    Mail CreateTextMail(string theme, string text);
-    Mail CreateHtmlMail(string theme, string html);
+    Mail CreateTextMail(
+        string theme,
+        string text,
+        IEnumerable<Attachment>? attachments = null);
+    Mail CreateHtmlMail(
+        string theme,
+        string html,
+        IEnumerable<Attachment>? attachments = null);
 }

@@ -27,7 +27,8 @@ public static class IdentityServerStaticData
                 Scopes =
                 {
                     "readSecured_resourceServer",
-                    "writeDefault_resourceServer"
+                    "writeDefault_resourceServer",
+                    "fullAccess_resourceServer"
                 }
             }
         };
@@ -76,8 +77,6 @@ public static class IdentityServerStaticData
                     OidcConstants.StandardScopes.OpenId,
                     OidcConstants.StandardScopes.Email,
                     OidcConstants.StandardScopes.Profile,
-                    "readSecured_resourceServer",
-                    "writeDefault_resourceServer"
                 },
 
                 ClientSecrets = {new Secret("webUser_Secret".ToSha256())},
@@ -87,13 +86,29 @@ public static class IdentityServerStaticData
                 RedirectUris =
                 {
                     IdentityClients.ClientServer + "/signin-oidc",
-                    "https://oauth.pstmn.io/v1/browser-callback",
-                    "https://localhost:9001/oauth2-redirect.html"
                 },
                 PostLogoutRedirectUris =
                     { IdentityClients.ClientServer + "/signout-callback-oidc" },
 
                 AllowAccessTokensViaBrowser = true,
+            },
+            new Client()
+            {
+                ClientId = "resourceServer_Client",
+                ClientSecrets = { new Secret("resourceServer_Secret".ToSha256()) },
+
+                AllowedGrantTypes = GrantTypes.ClientCredentials,
+
+                AllowedScopes =
+                {
+                    "fullAccess_resourceServer"
+                },
+
+                RedirectUris =
+                {
+                    "https://oauth.pstmn.io/v1/browser-callback",
+                    "https://localhost:9001/oauth2-redirect.html"
+                }
             }
         };
 }

@@ -12,9 +12,9 @@ public class EmailAddressFromConfiguration : IEntityTypeConfiguration<EmailAddre
 
         builder.HasKey(t => t.Id);
 
-        builder.HasOne<MailingGroup>()
-            .WithOne(te => te.From)
-            .OnDelete(DeleteBehavior.NoAction)
-            .HasForeignKey<MailingGroup>();
+        builder.HasOne(a => a.Group)
+            .WithOne(m => m.From)
+            .HasForeignKey<MailingGroup>()
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }
