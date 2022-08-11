@@ -74,9 +74,7 @@ services.AddIdentityServer(opt =>
     })
     .AddAspNetIdentity<User>()
     .AddInMemoryApiScopes(IdentityServerStaticData.Scopes)
-    .AddInMemoryClients(IdentityServerStaticData
-        .GetClients(
-            withPkce: !builder.Environment.IsDevelopment()))
+    .AddInMemoryClients(IdentityServerStaticData.Clients)
     .AddInMemoryIdentityResources(IdentityServerStaticData.IdentityResources)
     .AddInMemoryApiResources(IdentityServerStaticData.ApiResources)
     .AddDeveloperSigningCredential();

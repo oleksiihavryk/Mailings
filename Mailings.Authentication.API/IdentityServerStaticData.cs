@@ -63,7 +63,7 @@ public static class IdentityServerStaticData
             }
         };
 
-    public static IEnumerable<Client> GetClients(bool withPkce = true)
+    public static IEnumerable<Client> Clients
         => new List<Client>()
         {
             new Client()
@@ -81,7 +81,7 @@ public static class IdentityServerStaticData
 
                 ClientSecrets = {new Secret("webUser_Secret".ToSha256())},
 
-                RequirePkce = withPkce,
+                RequirePkce = true,
 
                 RedirectUris =
                 {
