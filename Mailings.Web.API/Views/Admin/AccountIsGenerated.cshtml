@@ -1,0 +1,15 @@
+﻿@model GeneratedAccountViewModel
+@section Content
+{
+    <h2 class="main-text">Account is successfully generated!</h2>
+    <p>Printed or copy this access data from beta test account.</p>
+    <list struct="Block">
+        <el>Username: @Model.UserName</el>
+        <el>Password: @Model.Password</el>
+        <el>Email: @Model.Email</el>
+    </list>
+    <div class="center-text">
+        <button class="button copy">Copy</button>
+        <button class="button print">Print</button>
+    </div>
+}

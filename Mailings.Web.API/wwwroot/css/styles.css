@@ -1,0 +1,222 @@
+a.email {
+    color: #B14949;
+}
+.text-value-marker {
+    color: #B14949;
+    font-size: 16px;
+    font-weight: 700;
+}
+.admin-panel-options {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+.admin-panel-option {
+    text-align: center;
+    flex-basis: 30%;
+    height: 150px;
+    line-height: 150px;
+    line-height: 150px;
+    margin: 10px 0;
+    background-color: #a9a9a9;
+    text-decoration: none;
+    color: white;
+    font-size: 22px;
+    border-radius: 20px;
+    transition-duration: 0.4s;
+}
+.admin-panel-option:hover {
+    transform: scale(1.1);
+    background-color: black;
+}
+.admin-panel-option > * {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: normal;
+}
+@font-face {
+    font-family: "Cabin";
+    src: url('fonts/Cabin/Cabin-Bold.ttf') format('truetype'),
+         url('fonts/Cabin/Cabin-BoldItalic.ttf') format('truetype'),
+         url('fonts/Cabin/Cabin-Italic.ttf') format('truetype'),
+         url('fonts/Cabin/Cabin-Medium.ttf') format('truetype'),
+         url('fonts/Cabin/Cabin-MediumItalic.ttf') format('truetype'),
+         url('fonts/Cabin/Cabin-Regular.ttf') format('truetype'),
+         url('fonts/Cabin/Cabin-SemiBold.ttf') format('truetype'),
+         url('fonts/Cabin/Cabin-SemiBoldItalic.ttf') format('truetype');
+}
+
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Cabin;
+}
+
+/*
+    Common header style [BEGIN]
+*/
+
+.header {
+    background-color: #F8F8F8;
+}
+.header-block {
+    padding: 10px;
+}
+.header-upper-block {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.company-logo {
+    width: 50px;
+    height: 50px;
+}
+.header-text {
+    margin: 0;
+    padding: 0;
+    font-size: 40px;
+}
+.navigation {
+    padding: 5px 0;
+    display: flex;
+}
+.navigation > * {
+    text-align: center;
+    flex-basis: 10%;
+}
+.navigation > .navigation-section {
+    padding: 2.5px;
+    background-color: black;
+    color: white;
+    border-radius: 5px;
+    text-decoration: none;
+    margin-right: 5px;
+}
+.navigation > .navigation-section:last-child {
+    margin-right: 0;
+}
+
+/*
+    Common header style [END]
+*/
+
+/*
+    Common content style [BEGIN]
+*/
+
+.content {
+    width: 80%;
+    margin: 0 auto;
+}
+.main-text {
+    text-align: center;
+    font-size: 32px;
+    font-weight: 600;
+    margin: 0;
+    padding: 10px 0;
+}
+.center-text {
+    text-align: center;
+}
+.text-block {
+    padding: 10px;
+    text-align: center;
+    background-color: #494949;
+    color: white;
+}
+.text-block p {
+    margin: 0;
+    padding: 5px 0;
+    font-size: 18px;
+}
+.block-list {
+    padding: 10px 5px 10px 20%;
+    background-color: #373737;
+    list-style-type: none;
+    color: white;
+}
+.block-list-element {
+    background-color: #ababab;
+    padding: 5px;
+    border-bottom: 5px solid #373737;
+}
+.block-list-element:last-child {
+    border-bottom: none;
+}
+.button {
+    color: white;
+    text-decoration: none;
+    padding: 2.5px 7.5px;
+    margin: 0px;
+    display: inline-block;
+    background-color: black;
+    border: none;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    box-sizing: border-box;
+    text-indent: 0;
+}
+.button:hover {
+    text-decoration: underline;
+}
+
+/*
+    Common content style [END]
+*/
+
+/*
+    Common form style [BEGIN]
+*/
+.validation-summary-errors {
+    margin: 10px 0;
+    padding: 0 10px;
+}
+.validation-summary-errors > ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+.form-section {
+    padding: 5px;
+    border-radius: 5px;
+    background-color: #ababab;
+    margin: 10px 0;
+}
+.form-group {
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    color: white;
+}
+.form-group > input {
+    font-size: 18px;
+    font-weight: 600;
+}
+.form-group > input[type=text] {
+    outline: none;
+}
+.buttons-section {
+    padding: 5px;
+    background-color: #ababab;
+    border-radius: 5px;
+    margin: 10px 0;
+    text-align: center;
+}
+form {
+    width: 250px;
+    margin: 0 auto;
+    padding: 10px;
+}
+.form-section-label {
+    margin: 10px 0;
+    color: white;
+    font-weight: 600;
+    font-size: 24px;
+    text-align: center;
+}
+/*
+    Common form style [END]
+*/
+

@@ -155,6 +155,11 @@ public sealed class AccountController : Controller
             claim: new Claim(
                 type: JwtClaimTypes.PreferredUserName,
                 value: user.UserName));
+        await _userManager.AddClaimAsync(
+            user: user,
+            claim: new Claim(
+                type: JwtClaimTypes.Role,
+                value: Roles.Default.ToString()));
     }
     private async Task<User> CreateUserAsync(RegisterViewModel viewModel)
     {

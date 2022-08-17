@@ -14,7 +14,8 @@ public static class IdentityServerStaticData
             {
                 JwtClaimTypes.FamilyName,
                 JwtClaimTypes.GivenName,
-                JwtClaimTypes.PreferredUserName
+                JwtClaimTypes.PreferredUserName,
+                JwtClaimTypes.Role
             })
         };
     public static IEnumerable<ApiResource> ApiResources
@@ -29,6 +30,15 @@ public static class IdentityServerStaticData
                     "readSecured_resourceServer",
                     "writeDefault_resourceServer",
                     "fullAccess_resourceServer"
+                }
+            },
+            new ApiResource("_authenticationServer",
+                "Api resource to access authentication server.")
+            {
+                Enabled = true,
+                Scopes =
+                {
+                    "default_authenticationServer"
                 }
             }
         };
@@ -60,6 +70,13 @@ public static class IdentityServerStaticData
                              "any endpoint in resource server side")
             {
                 ShowInDiscoveryDocument = true,
+            },
+            new ApiScope(
+                name: "default_authenticationServer",
+                displayName: "Scope of authorized authentication server for get access " +
+                             "to protected api for accounts operating")
+            {
+                ShowInDiscoveryDocument = true
             }
         };
 
@@ -78,6 +95,8 @@ public static class IdentityServerStaticData
                     OidcConstants.StandardScopes.Email,
                     OidcConstants.StandardScopes.Profile,
                 },
+
+                AlwaysIncludeUserClaimsInIdToken = true,
 
                 ClientSecrets = {new Secret("webUser_Secret".ToSha256())},
 
@@ -107,8 +126,32 @@ public static class IdentityServerStaticData
                 RedirectUris =
                 {
                     "https://oauth.pstmn.io/v1/browser-callback",
-                    "https://localhost:9001/oauth2-redirect.html"
-                }
+                    IdentityClients.ResourceServer + "/oauth2-redirect.html",
+                    IdentityClients.ResourceServer + "/signin-oidc",
+                },
+                PostLogoutRedirectUris =
+                { IdentityClients.ResourceServer + "/signout-callback-oidc" },
+            },
+            new Client()
+            {
+                ClientId = "authenticationServer_Client",
+                ClientSecrets = { new Secret("authenticationServer_Secret".ToSha256()) },
+
+                AllowedGrantTypes = GrantTypes.ClientCredentials,
+
+                AllowedScopes =
+                {
+                    "default_authenticationServer"
+                },
+
+                RedirectUris =
+                {
+                    "https://localhost:7001" + "/signin-oidc"
+                },
+                PostLogoutRedirectUris =
+                {
+                    "https://localhost:7001" + "/signout-callback-oidc"
+                },
             }
         };
 }

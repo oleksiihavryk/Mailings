@@ -1,6 +1,5 @@
 using Mailings.Web.API.Extensions;
-using Mailings.Web.Shared.StaticData;
-using Microsoft.AspNetCore.Authentication;
+using static Mailings.Web.Api.ComponentOptions;
 
 var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
@@ -8,38 +7,18 @@ var services = builder.Services;
 
 config.SetupStaticData();
 
-services.Configure<RouteOptions>(opt =>
-{
-    opt.AppendTrailingSlash = true;
-    opt.LowercaseUrls = true;
-});
+services.Configure<RouteOptions>(RouteOptions);
 
-services.AddMvc(opt =>
-{
-    opt.EnableEndpointRouting = false;
-});
+services.ConfigureDIContainer();
+
+services.AddMvc(MvcOptions);
 
 services.AddHttpClient();
 
-services.AddAuthentication(opt =>
-{
-    opt.DefaultScheme = "Cookies";
-    opt.DefaultAuthenticateScheme = "oidc";
-}).AddCookie("Cookies")
-    .AddOpenIdConnect("oidc", opt =>
-    {
-        opt.Authority = Servers.Authentication;
-        opt.ClientId = "webUser_Client";
-        opt.ClientSecret = "webUser_Secret";
-
-        opt.UsePkce = true;
-
-        opt.SaveTokens = true;
-        opt.GetClaimsFromUserInfoEndpoint = true;
-
-        opt.ClaimActions.MapAll();
-    });
-services.AddAuthorization();
+services.AddAuthentication(AuthenticationOptions)
+    .AddCookie("Cookies")
+    .AddOpenIdConnect("oidc", OidcAuthOptions);
+services.AddAuthorization(AuthorizationOptions);
 
 var app = builder.Build();
 
@@ -60,6 +39,6 @@ app.UseStaticFiles();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseMvc();
+app.UseMvc(MvcRouteOptions);
 
 app.Run();

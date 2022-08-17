@@ -1,0 +1,9 @@
+[
+  {
+    "outputFileName": "wwwroot/css/styles.css",
+    "inputFiles": [
+      "wwwroot/css/specific-styles.css",
+      "wwwroot/css/base.css"
+    ]
+  }
+]

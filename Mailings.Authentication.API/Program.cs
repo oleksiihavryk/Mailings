@@ -1,10 +1,12 @@
-﻿using Mailings.Authentication.API.Extensions;
+﻿using IdentityModel;
+using Mailings.Authentication.API.Extensions;
 using Mailings.Authentication.API.Infrastructure;
 using Mailings.Authentication.Shared;
 using Mailings.Authentication.Shared.StaticData;
 using Mailings.Authentication.Data.DbContexts;
 using Mailings.Authentication.Data.DbInitializer;
 using Mailings.Authentication.API;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -79,6 +81,17 @@ services.AddIdentityServer(opt =>
     .AddInMemoryApiResources(IdentityServerStaticData.ApiResources)
     .AddDeveloperSigningCredential();
 
+services.AddAuthentication(opt =>
+{
+    opt.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, opt =>
+    {
+        opt.Authority = "https://localhost:7001";
+        opt.Audience = "_authenticationServer";
+        opt.RequireHttpsMetadata = false;
+    });
+services.AddAuthorization();
+
 var app = builder.Build();
 
 //Seeding data
@@ -95,6 +108,9 @@ app.UseCors("Any");
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.UseIdentityServer();
 

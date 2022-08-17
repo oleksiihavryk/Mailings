@@ -1,0 +1,42 @@
+﻿@using IdentityModel
+@{
+    bool CheckUserRoleOnAdmin()
+    {
+        if (User.Identity is System.Security.Claims.ClaimsIdentity claims)
+        {
+            var roles = claims
+                .FindAll(c => c.Type.Contains("/" + JwtClaimTypes.Role))
+                .Select(c => c.Value);
+
+            if (roles.Contains("Administrator"))
+                return true;
+        }
+
+        return false;
+    };
+}
+<header class="header">
+    <div class="header-block header-upper-block">
+        <a asp-action="Index" asp-controller="Home">
+            <img class="company-logo" src="\img\logo.jpg"/>
+        </a>
+        <h1 class="header-text">Mailings</h1>
+    </div>
+    <div class="header-block">
+        <nav class="navigation">
+            @if (!User.Identity?.IsAuthenticated is true)
+            {
+                <navsec action="Login" controller="Home">Login</navsec>
+            }
+            else
+            {
+                <navsec action="Logout" controller="Home">Logout</navsec>
+                <navsec action="Profile" controller="User">Profile</navsec>
+                @if (CheckUserRoleOnAdmin())
+                {
+                    <navsec action="Panel" controller="Admin">Admin panel</navsec>
+                }
+            }
+        </nav>
+    </div>
+</header>

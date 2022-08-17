@@ -2,5 +2,6 @@
 public enum Roles
 {
     Default,
-    Administrator
+    BetaTester,
+    Administrator,
 }
