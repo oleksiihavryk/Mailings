@@ -38,7 +38,7 @@ public class AuthenticationRequestMode : IAuthServiceRequestMode
         Uri serviceUri,
         ServiceRequest request)
     {
-        var uri = serviceUri.AbsolutePath;
+        var uri = serviceUri.AbsoluteUri.TrimEnd('/');
 
         if (request.RoutePrefix != null)
             uri += request.RoutePrefix;
@@ -56,6 +56,7 @@ public class AuthenticationRequestMode : IAuthServiceRequestMode
 
         headers.Accept
             .Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        httpRequestMessage.Method = request.Method;
     }
     protected virtual void ConfigureBody(
         HttpRequestMessage httpRequestMessage,
@@ -79,7 +80,8 @@ public class AuthenticationRequestMode : IAuthServiceRequestMode
                     ClientId = authOptions.ClientId,
                     ClientSecret = authOptions.ClientSecret,
 
-                    GrantType = OidcConstants.GrantTypes.ClientCredentials
+                    GrantType = OidcConstants.GrantTypes.ClientCredentials,
+                    Scope = string.Join(',', authOptions.Scopes)
                 });
 
         if (tokenResponse.IsError)

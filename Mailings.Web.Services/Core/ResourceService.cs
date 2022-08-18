@@ -24,6 +24,10 @@ public class ResourceService : BaseService
                 {
                     opt.ClientId = "resourceServer_Client";
                     opt.ClientSecret = "resourceServer_Secret";
+                    opt.Scopes = new System.Collections.Generic.List<string>
+                    {
+                        "fullAccess_resourceServer"
+                    };
                 });
 
         return await _client.SendAsync(responseMessage);

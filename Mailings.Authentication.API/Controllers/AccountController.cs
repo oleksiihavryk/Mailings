@@ -1,8 +1,7 @@
-﻿using System.Security.Claims;
-using IdentityModel;
-using IdentityServer4.Services;
+﻿using IdentityServer4.Services;
 using Mailings.Authentication.API.ViewModels;
 using Mailings.Authentication.Shared;
+using Mailings.Authentication.Shared.ClaimProvider;
 using Mailings.Authentication.Shared.Exceptions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -14,13 +13,17 @@ public sealed class AccountController : Controller
     private readonly UserManager<User> _userManager;
     private readonly SignInManager<User> _signInManager;
     private readonly IIdentityServerInteractionService _interactionService;
+    private readonly IClaimProvider<User> _claimProvider;
 
     public AccountController(
         UserManager<User> userManager,
         SignInManager<User> signInManager,
-        IIdentityServerInteractionService interactionService)
-        => (_userManager, _signInManager, _interactionService) =
-            (userManager, signInManager, interactionService);
+        IIdentityServerInteractionService interactionService, 
+        IClaimProvider<User> claimProvider)
+    {
+        (_userManager, _signInManager, _interactionService, _claimProvider) =
+            (userManager, signInManager, interactionService, claimProvider);
+    }
 
     [HttpGet]
     [Route("[action]")]
@@ -97,7 +100,7 @@ public sealed class AccountController : Controller
         try 
         {
             user = await CreateUserAsync(viewModel);
-            await PopulateClaimsAsync(user);
+            await _claimProvider.ProvideClaimsAsync(user, Roles.Default);
             var result = await _signInManager.PasswordSignInAsync(
                 user: user,
                 password: viewModel.Password,
@@ -123,44 +126,6 @@ public sealed class AccountController : Controller
         }
     }
 
-    private async Task PopulateClaimsAsync(User user)
-    {
-        await _userManager.AddClaimAsync(
-            user: user, 
-            claim: new Claim(
-                type: JwtClaimTypes.GivenName, 
-                value: user.FirstName));
-        await _userManager.AddClaimAsync(
-            user: user,
-            claim: new Claim(
-                type: JwtClaimTypes.FamilyName,
-                value: user.LastName));
-        await _userManager.AddClaimAsync(
-            user: user,
-            claim: new Claim(
-                type: JwtClaimTypes.Email,
-                value: user.Email));
-        await _userManager.AddClaimAsync(
-            user: user,
-            claim: new Claim(
-                type: JwtClaimTypes.EmailVerified,
-                value: user.EmailConfirmed.ToString()));
-        await _userManager.AddClaimAsync(
-            user: user,
-            claim: new Claim(
-                type: JwtClaimTypes.Id,
-                value: user.Id));
-        await _userManager.AddClaimAsync(
-            user: user,
-            claim: new Claim(
-                type: JwtClaimTypes.PreferredUserName,
-                value: user.UserName));
-        await _userManager.AddClaimAsync(
-            user: user,
-            claim: new Claim(
-                type: JwtClaimTypes.Role,
-                value: Roles.Default.ToString()));
-    }
     private async Task<User> CreateUserAsync(RegisterViewModel viewModel)
     {
         User user = new User()

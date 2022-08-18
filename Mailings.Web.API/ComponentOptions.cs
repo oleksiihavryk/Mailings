@@ -11,6 +11,12 @@ public static class ComponentOptions
     public static void MvcRouteOptions(IRouteBuilder routes)
     {
         routes.MapRoute(null,
+            "admin/generate-account",
+            defaults: new { controller="Admin", action = "GenerateAccount"});
+        routes.MapRoute(null,
+            "admin/account-is-generated",
+            defaults: new { controller="Admin", action = "AccountIsGenerated" });
+        routes.MapRoute(null,
             "{controller=Home}/{action=Index}");
     }
     public static void AuthorizationOptions(AuthorizationOptions opt)

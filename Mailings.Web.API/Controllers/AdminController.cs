@@ -16,7 +16,7 @@ public sealed class AdminController : Controller
     }
 
     public IActionResult Panel() => View();
-    [HttpGet]
+
     public IActionResult GenerateAccount() => View();
     [HttpPost]
     public async Task<IActionResult> TryToGenerateAccount()
@@ -25,17 +25,10 @@ public sealed class AdminController : Controller
 
         var viewModel = GetViewModel(acc);
 
-        ViewBag.Account = viewModel;
-
-        return RedirectToAction(nameof(AccountIsGenerated));
+        return RedirectToAction(nameof(AccountIsGenerated), viewModel);
     }
-    [HttpGet]
-    public IActionResult AccountIsGenerated()
-    {
-        var viewModel = ViewBag.Account;
-
-        return View((object)viewModel);
-    }
+    public IActionResult AccountIsGenerated(GeneratedAccountViewModel viewModel) 
+        => View(viewModel); 
 
     private GeneratedAccountViewModel GetViewModel(GeneratedUserDto acc)
         => new GeneratedAccountViewModel()

@@ -1,0 +1,26 @@
+﻿@model string
+@{
+    string subject = "Mailings bug";
+    string to = "oleksii.havryk2004@gmail.com";
+    string message = "Hey, i found a bug on your site. Please fix this. " +
+                     $"This is a path when bug is occurred: {Model}";
+    string emailLink = $"https://mail.google.com/mail/?" +
+                              $"view=cm&" +
+                              $"fs=1&" +
+                              $"to={to}&" +
+                              $"su={subject}&" +
+                              $"body={message}&";
+}
+@section Content
+{
+    <h2 class="main-text">Error</h2>
+    <div class="center-text">
+        <p>Occurred unknown error when following a link.</p>
+        <p>Path: @Model</p>
+        <p>Please, report about this error on 
+            <a class="email" href="emailLink">
+                oleksii.havryk2004@gmail.com
+            </a>
+        </p>
+    </div>
+}

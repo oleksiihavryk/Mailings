@@ -1,4 +1,5 @@
 ﻿using IdentityModel;
+using IdentityServer4;
 using IdentityServer4.Models;
 using Mailings.Authentication.Shared.StaticData;
 
@@ -32,14 +33,10 @@ public static class IdentityServerStaticData
                     "fullAccess_resourceServer"
                 }
             },
-            new ApiResource("_authenticationServer",
+            new ApiResource(IdentityServerConstants.LocalApi.ScopeName,
                 "Api resource to access authentication server.")
             {
                 Enabled = true,
-                Scopes =
-                {
-                    "default_authenticationServer"
-                }
             }
         };
     public static IEnumerable<ApiScope> Scopes 
@@ -72,12 +69,8 @@ public static class IdentityServerStaticData
                 ShowInDiscoveryDocument = true,
             },
             new ApiScope(
-                name: "default_authenticationServer",
-                displayName: "Scope of authorized authentication server for get access " +
-                             "to protected api for accounts operating")
-            {
-                ShowInDiscoveryDocument = true
-            }
+                name: IdentityServerConstants.LocalApi.ScopeName,
+                displayName: "Scope of auth server with access to advaned api.")
         };
 
     public static IEnumerable<Client> Clients
@@ -140,9 +133,7 @@ public static class IdentityServerStaticData
                 AllowedGrantTypes = GrantTypes.ClientCredentials,
 
                 AllowedScopes =
-                {
-                    "default_authenticationServer"
-                },
+                { IdentityServerConstants.LocalApi.ScopeName },
 
                 RedirectUris =
                 {

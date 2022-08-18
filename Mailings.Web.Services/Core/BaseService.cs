@@ -1,5 +1,6 @@
 ﻿using System.Net.Http.Json;
 using Mailings.Web.Services.Exceptions;
+using Newtonsoft.Json;
 
 namespace Mailings.Web.Services.Core;
 
@@ -28,21 +29,35 @@ public abstract class BaseService : IBaseService
     {
         var result = await SendAndReceiveRawAsync(request);
 
-        var response = await result.Content
-                           .ReadFromJsonAsync<EmptyServiceResponse>() ??
-                       throw new UnknownServiceResponseFormatException();
+        if (result.IsSuccessStatusCode)
+        {
+            var responseString = await result.Content.ReadAsStringAsync();
 
-        return response;
+            var response = JsonConvert
+                .DeserializeObject<EmptyServiceResponse>(responseString);
+
+            if (response != null)
+                return response;
+        }
+
+        throw new UnknownServiceResponseFormatException();
     }
     public virtual async Task<ServiceResponse<TResult>> SendAndReceiveResponse<TResult>(
         ServiceRequest request)
     {
         var result = await SendAndReceiveRawAsync(request);
 
-        var response = await result.Content
-                           .ReadFromJsonAsync<ServiceResponse<TResult>>() ??
-                       throw new UnknownServiceResponseFormatException();
+        if (result.IsSuccessStatusCode)
+        {
+            var responseString = await result.Content.ReadAsStringAsync();
 
-        return response;
+            var response = JsonConvert
+                .DeserializeObject<ServiceResponse<TResult>>(responseString);
+
+            if (response != null)
+                return response;
+        }
+
+        throw new UnknownServiceResponseFormatException();
     }
 }

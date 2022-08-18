@@ -1,7 +1,10 @@
 ﻿@section Content{
     <h2 class="main-text">Generate account</h2>
     <div class="center-text">
-        <p>Click on button to generate beta test account.</p>S
-        <btn action="TryToGenerateAccount" controller="Admin">Generate account</btn>
+        <p>Click on button to generate beta test account.</p>
+        <form method="post" 
+            asp-action="TryToGenerateAccount" asp-controller="Admin">
+            <button class="button">Generate account</button>
+        </form>
     </div>
 }

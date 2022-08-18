@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using IdentityModel;
 using Mailings.Authentication.Shared;
+using Mailings.Authentication.Shared.ClaimProvider;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 
@@ -10,6 +11,7 @@ public class IdentityDbInitializer : IDbInitializer
     private readonly UserManager<User> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
     private readonly IHostingEnvironment _env;
+    private readonly IClaimProvider<User> _claimProvider;
 
     protected virtual IDictionary<User, string> Admins => new Dictionary<User, string>()
     {
@@ -33,34 +35,6 @@ public class IdentityDbInitializer : IDbInitializer
             UserName = "defaultUser",
         }] = "kof94sjo3v",
     };
-    protected virtual IDictionary<User, string> BetaTesters
-        => new Dictionary<User, string>()
-        {
-            [new User()
-            {
-                FirstName = "First",
-                LastName = "Beta tester",
-                Email = "test.email3@gmail.com",
-                EmailConfirmed = true,
-                UserName = "betatester1",
-            }] = "dSfo19fjFA",
-            [new User()
-            {
-                FirstName = "Second",
-                LastName = "Beta tester",
-                Email = "test.email4@gmail.com",
-                EmailConfirmed = true,
-                UserName = "betatester2",
-            }] = "Ksa92S37f0",
-            [new User()
-            {
-                FirstName = "Thirst",
-                LastName = "Beta tester",
-                Email = "test.email5@gmail.com",
-                EmailConfirmed = true,
-                UserName = "betatester3",
-            }] = "20SJ72SNn8",
-        };
 
     public IdentityDbInitializer(
         UserManager<User> userManager, 
@@ -77,24 +51,10 @@ public class IdentityDbInitializer : IDbInitializer
     {
         await PopulateRolesIfItsPossibleAsync();
         await PopulateAdminsIfItsPossibleAsync();
-        await PopulateBetaTestersIfItsPossibleAsync();
 
         if (_env.IsDevelopment())
         {
             await PopulateDefaultUsersIfItsPossibleAsync();
-        }
-    }
-
-    private async Task PopulateBetaTestersIfItsPossibleAsync()
-    {
-        foreach (var user in BetaTesters)
-        {
-            if ((await _userManager.FindByNameAsync(user.Key.UserName)) == null)
-            {
-                await _userManager.CreateAsync(user.Key, user.Value);
-                await _userManager.AddToRoleAsync(user.Key, Roles.BetaTester.ToString());
-                await PopulateClaimsToUserAsync(user.Key, Roles.BetaTester);
-            }
         }
     }
     private async Task PopulateDefaultUsersIfItsPossibleAsync()
@@ -105,7 +65,7 @@ public class IdentityDbInitializer : IDbInitializer
             {
                 await _userManager.CreateAsync(user.Key, user.Value);
                 await _userManager.AddToRoleAsync(user.Key, Roles.Default.ToString());
-                await PopulateClaimsToUserAsync(user.Key, Roles.Default);
+                await _claimProvider.ProvideClaimsAsync(user.Key, Roles.Default);
             }
         }
     }
@@ -117,7 +77,7 @@ public class IdentityDbInitializer : IDbInitializer
             {
                 await _userManager.CreateAsync(user.Key, user.Value);
                 await _userManager.AddToRoleAsync(user.Key, Roles.Administrator.ToString());
-                await PopulateClaimsToUserAsync(user.Key, Roles.Administrator);
+                await _claimProvider.ProvideClaimsAsync(user.Key, Roles.Administrator);
             }
         }
     }
@@ -131,43 +91,5 @@ public class IdentityDbInitializer : IDbInitializer
                 await _roleManager.CreateAsync(identityRole);
             }
         }
-    }
-    private async Task PopulateClaimsToUserAsync(User user, Roles role)
-    {
-        await _userManager.AddClaimAsync(
-            user: user,
-            claim: new Claim(
-                type: JwtClaimTypes.GivenName,
-                value: user.FirstName));
-        await _userManager.AddClaimAsync(
-            user: user,
-            claim: new Claim(
-                type: JwtClaimTypes.FamilyName,
-                value: user.LastName));
-        await _userManager.AddClaimAsync(
-            user: user,
-            claim: new Claim(
-                type: JwtClaimTypes.Email,
-                value: user.Email));
-        await _userManager.AddClaimAsync(
-            user: user,
-            claim: new Claim(
-                type: JwtClaimTypes.EmailVerified,
-                value: user.EmailConfirmed.ToString()));
-        await _userManager.AddClaimAsync(
-            user: user,
-            claim: new Claim(
-                type: JwtClaimTypes.Id,
-                value: user.Id));
-        await _userManager.AddClaimAsync(
-            user: user,
-            claim: new Claim(
-                type: JwtClaimTypes.PreferredUserName,
-                value: user.UserName));
-        await _userManager.AddClaimAsync(
-            user: user,
-            claim: new Claim(
-                type: JwtClaimTypes.Role,
-                value: role.ToString()));
     }
 }

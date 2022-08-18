@@ -5,7 +5,7 @@ using Mailings.Web.Shared.Dto;
 namespace Mailings.Web.Services;
 public class BetaTestAuthenticationService : IBetaTestAuthenticationService
 {
-    public const string RoutePrefix = "/api/beta-test";
+    public const string RoutePrefix = "/api/account/beta-test";
 
     protected readonly AuthenticationService _authService;
 
@@ -19,7 +19,7 @@ public class BetaTestAuthenticationService : IBetaTestAuthenticationService
         //setup request
         var request = new ServiceRequest(HttpMethod.Post)
         {
-            RoutePrefix = "/account"
+            RoutePrefix = RoutePrefix
         };
 
         //send request
