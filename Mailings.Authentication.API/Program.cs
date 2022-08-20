@@ -1,5 +1,4 @@
-﻿using IdentityServer4;
-using Mailings.Authentication.API.Extensions;
+﻿using Mailings.Authentication.API.Extensions;
 using Mailings.Authentication.API.Infrastructure;
 using Mailings.Authentication.Shared;
 using Mailings.Authentication.Shared.StaticData;
@@ -8,7 +7,6 @@ using Mailings.Authentication.Data.DbInitializer;
 using Mailings.Authentication.API;
 using Mailings.Authentication.Shared.ClaimProvider;
 using Mailings.Authentication.Shared.PasswordGenerator;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;

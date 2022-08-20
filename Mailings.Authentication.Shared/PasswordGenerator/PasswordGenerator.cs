@@ -1,8 +1,6 @@
-﻿using System.Net.NetworkInformation;
-using System.Text;
+﻿using System.Text;
 
 namespace Mailings.Authentication.Shared.PasswordGenerator;
-
 public class PasswordGenerator : IPasswordGenerator
 {
     public const int SymbolsCount = 20;
@@ -39,7 +37,8 @@ public class PasswordGenerator : IPasswordGenerator
             {
                 1 => digit,
                 2 => lowerCaseLetter,
-                3 => upperCaseLetter
+                3 => upperCaseLetter,
+                _ => throw new InvalidOperationException("Impossible exception")
             };
 
             sb.Append(symbol);

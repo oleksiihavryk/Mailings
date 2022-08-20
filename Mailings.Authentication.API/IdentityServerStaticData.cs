@@ -4,7 +4,7 @@ using IdentityServer4.Models;
 using Mailings.Authentication.Shared.StaticData;
 
 namespace Mailings.Authentication.API;
-public static class IdentityServerStaticData
+internal static class IdentityServerStaticData
 {
     public static IEnumerable<IdentityResource> IdentityResources 
         => new List<IdentityResource>()

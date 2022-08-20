@@ -2,7 +2,8 @@
 using Microsoft.AspNetCore.Identity;
 
 namespace Mailings.Authentication.Shared.Exceptions;
-public class FailedSignInException : Exception
+[Serializable]
+public sealed class FailedSignInException : Exception
 {
     private readonly User _user;
     private readonly SignInResult _signInResult;

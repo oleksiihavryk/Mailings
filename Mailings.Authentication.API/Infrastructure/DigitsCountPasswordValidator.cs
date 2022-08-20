@@ -19,7 +19,9 @@ public class DigitsCountPasswordValidator : PasswordValidator<User>
     }
 
     public override async Task<IdentityResult> ValidateAsync(
-        UserManager<User> manager, User user, string password)
+        UserManager<User> manager, 
+        User user, 
+        string password)
     {
         var result = await base.ValidateAsync(manager, user, password);
 
@@ -28,7 +30,10 @@ public class DigitsCountPasswordValidator : PasswordValidator<User>
         return result;
     }
 
-    protected virtual void CheckOnDigitCount(string password, int minDigitCount, ref IdentityResult result)
+    protected virtual void CheckOnDigitCount(
+        string password, 
+        int minDigitCount, 
+        ref IdentityResult result)
     {
         IdentityResult? newResult = null;
 

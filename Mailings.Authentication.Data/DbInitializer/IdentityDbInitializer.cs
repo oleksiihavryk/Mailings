@@ -1,6 +1,4 @@
-﻿using System.Security.Claims;
-using IdentityModel;
-using Mailings.Authentication.Shared;
+﻿using Mailings.Authentication.Shared;
 using Mailings.Authentication.Shared.ClaimProvider;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -8,10 +6,10 @@ using Microsoft.AspNetCore.Identity;
 namespace Mailings.Authentication.Data.DbInitializer;
 public class IdentityDbInitializer : IDbInitializer
 {
-    private readonly UserManager<User> _userManager;
-    private readonly RoleManager<IdentityRole> _roleManager;
-    private readonly IHostingEnvironment _env;
-    private readonly IClaimProvider<User> _claimProvider;
+    protected readonly UserManager<User> _userManager;
+    protected readonly RoleManager<IdentityRole> _roleManager;
+    protected readonly IHostingEnvironment _env;
+    protected readonly IClaimProvider<User> _claimProvider;
 
     protected virtual IDictionary<User, string> Admins => new Dictionary<User, string>()
     {
@@ -39,13 +37,14 @@ public class IdentityDbInitializer : IDbInitializer
     public IdentityDbInitializer(
         UserManager<User> userManager, 
         RoleManager<IdentityRole> roleManager,
-        IHostingEnvironment env)
+        IHostingEnvironment env,
+        IClaimProvider<User> claimProvider)
     {
         _userManager = userManager;
         _roleManager = roleManager;
         _env = env;
+        _claimProvider = claimProvider;
     }
-
 
     public virtual async Task InitializeAsync()
     {

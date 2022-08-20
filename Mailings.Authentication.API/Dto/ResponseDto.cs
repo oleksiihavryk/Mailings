@@ -2,8 +2,8 @@
 
 internal sealed class ResponseDto
 {
-    public bool IsSuccess { get; set; }
-    public int StatusCode { get; set; }
-    public object? Result { get; set; }
-    public IEnumerable<string> Messages { get; set; }
+    public bool IsSuccess { get; set; } = false;
+    public int StatusCode { get; set; } = StatusCodes.Status500InternalServerError;
+    public object? Result { get; set; } = null;
+    public IEnumerable<string> Messages { get; set; } = Enumerable.Empty<string>();
 }

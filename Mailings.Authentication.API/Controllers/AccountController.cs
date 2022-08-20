@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Mailings.Authentication.API.Controllers;
 [Route("[controller]")]
-public sealed class AccountController : Controller
+internal sealed class AccountController : Controller
 {
     private readonly UserManager<User> _userManager;
     private readonly SignInManager<User> _signInManager;
@@ -116,12 +116,12 @@ public sealed class AccountController : Controller
         }
         catch (FailedSignInException)
         {
-            await _userManager.DeleteAsync(user);
+            await _userManager.DeleteAsync(user ?? new User());
             throw;
         }
         catch (FailedSignUpException)
         {
-            await _userManager.DeleteAsync(user);
+            await _userManager.DeleteAsync(user ?? new User());
             throw;
         }
     }

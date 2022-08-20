@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Mailings.Authentication.Shared.Exceptions;
 [Serializable]
-public class FailedSignUpException : Exception
+public sealed class FailedSignUpException : Exception
 {
     private readonly User _user;
     private readonly IdentityResult _identityResult;

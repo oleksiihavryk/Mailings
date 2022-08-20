@@ -6,14 +6,14 @@ namespace Mailings.Authentication.Shared.ClaimProvider;
 
 public class UserClaimProvider : IClaimProvider<User>
 {
-    private readonly UserManager<User> _userManager;
+    protected readonly UserManager<User> _userManager;
 
     public UserClaimProvider(UserManager<User> userManager)
     {
         _userManager = userManager;
     }
 
-    public async Task ProvideClaimsAsync(User user, Roles role)
+    public virtual async Task ProvideClaimsAsync(User user, Roles role)
     {
         await _userManager.AddClaimAsync(
             user: user,
