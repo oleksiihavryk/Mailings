@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
  
 namespace Mailings.Web.API.Controllers;
 [Authorize("Admin")]
-internal sealed class AdminController : Controller
+public sealed class AdminController : Controller
 {
     private readonly IBetaTestAuthenticationService _betaTestService;
 

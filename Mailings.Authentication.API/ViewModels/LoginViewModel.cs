@@ -2,7 +2,7 @@
 
 namespace Mailings.Authentication.API.ViewModels;
 
-internal sealed class LoginViewModel
+public sealed class LoginViewModel
 {
     [Required]
     [Display(Name = "User name")]

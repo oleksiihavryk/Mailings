@@ -1,6 +1,6 @@
 ﻿namespace Mailings.Authentication.API.Dto;
 
-internal sealed class ResponseDto
+public sealed class ResponseDto
 {
     public bool IsSuccess { get; set; } = false;
     public int StatusCode { get; set; } = StatusCodes.Status500InternalServerError;

@@ -11,7 +11,6 @@ namespace Mailings.Resources.API.Controllers;
 [ApiController]
 [Authorize]
 [Route("/api/mails/text")]
-//Todo: implement text mails controller later
 public sealed class TextMailsController : ControllerBase
 {
     private readonly ITextMailsRepository _mailsRepository;

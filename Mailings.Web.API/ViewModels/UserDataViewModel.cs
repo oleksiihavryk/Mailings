@@ -1,7 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 namespace Mailings.Web.API.ViewModels;
-internal sealed class UserDataViewModel
+
+public sealed class UserDataViewModel
 {
     //this view model is not using in forms, but it can.
     //so if you want to use this view model in forms just add some attributes

@@ -4,16 +4,17 @@ using Mailings.Resources.Domain.MainModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace Mailings.Resources.Data.Repositories;
+
 public class TextMailsRepository : ITextMailsRepository
 {
-    private readonly CommonResourcesDbContext _dbContext;
+    protected readonly CommonResourcesDbContext _dbContext;
 
     public TextMailsRepository(CommonResourcesDbContext dbContext)
     {
         _dbContext = dbContext;
     }
 
-    public IEnumerable<TextMail> GetAll()
+    public virtual IEnumerable<TextMail> GetAll()
     {
         var entities = _dbContext.TextMails
             .Include(m => m.Attachments)
@@ -21,7 +22,7 @@ public class TextMailsRepository : ITextMailsRepository
 
         return entities;
     }
-    public async Task<TextMail> GetByKeyAsync(Guid key)
+    public virtual async Task<TextMail> GetByKeyAsync(Guid key)
     {
         var entity = await _dbContext.TextMails
             .Include(m => m.Attachments)
@@ -31,14 +32,14 @@ public class TextMailsRepository : ITextMailsRepository
             typeOfObject: typeof(TextMail),
             dbContext: _dbContext);
     }
-    public async Task<TextMail> SaveIntoDbAsync(TextMail entity)
+    public virtual async Task<TextMail> SaveIntoDbAsync(TextMail entity)
     {
         await _dbContext.TextMails.AddAsync(entity);
         await _dbContext.SaveChangesAsync();
 
         return entity;
     }
-    public async Task DeleteFromDbByKey(Guid key)
+    public virtual async Task DeleteFromDbByKey(Guid key)
     {
         var entity = await GetByKeyAsync(key);
         

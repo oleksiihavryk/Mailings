@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace Mailings.Resources.Data.EntityConfigurations;
 public class AttachmentsConfiguration : IEntityTypeConfiguration<Attachment>
 {
-    public void Configure(EntityTypeBuilder<Attachment> builder)
+    public virtual void Configure(EntityTypeBuilder<Attachment> builder)
     {
         builder.HasKey(a => a.Id);
 

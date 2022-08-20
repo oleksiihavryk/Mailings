@@ -6,14 +6,14 @@ using Microsoft.EntityFrameworkCore;
 namespace Mailings.Resources.Data.Repositories;
 public class HtmlMailsRepository : IHtmlMailsRepository
 {
-    private readonly CommonResourcesDbContext _dbContext;
+    protected readonly CommonResourcesDbContext _dbContext;
 
     public HtmlMailsRepository(CommonResourcesDbContext dbContext)
     {
         _dbContext = dbContext;
     }
 
-    public IEnumerable<HtmlMail> GetAll()
+    public virtual IEnumerable<HtmlMail> GetAll()
     {
         var entities = _dbContext.HtmlMails
             .Include(m => m.Attachments)
@@ -21,7 +21,7 @@ public class HtmlMailsRepository : IHtmlMailsRepository
 
         return entities;
     }
-    public async Task<HtmlMail> GetByKeyAsync(Guid key)
+    public virtual async Task<HtmlMail> GetByKeyAsync(Guid key)
     {
         var entity = await _dbContext.HtmlMails
             .Include(m => m.Attachments)
@@ -31,14 +31,14 @@ public class HtmlMailsRepository : IHtmlMailsRepository
             typeOfObject: typeof(HtmlMail),
             dbContext: _dbContext);
     }
-    public async Task<HtmlMail> SaveIntoDbAsync(HtmlMail entity)
+    public virtual async Task<HtmlMail> SaveIntoDbAsync(HtmlMail entity)
     {
         await _dbContext.HtmlMails.AddAsync(entity);
         await _dbContext.SaveChangesAsync();
 
         return entity;
     }
-    public async Task DeleteFromDbByKey(Guid key)
+    public virtual async Task DeleteFromDbByKey(Guid key)
     {
         var entity = await GetByKeyAsync(key);
 

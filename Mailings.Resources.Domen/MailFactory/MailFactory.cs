@@ -16,7 +16,7 @@ public class MailFactory : IMailFactory
         ForUser = forUser;
     }
 
-    public Mail CreateTextMail(
+    public virtual Mail CreateTextMail(
         string theme, 
         string text,
         IEnumerable<Attachment>? attachments = null)
@@ -47,7 +47,7 @@ public class MailFactory : IMailFactory
         mail.StringContent = text;
         return mail;
     }
-    public Mail CreateHtmlMail(
+    public virtual Mail CreateHtmlMail(
         string theme, 
         string html, 
         IEnumerable<Attachment>? attachments = null)

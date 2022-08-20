@@ -10,14 +10,14 @@ using SmtpClient = MailKit.Net.Smtp.SmtpClient;
 namespace Mailings.Resources.Application.MailingService;
 public class MailingService : IMailingService
 {
-    private readonly MailSettings _mailSettings;
+    protected readonly MailSettings _mailSettings;
 
     public MailingService(IOptions<MailSettings> mailSettings)
     {
         _mailSettings = mailSettings.Value;
     }
 
-    public MailingSendResponse Send(MailingSendRequest request)
+    public virtual MailingSendResponse Send(MailingSendRequest request)
     {
         CheckRequest(request);
 
@@ -41,7 +41,7 @@ public class MailingService : IMailingService
 
             response = new MailingSendResponse()
             {
-                IsSucceded = true,
+                IsSuccess = true,
                 Group = request.Group
             };
         }
@@ -49,14 +49,14 @@ public class MailingService : IMailingService
         {
             response = new MailingSendResponse()
             {
-                IsSucceded = false,
+                IsSuccess = false,
                 Group = request.Group
             };
         }
 
         return response;
     }
-    public async Task<MailingSendResponse> SendAsync(MailingSendRequest request)
+    public virtual async Task<MailingSendResponse> SendAsync(MailingSendRequest request)
     {
         CheckRequest(request);
 
@@ -81,7 +81,7 @@ public class MailingService : IMailingService
 
             response = new MailingSendResponse()
             {
-                IsSucceded = true,
+                IsSuccess = true,
                 Group = request.Group
             };
         }
@@ -89,7 +89,7 @@ public class MailingService : IMailingService
         {
             response = new MailingSendResponse()
             {
-                IsSucceded = false,
+                IsSuccess = false,
                 Group = request.Group
             };
         }
@@ -97,7 +97,7 @@ public class MailingService : IMailingService
         return response;
     }
 
-    protected MimeMessage CreateMail(MailingSendRequest request)
+    protected virtual MimeMessage CreateMail(MailingSendRequest request)
     {
         var mail = new MimeMessage();
 
@@ -133,7 +133,7 @@ public class MailingService : IMailingService
 
         return mail;
     }
-    protected void CheckRequest(MailingSendRequest request)
+    protected virtual void CheckRequest(MailingSendRequest request)
     {
         if (!request.Group.To.Any())
             throw new MailingRequestException(

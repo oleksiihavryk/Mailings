@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Mailings.Resources.Data.Exceptions;
 
 [Serializable]
-public class ObjectNotFoundInDatabaseException : Exception
+public sealed class ObjectNotFoundInDatabaseException : Exception
 {
     private readonly Type _typeOfObject;
     private readonly DbContext _dbContext;
@@ -19,9 +19,16 @@ public class ObjectNotFoundInDatabaseException : Exception
     };
 
     public ObjectNotFoundInDatabaseException(
+        Type typeOfObject,
+        DbContext dbContext,
+        string? message = null)
+        :this (typeOfObject, dbContext, message, null)
+    {
+    }
+    public ObjectNotFoundInDatabaseException(
         Type typeOfObject, 
         DbContext dbContext,
-        string? message = null,
+        string? message,
         Exception? inner = null)
         : base(message, inner)
     {

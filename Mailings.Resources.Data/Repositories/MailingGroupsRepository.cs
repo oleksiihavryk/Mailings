@@ -7,13 +7,13 @@ namespace Mailings.Resources.Data.Repositories;
 
 public class MailingGroupsRepository : IMailingGroupsRepository
 {
-    private readonly CommonResourcesDbContext _dbContext;
+    protected readonly CommonResourcesDbContext _dbContext;
 
     public MailingGroupsRepository(CommonResourcesDbContext dbContext)
     {
         _dbContext = dbContext;
     }
-    public IEnumerable<MailingGroup> GetAll()
+    public virtual IEnumerable<MailingGroup> GetAll()
     {
         var entities = _dbContext.MailingGroups
             .Include(m => m.From)
@@ -24,7 +24,7 @@ public class MailingGroupsRepository : IMailingGroupsRepository
 
         return entities;
     }
-    public async Task<MailingGroup> GetByKeyAsync(Guid key)
+    public virtual async Task<MailingGroup> GetByKeyAsync(Guid key)
     {
         var entity = await _dbContext.MailingGroups
             .Include(g => g.From)
@@ -37,14 +37,14 @@ public class MailingGroupsRepository : IMailingGroupsRepository
             typeOfObject: typeof(MailingGroup),
             dbContext: _dbContext);
     }
-    public async Task<MailingGroup> SaveIntoDbAsync(MailingGroup entity)
+    public virtual async Task<MailingGroup> SaveIntoDbAsync(MailingGroup entity)
     {
         await _dbContext.MailingGroups.AddAsync(entity);
         await _dbContext.SaveChangesAsync();
 
         return entity;
     }
-    public async Task DeleteFromDbByKey(Guid key)
+    public virtual async Task DeleteFromDbByKey(Guid key)
     {
         var entity = await GetByKeyAsync(key);
 

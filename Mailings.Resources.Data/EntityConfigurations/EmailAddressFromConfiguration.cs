@@ -6,7 +6,7 @@ namespace Mailings.Resources.Data.EntityConfigurations;
 
 public class EmailAddressFromConfiguration : IEntityTypeConfiguration<EmailAddressFrom>
 {
-    public void Configure(EntityTypeBuilder<EmailAddressFrom> builder)
+    public virtual void Configure(EntityTypeBuilder<EmailAddressFrom> builder)
     {
         builder.ToTable("EmailSenders");
 

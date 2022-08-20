@@ -6,7 +6,7 @@ namespace Mailings.Resources.Data.EntityConfigurations;
 
 public class HtmlMailConfiguration : IEntityTypeConfiguration<HtmlMail>
 {
-    public void Configure(EntityTypeBuilder<HtmlMail> builder)
+    public virtual void Configure(EntityTypeBuilder<HtmlMail> builder)
     {
         builder.Property(hm => hm.ByteContent).IsRequired(false);
     }

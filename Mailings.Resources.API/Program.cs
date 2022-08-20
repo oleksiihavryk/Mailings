@@ -45,8 +45,6 @@ services.AddCors(opt =>
     });
 });
 
-services.AddAutoMapper();
-
 services.AddGlobalExceptionHandler();
 
 services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

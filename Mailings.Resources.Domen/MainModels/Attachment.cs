@@ -12,6 +12,6 @@ public class Attachment
         get => Convert.FromBase64String(Data);
         set => Data = Convert.ToBase64String(value);
     }
-    public string ContentType { get; set; }
-    public Mail Mail { get; set; }
+    public string ContentType { get; set; } 
+    public Mail Mail { get; set; } 
 }

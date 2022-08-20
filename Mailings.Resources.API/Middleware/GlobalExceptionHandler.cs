@@ -1,10 +1,10 @@
 ﻿using Mailings.Resources.API.ResponseFactory;
 
 namespace Mailings.Resources.API.Middleware;
-public class GlobalExceptionHandler : IMiddleware
+internal class GlobalExceptionHandler : IMiddleware
 {
-    private readonly IResponseFactory _responseFactory;
-    private readonly ILogger<GlobalExceptionHandler> _logger;
+    protected readonly IResponseFactory _responseFactory;
+    protected readonly ILogger<GlobalExceptionHandler> _logger;
 
     public GlobalExceptionHandler(
         IResponseFactory responseFactory, 
@@ -14,7 +14,7 @@ public class GlobalExceptionHandler : IMiddleware
         _logger = logger;
     }
 
-    public async Task InvokeAsync(HttpContext context, RequestDelegate next)
+    public virtual async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
         try
         {
@@ -29,7 +29,7 @@ public class GlobalExceptionHandler : IMiddleware
         }
     }
 
-    private async Task HandleException(HttpContext context)
+    protected virtual async Task HandleException(HttpContext context)
     {
         var result = _responseFactory.EmptyInternalServerError;
         var response = context.Response;

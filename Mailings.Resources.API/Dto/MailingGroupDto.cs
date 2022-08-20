@@ -1,5 +1,6 @@
 ﻿namespace Mailings.Resources.API.Dto;
-public class MailingGroupDto
+
+public sealed class MailingGroupDto
 {
     public Guid Id { get; set; } = Guid.Empty;
     public Guid MailId { get; set; }

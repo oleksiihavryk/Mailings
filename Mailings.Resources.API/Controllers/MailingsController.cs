@@ -12,8 +12,7 @@ namespace Mailings.Resources.API.Controllers;
 [ApiController]
 [Authorize]
 [Route("api/[controller]")]
-//Todo: implement main mailings controller later
-public class MailingsController : ControllerBase
+public sealed class MailingsController : ControllerBase
 {
     private readonly IMailingService _mailingService;
     private readonly IMailingGroupsRepository _mailingGroups;
@@ -67,7 +66,7 @@ public class MailingsController : ControllerBase
     {
         return new MailingResponseDto()
         {
-            IsSucceded = response.IsSucceded,
+            IsSuccess = response.IsSuccess,
             MailingId = response.Group.Id,
         };
     }

@@ -6,7 +6,7 @@ namespace Mailings.Resources.Data.EntityConfigurations;
 
 public class TextMailConfiguration : IEntityTypeConfiguration<TextMail>
 {
-    public void Configure(EntityTypeBuilder<TextMail> builder)
+    public virtual void Configure(EntityTypeBuilder<TextMail> builder)
     {
         builder.Property(t => t.StringContent).IsRequired(false);
     }

@@ -2,12 +2,12 @@
 
 namespace Mailings.Resources.Application.MailingService;
 
-public class MailingSendResponse
+public sealed class MailingSendResponse
 {
-    public bool IsSucceded { get; set; }
+    public bool IsSuccess { get; set; }
     public MailingGroup Group { get; set; }
 
     public HistoryNoteMailingGroup GetHistoryNote()
-        => new HistoryNoteMailingGroup(Group, IsSucceded) 
+        => new HistoryNoteMailingGroup(Group, IsSuccess) 
             { When = DateTime.Now.ToUniversalTime() };
 }

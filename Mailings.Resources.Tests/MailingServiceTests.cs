@@ -111,7 +111,7 @@ public class MailingServiceTests
         else
         {
             response = mailingService.Send(request);
-            Assert.True(response.IsSucceded);
+            Assert.True(response.IsSuccess);
             Assert.Equal(mailingGroup, response.Group);
         }
     }

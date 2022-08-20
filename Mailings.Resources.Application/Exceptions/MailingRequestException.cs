@@ -4,7 +4,7 @@ using Mailings.Resources.Application.MailingService;
 namespace Mailings.Resources.Application.Exceptions;
 
 [Serializable]
-public class MailingRequestException : Exception
+internal class MailingRequestException : Exception
 {
     private readonly MailingSendRequest _sendRequest;
 

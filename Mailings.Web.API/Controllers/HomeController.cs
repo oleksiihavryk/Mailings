@@ -2,7 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 
 namespace Mailings.Web.API.Controllers;
-internal sealed class HomeController : Controller
+
+public sealed class HomeController : Controller
 {
     public ViewResult Index() => View();
     [Authorize]

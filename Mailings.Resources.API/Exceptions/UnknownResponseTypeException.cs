@@ -2,7 +2,7 @@
 
 namespace Mailings.Resources.API.Exceptions;
 [Serializable]
-public class UnknownResponseTypeException : Exception
+internal sealed class UnknownResponseTypeException : Exception
 {
     public UnknownResponseTypeException()
         : base()

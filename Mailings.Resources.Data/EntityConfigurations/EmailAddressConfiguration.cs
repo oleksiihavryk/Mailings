@@ -6,7 +6,7 @@ namespace Mailings.Resources.Data.EntityConfigurations;
 
 public class EmailAddressConfiguration : IEntityTypeConfiguration<EmailAddress>
 {
-    public void Configure(EntityTypeBuilder<EmailAddress> builder)
+    public virtual void Configure(EntityTypeBuilder<EmailAddress> builder)
     {
         builder.HasKey(e => e.Id);
 

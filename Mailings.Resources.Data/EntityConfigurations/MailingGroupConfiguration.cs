@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace Mailings.Resources.Data.EntityConfigurations;
 public class MailingGroupConfiguration : IEntityTypeConfiguration<MailingGroup>
 {
-    public void Configure(EntityTypeBuilder<MailingGroup> builder)
+    public virtual void Configure(EntityTypeBuilder<MailingGroup> builder)
     {
         builder.HasKey(m => m.Id);
 

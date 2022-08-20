@@ -12,7 +12,7 @@ namespace Mailings.Resources.API.Controllers;
 [ApiController]
 [Authorize]
 [Route("api/mailing-groups")]
-public class MailingGroupsController : ControllerBase
+public sealed class MailingGroupsController : ControllerBase
 {
     private readonly IMailingGroupsRepository _mailingRepository;
     private readonly IResponseFactory _responseFactory;

@@ -1,7 +1,7 @@
 ﻿using Mailings.Resources.API.Middleware;
 
 namespace Mailings.Resources.API.Extensions;
-public static class GlobalExceptionHandlerExtensions
+internal static class GlobalExceptionHandlerExtensions
 {
     public static void AddGlobalExceptionHandler(this IServiceCollection services)
         => services.AddScoped<GlobalExceptionHandler>();

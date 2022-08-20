@@ -2,7 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 
 namespace Mailings.Web.API.Controllers;
-internal class ErrorController : Controller
+
+public class ErrorController : Controller
 {
     public IActionResult Index()
     {

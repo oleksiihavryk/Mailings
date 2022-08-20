@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Mailings.Authentication.API.Controllers;
 [Route("[controller]")]
-internal sealed class AccountController : Controller
+public sealed class AccountController : Controller
 {
     private readonly UserManager<User> _userManager;
     private readonly SignInManager<User> _signInManager;

@@ -1,6 +1,7 @@
 ﻿using Mailings.Resources.API.Exceptions;
 
 namespace Mailings.Resources.API.ResponseFactory;
+
 public class ResponseFactory : IResponseFactory
 {
     public Response EmptySuccess => new Response()
@@ -18,7 +19,7 @@ public class ResponseFactory : IResponseFactory
         StatusCode = StatusCodes.Status500InternalServerError
     };
 
-    public Response CreateSuccess(
+    public virtual Response CreateSuccess(
         SuccessResponseType successType = SuccessResponseType.Ok,
         object? result = null)
         => new Response()
@@ -33,7 +34,7 @@ public class ResponseFactory : IResponseFactory
                 _ => throw new UnknownResponseTypeException()
             }
         };
-    public Response CreateFailedResponse(
+    public virtual Response CreateFailedResponse(
         FailedResponseType failedType = FailedResponseType.BadRequest,
         string? message = null)
         => new Response()
@@ -48,7 +49,7 @@ public class ResponseFactory : IResponseFactory
                 _ => throw new UnknownResponseTypeException()
             }
         };
-    public Response CreateFailedResponse(
+    public virtual Response CreateFailedResponse(
         FailedResponseType failedType = FailedResponseType.BadRequest,
         string[]? messages = null)
         => new Response()

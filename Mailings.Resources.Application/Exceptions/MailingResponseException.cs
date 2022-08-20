@@ -1,9 +1,11 @@
 ﻿namespace Mailings.Resources.Application.Exceptions;
 
 [Serializable]
-public class MailingResponseException : Exception
+internal class MailingResponseException : Exception
 {
-    public MailingResponseException(Exception inner, string? message = null)
+    public MailingResponseException(
+        Exception inner, 
+        string? message = null)
         : base(message, inner)
     {
     }

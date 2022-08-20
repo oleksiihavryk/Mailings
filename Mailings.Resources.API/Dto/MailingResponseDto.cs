@@ -1,7 +1,7 @@
 ﻿namespace Mailings.Resources.API.Dto;
 
-public class MailingResponseDto
+public sealed class MailingResponseDto
 {
-    public bool IsSucceded { get; set; }
+    public bool IsSuccess { get; set; }
     public Guid MailingId { get; set; }
 }
