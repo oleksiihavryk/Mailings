@@ -1,5 +1,6 @@
 ﻿namespace Mailings.Authentication.API.Dto;
-public class ResponseDto
+
+internal sealed class ResponseDto
 {
     public bool IsSuccess { get; set; }
     public int StatusCode { get; set; }

@@ -11,7 +11,7 @@ namespace Mailings.Authentication.API.Controllers;
 [ApiController]
 [Route("/api/account/beta-test")]
 [Authorize(Policy = IdentityServerConstants.LocalApi.PolicyName)]
-public class BetaTestController : ControllerBase
+public sealed class BetaTestController : ControllerBase
 {
     private readonly IPasswordGenerator _passwordGen;
     private readonly UserManager<User> _userManager;

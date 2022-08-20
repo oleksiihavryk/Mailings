@@ -1,7 +1,8 @@
 ﻿using Mailings.Authentication.Data.DbInitializer;
 
 namespace Mailings.Authentication.API.Extensions;
-public static class WebApplicationExtensions
+
+internal static class WebApplicationExtensions
 {
     public static void SeedData(this WebApplication app)
     {

@@ -6,6 +6,11 @@
     font-size: 16px;
     font-weight: 700;
 }
+.data-for-copying {
+    color: #E5EF41;
+    font-size: 16px;
+    font-weight: 500;
+}
 .admin-panel-options {
     display: flex;
     flex-wrap: wrap;
@@ -33,4 +38,29 @@
     display: inline-block;
     vertical-align: middle;
     line-height: normal;
+}
+
+/*Creating of modal window*/
+
+.modal-window {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: none;
+}
+.modal-block {
+    height: 10%;
+    width: 60%;
+    margin: -10% auto;
+    background-color: white;
+    z-index: 1;
+    padding: 10px;
+}
+.modal-close-button {
+    float: right;
+}
+.modal-block-text {
+    margin: 0;
+    padding: 20px;
 }

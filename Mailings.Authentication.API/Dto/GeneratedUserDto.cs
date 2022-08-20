@@ -1,6 +1,5 @@
 ﻿namespace Mailings.Authentication.API.Dto;
-
-internal class GeneratedUserDto
+internal sealed class GeneratedUserDto
 {
     public string Email { get; set; }
     public string UserName { get; set; }
