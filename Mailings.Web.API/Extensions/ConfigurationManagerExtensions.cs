@@ -1,7 +1,7 @@
 ﻿using Mailings.Web.Shared.StaticData;
 
 namespace Mailings.Web.API.Extensions;
-public static class ConfigurationManagerExtensions
+internal static class ConfigurationManagerExtensions
 {
     public static void SetupStaticData(this ConfigurationManager config)
     {

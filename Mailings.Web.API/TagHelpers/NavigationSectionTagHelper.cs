@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 namespace Mailings.Web.API.TagHelpers;
 
 [HtmlTargetElement(ElementTag, Attributes = "action, controller")]
-public class NavigationSectionTagHelper : TagHelper
+public sealed class NavigationSectionTagHelper : TagHelper
 {
     public const string ElementTag = "navsec";
     public const string ElementClass = "navigation-section";

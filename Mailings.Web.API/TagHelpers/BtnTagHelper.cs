@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 namespace Mailings.Web.API.TagHelpers;
 
 [HtmlTargetElement(ElementTag, Attributes = "action, controller")]
-public class BtnTagHelper : TagHelper
+public sealed class BtnTagHelper : TagHelper
 {
     public const string ElementTag = "btn";
     public const string ElementClass = "button";

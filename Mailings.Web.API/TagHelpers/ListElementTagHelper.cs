@@ -2,7 +2,7 @@
 
 namespace Mailings.Web.API.TagHelpers;
 [HtmlTargetElement(ElementTag, ParentTag = ListTagHelper.ElementTag)]
-public class ListElementTagHelper : TagHelper
+public sealed class ListElementTagHelper : TagHelper
 {
     public const string ElementTag = "el";
 

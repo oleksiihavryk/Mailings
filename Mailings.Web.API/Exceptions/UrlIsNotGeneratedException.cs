@@ -1,6 +1,6 @@
 ﻿namespace Mailings.Web.API.Exceptions;
 [Serializable]
-internal class UrlIsNotGeneratedException : Exception
+internal sealed class UrlIsNotGeneratedException : Exception
 {
     public override string Message => base.Message ?? 
                                       "Url is not generated with current " +

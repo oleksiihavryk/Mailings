@@ -6,7 +6,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Mailings.Web.Api;
-public static class ComponentOptions
+
+internal static class ComponentOptions
 {
     public static void MvcRouteOptions(IRouteBuilder routes)
     {

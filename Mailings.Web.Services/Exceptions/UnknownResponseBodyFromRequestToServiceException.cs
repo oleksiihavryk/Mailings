@@ -2,7 +2,7 @@
 
 namespace Mailings.Web.Services.Exceptions;
 
-public class UnknownResponseBodyFromRequestToServiceException : Exception
+public sealed class UnknownResponseBodyFromRequestToServiceException : Exception
 {
     private readonly string _nameOfService;
 

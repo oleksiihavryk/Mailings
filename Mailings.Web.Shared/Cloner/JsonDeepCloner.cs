@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace Mailings.Web.Shared.Cloner;
 
-public class JsonDeepCloner : IDeepCloner
+public sealed class JsonDeepCloner : IDeepCloner
 {
     public T DeepClone<T>(T obj)
     {

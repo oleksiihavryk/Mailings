@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Mailings.Web.API.Controllers;
 
 [Authorize]
-public class UserController : Controller
+internal sealed class UserController : Controller
 {
     public IActionResult Profile()
     {

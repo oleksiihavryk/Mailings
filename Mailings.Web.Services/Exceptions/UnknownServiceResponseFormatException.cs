@@ -1,5 +1,5 @@
 ﻿namespace Mailings.Web.Services.Exceptions;
-public class UnknownServiceResponseFormatException : Exception
+public sealed class UnknownServiceResponseFormatException : Exception
 {
     public UnknownServiceResponseFormatException(string? message = null)   
         : this(message, null)

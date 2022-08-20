@@ -4,12 +4,12 @@ using Mailings.Web.Shared.Cloner;
 namespace Mailings.Web.Shared.Exceptions;
 
 [Serializable]
-public class ObjectCloneException : Exception
+public sealed class ObjectCloneException : Exception
 {
-    private readonly object _object;
+    private readonly object? _object;
     private readonly IDeepCloner _deepCloner;
 
-    public override IDictionary Data => new Dictionary<string, object>()
+    public override IDictionary Data => new Dictionary<string, object?>()
     {
         ["cloning object"] = _object,
         ["cloner"] = _deepCloner
@@ -21,9 +21,16 @@ public class ObjectCloneException : Exception
                                       $"Cloning object: {_object}";
 
     public ObjectCloneException(
-        object cloningObject,
         IDeepCloner deepCloner,
-        string? message = null,
+        object? cloningObject,
+        string? message = null)
+        : this(deepCloner, cloningObject, message, null)
+    {
+    }
+    public ObjectCloneException(
+        IDeepCloner deepCloner,
+        object? cloningObject,
+        string? message,
         Exception? inner = null)
         : base(message, inner)
     {

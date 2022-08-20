@@ -1,6 +1,6 @@
 ﻿namespace Mailings.Web.Services.Core;
 
-public class ServiceRequest
+public sealed class ServiceRequest
 {
     public string? RoutePrefix { get; set; }
     public HttpMethod Method { get; set; }

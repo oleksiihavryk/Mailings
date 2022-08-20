@@ -2,7 +2,7 @@
 
 namespace Mailings.Web.API.TagHelpers;
 [HtmlTargetElement(ElementTag, Attributes = "struct")]
-public class ListTagHelper : TagHelper
+public sealed class ListTagHelper : TagHelper
 {
     public const string ElementTag = "list";
     public const string ParentKey = "child element class";

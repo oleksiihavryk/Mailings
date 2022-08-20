@@ -2,7 +2,7 @@
 
 namespace Mailings.Web.Services.Exceptions;
 
-public class RequestToServiceIsFailedException : Exception
+public sealed class RequestToServiceIsFailedException : Exception
 {
     private readonly string _nameOfService;
 

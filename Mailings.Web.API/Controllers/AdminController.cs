@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
  
 namespace Mailings.Web.API.Controllers;
 [Authorize("Admin")]
-public sealed class AdminController : Controller
+internal sealed class AdminController : Controller
 {
     private readonly IBetaTestAuthenticationService _betaTestService;
 
@@ -16,7 +16,6 @@ public sealed class AdminController : Controller
     }
 
     public IActionResult Panel() => View();
-
     public IActionResult GenerateAccount() => View();
     [HttpPost]
     public async Task<IActionResult> TryToGenerateAccount()
