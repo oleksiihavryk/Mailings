@@ -22,10 +22,6 @@ public sealed class UserController : Controller
     {
         var userClaims = (User.Identity as ClaimsIdentity)?.Claims;
 
-        if (userClaims == null)
-            throw new InvalidOperationException(
-                "User is must be authorized on the system!");
-
         var userData = PrepareUserData(userClaims);
 
         return View(userData);
@@ -33,10 +29,6 @@ public sealed class UserController : Controller
     public IActionResult Change()
     {
         var userClaims = (User.Identity as ClaimsIdentity)?.Claims;
-
-        if (userClaims == null)
-            throw new InvalidOperationException(
-                "User is must be authorized on the system!");
 
         var userData = PrepareUserData(userClaims);
 
@@ -65,44 +57,59 @@ public sealed class UserController : Controller
             throw new InvalidOperationException(
                 "User is must be authorized on the system!");
 
-        var userData = PrepareUserData(userClaims);
+        var email = userClaims
+            .FirstOrDefault(c => c.Type == JwtClaimTypes.Email)?
+            .Value;
+        var firstName = userClaims
+            .FirstOrDefault(c => c.Type == JwtClaimTypes.GivenName)?
+            .Value;
+        var lastName = userClaims
+            .FirstOrDefault(c => c.Type == JwtClaimTypes.GivenName)?
+            .Value;
+        var username = userClaims
+            .FirstOrDefault(c => c.Type == JwtClaimTypes.PreferredUserName)?
+            .Value ?? throw new InvalidOperationException("Impossible error");
 
         var userDataDto = new UserDataDto()
         {
-            Email = userData.Email != viewModel.Email ? 
+            Email = email != viewModel.Email ? 
                 viewModel.Email : null,
-            FirstName = userData.FirstName != viewModel.FirstName ? 
+            FirstName = firstName != viewModel.FirstName ? 
                 viewModel.FirstName : null,
-            LastName = userData.LastName != viewModel.LastName ? 
+            LastName = lastName != viewModel.LastName ? 
                 viewModel.LastName : null,
-            Username = userData.UserName
+            Username = username
         };
 
         return userDataDto;
     }
 
     private UserDataViewModel PrepareUserData(IEnumerable<Claim> userClaims)
-        => new UserDataViewModel()
+    {
+        if (userClaims == null)
+            throw new InvalidOperationException(
+                "User is must be authorized on the system!");
+
+        var arrayUseClaims = userClaims as Claim[] ?? userClaims.ToArray();
+        var userData = new UserDataViewModel()
         {
-            Email = userClaims
-                .FirstOrDefault(c => c.Type
-                    .Contains(ClaimTypes.Email))?
+            Email = arrayUseClaims
+                .FirstOrDefault(c => c.Type == JwtClaimTypes.Email)?
                 .Value ?? "[email address is missing]",
-            FirstName = userClaims
-                .FirstOrDefault(c => c.Type
-                    .Contains(ClaimTypes.GivenName))?
+            FirstName = arrayUseClaims
+                .FirstOrDefault(c => c.Type == JwtClaimTypes.GivenName)?
                 .Value ?? "[first name is missing]",
-            LastName = userClaims
-                .FirstOrDefault(c => c.Type
-                    .Contains(ClaimTypes.Surname))?
+            LastName = arrayUseClaims
+                .FirstOrDefault(c => c.Type == JwtClaimTypes.FamilyName)?
                 .Value ?? "[last name is missing]",
-            UserName = userClaims
-                .FirstOrDefault(c => c.Type
-                    .Contains(JwtClaimTypes.PreferredUserName))?
+            UserName = arrayUseClaims
+                .FirstOrDefault(c => c.Type == JwtClaimTypes.PreferredUserName)?
                 .Value ?? "[username is missing]",
-            Role = userClaims
-                .FirstOrDefault(c => c.Type
-                    .Contains("/" + JwtClaimTypes.Role.Replace("_", "")))?
+            Role = arrayUseClaims
+                .FirstOrDefault(c => c.Type == JwtClaimTypes.Role)?
                 .Value ?? "[role is missing]"
         };
+
+        return userData;
+    }
 }

@@ -1,15 +1,4 @@
-﻿@{
-    string subject = "Mailings beta test access";
-    string to = "oleksii.havryk2004@gmail.com";
-    string message = "Write here your message";
-    string writeToEmailLink = $"https://mail.google.com/mail/?" +
-                           $"view=cm&" +
-                           $"fs=1&" +
-                           $"to={to}&" +
-                           $"su={subject}&" +
-                           $"body={message}&";
-}
-@section Content
+﻿@section Content
 {
     <h1 class="main-text center-text">Mailings application</h1>
     <p class="center-text">Application which helps organizing a mailing lists.</p>
@@ -18,7 +7,7 @@
         <p>
             If you would like to get an access to beta test, 
             please write on email 
-            <a class="email" href="@writeToEmailLink" target="_blank">
+            <a class="email" href="@ViewBag.WriteToEmailLink" target="_blank">
                 oleksii.havryk2004@gmail.com
             </a>
         </p>
