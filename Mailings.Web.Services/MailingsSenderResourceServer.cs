@@ -15,7 +15,7 @@ public class MailingsSenderResourceService : IMailingsSenderResourceService
         _resourceService = resourceService;
     }
 
-    public async Task<MailingResponseDto> Send(MailingRequestDto requestDto)
+    public virtual async Task<MailingResponseDto> Send(MailingRequestDto requestDto)
     {
         //setup request
         var request = new ServiceRequest(HttpMethod.Post)

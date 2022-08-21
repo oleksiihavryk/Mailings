@@ -1,4 +1,5 @@
 ﻿using IdentityServer4.Services;
+using Mailings.Authentication.API.Dto;
 using Mailings.Authentication.API.ViewModels;
 using Mailings.Authentication.Shared;
 using Mailings.Authentication.Shared.ClaimProvider;
@@ -80,13 +81,14 @@ public sealed class AccountController : Controller
 
         return Redirect(viewModel.ReturnUrl);
     }
+
     [HttpPost]
     [Route("[action]")]
     public async Task<IActionResult> Register(RegisterViewModel viewModel)
     {
 
         if (!ModelState.IsValid)
-                return View(viewModel);
+            return View(viewModel);
 
         if (viewModel.Password != viewModel.PasswordConfirmation)
         {
@@ -97,7 +99,7 @@ public sealed class AccountController : Controller
         }
 
         User? user = null;
-        try 
+        try
         {
             user = await CreateUserAsync(viewModel);
             await _claimProvider.ProvideClaimsAsync(user, Roles.Default);

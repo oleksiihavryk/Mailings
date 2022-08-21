@@ -5,7 +5,7 @@ namespace Mailings.Authentication.API.ViewModels;
 public sealed class RegisterViewModel
 {
     [Required]
-    [Display(Name = "User name")]
+    [Display(Name = "Username")]
     public string Username { get; set; } = string.Empty;
     [DataType("Password")] 
     [Required] 

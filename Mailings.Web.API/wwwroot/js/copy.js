@@ -1,19 +1,34 @@
 ﻿$(function () {
     const animTime = 150;
 
-    const copyButton = $('#copy');
+    $('#copy').click(copyAccountDataToClipboard);
+    $('.data-for-copying').click(copyDataUnitToClipboard);
 
-    copyButton.click(copyToBuffer);
-
-    function copyToBuffer() {
+    function copyDataUnitToClipboard() {
         //copying in buffer
-        const dataForCopying = getDataForCopying(); // {}
-        copyToUserCopyingBuffer(dataForCopying);
+        const dataForCopying = getUnitDataForCopying(this); // {}
+        copyDataToClipboard(dataForCopying);
+        //invoke model window with text
+        const text = `Data '${$(this).data('defenition')}' is copied in a clipboard!`;
+        invokeModalWindow(text);
+    }
+    function copyAccountDataToClipboard() {
+        //copying in buffer
+        const dataForCopying = getAccountDataForCopying(); // {}
+        copyDataToClipboard(dataForCopying);
         //invoke model window with text
         const text = 'Account data is copied in a clipboard!';
         invokeModalWindow(text);
     }
-    function getDataForCopying() {
+    function getUnitDataForCopying(el) {
+        const data = {};
+        const jqEl = $(el);
+
+        data[jqEl.data('defenition')] = jqEl.text();
+
+        return data;
+    }
+    function getAccountDataForCopying() {
         const data = {};
         const elems = $('.data-for-copying');
 
@@ -28,7 +43,7 @@
 
         return data;
     }
-    function copyToUserCopyingBuffer(dataForCopying) {
+    function copyDataToClipboard(dataForCopying) {
         const stringArray = [];
         for (let el in dataForCopying) {
             stringArray.push(el + ': ' + dataForCopying[el]);
@@ -83,8 +98,8 @@
         e.stopPropagation();
         const modal = $('#modal');
 
-        //anim and remove
-        modal.fadeOut(animTime);
+        //anim and remove   
+        modal.fadeOut(animTime, function () { modal.stop() });
         modal.children('.modal-block').animate({
             margin: '-10% auto'
         }, animTime, function () {

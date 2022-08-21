@@ -31,5 +31,6 @@ internal static class ConfigureDIContainerExtension
         services.AddScoped<IMailingGroupsResourceService, MailingGroupsResourceService>();
         services.AddScoped<IMailingsSenderResourceService, MailingsSenderResourceService>();
         services.AddScoped<IBetaTestAuthenticationService, BetaTestAuthenticationService>();
+        services.AddScoped<IAccountAuthenticationService, AccountAuthenticationService>();
     }
 }

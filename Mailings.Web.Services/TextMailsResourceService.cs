@@ -14,7 +14,7 @@ public class TextMailsResourceService : ITextMailsResourceService
         _resourceService = resourceService;
     }
 
-    public async Task<IEnumerable<MailDto>> GetMails()
+    public virtual async Task<IEnumerable<MailDto>> GetMails()
     {
         //setup request
         var request = new ServiceRequest(HttpMethod.Get)
@@ -35,7 +35,7 @@ public class TextMailsResourceService : ITextMailsResourceService
         throw new RequestToServiceIsFailedException(
             nameOfService: nameof(ResourceService));
     }
-    public async Task<IEnumerable<MailDto>> GetMailsByUserId(string userId)
+    public virtual async Task<IEnumerable<MailDto>> GetMailsByUserId(string userId)
     {
         //setup request
         var request = new ServiceRequest(HttpMethod.Get)
@@ -56,7 +56,7 @@ public class TextMailsResourceService : ITextMailsResourceService
         throw new RequestToServiceIsFailedException(
             nameOfService: nameof(ResourceService));
     }
-    public async Task<MailDto> GetById(string id)
+    public virtual async Task<MailDto> GetById(string id)
     {
         //setup request
         var request = new ServiceRequest(HttpMethod.Get)
@@ -77,7 +77,7 @@ public class TextMailsResourceService : ITextMailsResourceService
         throw new RequestToServiceIsFailedException(
             nameOfService: nameof(ResourceService));
     }
-    public async Task<MailDto> Save(MailDto mailDto)
+    public virtual async Task<MailDto> Save(MailDto mailDto)
     {
         //setup request
         var request = new ServiceRequest(HttpMethod.Post)
@@ -99,7 +99,7 @@ public class TextMailsResourceService : ITextMailsResourceService
         throw new RequestToServiceIsFailedException(
             nameOfService: nameof(ResourceService));
     }
-    public async Task<MailDto> Update(MailDto mailDto)
+    public virtual async Task<MailDto> Update(MailDto mailDto)
     {
         //setup request
         var request = new ServiceRequest(HttpMethod.Post)
@@ -121,7 +121,7 @@ public class TextMailsResourceService : ITextMailsResourceService
         throw new RequestToServiceIsFailedException(
             nameOfService: nameof(ResourceService));
     }
-    public async Task Delete(string id)
+    public virtual async Task Delete(string id)
     {
         //setup request
         var request = new ServiceRequest(HttpMethod.Post)

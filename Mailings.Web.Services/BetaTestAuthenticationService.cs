@@ -14,7 +14,7 @@ public class BetaTestAuthenticationService : IBetaTestAuthenticationService
         _authService = authService;
     }
 
-    public async Task<GeneratedUserDto> GenerateAccount()
+    public virtual async Task<GeneratedUserDto> GenerateAccount()
     {
         //setup request
         var request = new ServiceRequest(HttpMethod.Post)

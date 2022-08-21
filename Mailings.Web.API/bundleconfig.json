@@ -5,5 +5,17 @@
       "wwwroot/css/specific-styles.css",
       "wwwroot/css/base.css"
     ]
+  },
+  {
+    "outputFileName": "wwwroot/js/changeUserData.min.js",
+    "inputFiles": [
+      "wwwroot/js/changeUserData.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/copy.min.js",
+    "inputFiles": [
+      "wwwroot/js/copy.js"
+    ]
   }
 ]

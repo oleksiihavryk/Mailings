@@ -15,7 +15,7 @@ public class MailingGroupsResourceService : IMailingGroupsResourceService
         _resourceService = resourceService;
     }
 
-    public async Task<IEnumerable<MailingGroupDto>> GetGroups()
+    public virtual async Task<IEnumerable<MailingGroupDto>> GetGroups()
     {
         //setup request
         var request = new ServiceRequest(HttpMethod.Get)
@@ -36,7 +36,7 @@ public class MailingGroupsResourceService : IMailingGroupsResourceService
         throw new RequestToServiceIsFailedException(
             nameOfService: nameof(ResourceService));
     }
-    public async Task<IEnumerable<MailingGroupDto>> GetGroupsByUserId(string userId)
+    public virtual async Task<IEnumerable<MailingGroupDto>> GetGroupsByUserId(string userId)
     {
         //setup request
         var request = new ServiceRequest(HttpMethod.Get)
@@ -57,7 +57,7 @@ public class MailingGroupsResourceService : IMailingGroupsResourceService
         throw new RequestToServiceIsFailedException(
             nameOfService: nameof(ResourceService));
     }
-    public async Task<MailingGroupDto> GetById(string id)
+    public virtual async Task<MailingGroupDto> GetById(string id)
     {
         //setup request
         var request = new ServiceRequest(HttpMethod.Get)
@@ -78,7 +78,7 @@ public class MailingGroupsResourceService : IMailingGroupsResourceService
         throw new RequestToServiceIsFailedException(
             nameOfService: nameof(ResourceService));
     }
-    public async Task<MailingGroupDto> Save(MailingGroupDto mailDto)
+    public virtual async Task<MailingGroupDto> Save(MailingGroupDto mailDto)
     {
         //setup request
         var request = new ServiceRequest(HttpMethod.Post)
@@ -100,7 +100,7 @@ public class MailingGroupsResourceService : IMailingGroupsResourceService
         throw new RequestToServiceIsFailedException(
             nameOfService: nameof(ResourceService));
     }
-    public async Task<MailingGroupDto> Update(MailingGroupDto mailDto)
+    public virtual async Task<MailingGroupDto> Update(MailingGroupDto mailDto)
     {
         //setup request
         var request = new ServiceRequest(HttpMethod.Post)
@@ -122,7 +122,7 @@ public class MailingGroupsResourceService : IMailingGroupsResourceService
         throw new RequestToServiceIsFailedException(
             nameOfService: nameof(ResourceService));
     }
-    public async Task Delete(string id)
+    public virtual async Task Delete(string id)
     {
         //setup request
         var request = new ServiceRequest(HttpMethod.Post)

@@ -15,7 +15,7 @@ public class HtmlMailsResourceService : IHtmlMailsResourceService
         _resourceService = resourceService;
     }
 
-    public async Task<IEnumerable<MailDto>> GetMails()
+    public virtual async Task<IEnumerable<MailDto>> GetMails()
     {
         //setup request
         var request = new ServiceRequest(HttpMethod.Get)
