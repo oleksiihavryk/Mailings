@@ -8,5 +8,9 @@ internal static class ConfigurationManagerExtensions
         var servers = config.GetSection("Servers");
         Servers.Authentication = servers["Authentication"];
         Servers.Resources = servers["Resources"];
+
+        var oidcSettings = config.GetSection("OidcSettings");
+        OidcSettings.ClientId = oidcSettings["ClientId"];
+        OidcSettings.ClientSecret = oidcSettings["ClientSecret"];
     }
 }

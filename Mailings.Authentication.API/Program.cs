@@ -5,6 +5,7 @@ using Mailings.Authentication.Shared.StaticData;
 using Mailings.Authentication.Data.DbContexts;
 using Mailings.Authentication.Data.DbInitializer;
 using Mailings.Authentication.API;
+using Mailings.Authentication.API.ResponseFactory;
 using Mailings.Authentication.Shared.ClaimProvider;
 using Mailings.Authentication.Shared.PasswordGenerator;
 using Microsoft.AspNetCore.Identity;
@@ -52,6 +53,7 @@ services.AddCors(opt =>
 services.AddScoped<IDbInitializer, IdentityDbInitializer>();
 services.AddSingleton<IPasswordGenerator, PasswordGenerator>();
 services.AddScoped<IClaimProvider<User>, UserClaimProvider>();
+services.AddSingleton<IResponseFactory, ResponseFactory>();
 
 services.AddIdentity<User, IdentityRole>(opt =>
 {

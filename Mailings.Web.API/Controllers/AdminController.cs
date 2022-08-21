@@ -1,11 +1,12 @@
 ﻿using Mailings.Web.API.ViewModels;
 using Mailings.Web.Services;
 using Mailings.Web.Shared.Dto;
+using Mailings.Web.Shared.SystemConstants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
  
 namespace Mailings.Web.API.Controllers;
-[Authorize("Admin")]
+[Authorize(AuthorizationPolicyConstants.Admin)]
 public sealed class AdminController : Controller
 {
     private readonly IBetaTestAuthenticationService _betaTestService;

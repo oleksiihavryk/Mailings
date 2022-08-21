@@ -1,5 +1,6 @@
 ﻿using IdentityServer4;
 using Mailings.Authentication.API.Dto;
+using Mailings.Authentication.API.ResponseFactory;
 using Mailings.Authentication.Shared;
 using Mailings.Authentication.Shared.ClaimProvider;
 using Microsoft.AspNetCore.Authorization;
@@ -14,13 +15,16 @@ public sealed class ApiAccountController : ControllerBase
 {
     private readonly UserManager<User> _userManager;
     private readonly IClaimProvider<User> _claimProvider;
+    private readonly IResponseFactory _response;
 
     public ApiAccountController(
         UserManager<User> userManager,
-        IClaimProvider<User> claimProvider)
+        IClaimProvider<User> claimProvider, 
+        IResponseFactory response)
     {
         _userManager = userManager;
         _claimProvider = claimProvider;
+        _response = response;
     }
 
     [HttpPut("[action]")]
@@ -42,20 +46,10 @@ public sealed class ApiAccountController : ControllerBase
 
             await RecreateClaimsAsync(user);
 
-            return Ok(new ResponseDto()
-            {
-                IsSuccess = true,
-                StatusCode = StatusCodes.Status205ResetContent
-            });
+            return Ok(_response.CreateSuccess(SuccessResponseType.Changed));
         }
 
-        return Ok(new ResponseDto()
-        {
-            IsSuccess = false,
-            Messages = new[] { "User not found" },
-            Result = null,
-            StatusCode = StatusCodes.Status404NotFound
-        });
+        return Ok(_response.CreateFailedResponse(message: "User not found"));
     }
 
     private async Task RecreateClaimsAsync(User user)

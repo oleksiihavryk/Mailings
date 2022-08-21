@@ -1,6 +1,13 @@
 ﻿@font-face {
     font-family: "Cabin";
-    src: url('fonts/Cabin/Cabin-Bold.ttf') format('truetype'), url('fonts/Cabin/Cabin-BoldItalic.ttf') format('truetype'), url('fonts/Cabin/Cabin-Italic.ttf') format('truetype'), url('fonts/Cabin/Cabin-Medium.ttf') format('truetype'), url('fonts/Cabin/Cabin-MediumItalic.ttf') format('truetype'), url('fonts/Cabin/Cabin-Regular.ttf') format('truetype'), url('fonts/Cabin/Cabin-SemiBold.ttf') format('truetype'), url('fonts/Cabin/Cabin-SemiBoldItalic.ttf') format('truetype');
+    src: url('fonts/Cabin/Cabin-Bold.ttf') format('truetype'),
+         url('fonts/Cabin/Cabin-BoldItalic.ttf') format('truetype'), 
+         url('fonts/Cabin/Cabin-Italic.ttf') format('truetype'),
+         url('fonts/Cabin/Cabin-Medium.ttf') format('truetype'),
+         url('fonts/Cabin/Cabin-MediumItalic.ttf') format('truetype'), 
+         url('fonts/Cabin/Cabin-Regular.ttf') format('truetype'), 
+         url('fonts/Cabin/Cabin-SemiBold.ttf') format('truetype'),
+         url('fonts/Cabin/Cabin-SemiBoldItalic.ttf') format('truetype');
 }
 
 
@@ -100,30 +107,22 @@ body {
         font-size: 18px;
     }
 
-.bordered-block {
-}
-
-.text-part {
-}
-
-.text-list {
-}
-
-.text-list-element {
-}
-
-.sections-list-block {
-}
-
 .block-list {
-    padding: 10px 0 10px 20%;
+    padding: 10px 5px 10px 20%;
     background-color: #373737;
     list-style-type: none;
     color: white;
 }
 
 .block-list-element {
+    background-color: #ababab;
+    padding: 5px;
+    border-bottom: 5px solid #373737;
 }
+
+    .block-list-element:last-child {
+        border-bottom: none;
+    }
 
 .button {
     color: white;
