@@ -54,7 +54,7 @@ services.AddAuthorization(opt =>
         config.RequireRole(Roles.Administrator.ToString());
         config.RequireAuthenticatedUser();
     });
-    opt.AddPolicy(AuthorizationPolicyConstants.Admin, config =>
+    opt.AddPolicy(AuthorizationPolicyConstants.BetaTest, config =>
     {
         config.RequireRole(Roles.BetaTester.ToString());
         config.RequireAuthenticatedUser();
