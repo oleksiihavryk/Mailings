@@ -73,7 +73,7 @@ public sealed class MailingsController : ControllerBase
     private async Task<MailingSendRequest> PrepareMailingSendRequestAsync(
         MailingRequestDto sendRequestDto)
     {
-        var group = await _mailingGroups.GetByKeyAsync(key: sendRequestDto.MailingId);
+        var group = await _mailingGroups.GetByIdAsync(key: sendRequestDto.MailingId);
         var type = sendRequestDto.SendType.ToUpper().Trim(' ') switch
         {
             "HTML" => MailType.Html,
@@ -90,5 +90,5 @@ public sealed class MailingsController : ControllerBase
         return mailingSendRequest;
     }
     private async Task WriteMailingHistoryAsync(HistoryNoteMailingGroup historyNote)
-        => await _history.SaveIntoDbAsync(entity: historyNote);
+        => await _history.SaveAsync(entity: historyNote);
 }

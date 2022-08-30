@@ -1,14 +1,20 @@
 ﻿@using IdentityModel
+@using Mailings.Web.Shared.StaticData
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @{
-    bool CheckUserRoleOnAdmin()
+    bool CheckUserRole(params Roles[] checkRoles)
     {
         if (User.Identity is System.Security.Claims.ClaimsIdentity claims)
         {
             var roles = claims
                 .FindAll(c => c.Type.Contains("/" + JwtClaimTypes.Role))
-                .Select(c => c.Value);
+                .Select(c => c.Value)
+                .ToHashSet();
 
-            if (roles.Contains("Administrator"))
+            var stringCheckRoles = checkRoles
+                .Select(r => r.ToString());
+
+            if (roles.IsSubsetOf(stringCheckRoles))
                 return true;
         }
 
@@ -32,7 +38,12 @@
             {
                 <navsec action="Logout" controller="Home">Logout</navsec>
                 <navsec action="Profile" controller="User">Profile</navsec>
-                @if (CheckUserRoleOnAdmin())
+                @if (CheckUserRole(Roles.BetaTester, Roles.Administrator))
+                {
+                    <navsec action="All" controller="Mails">Mails</navsec>
+                    <navsec action="Index" controller="Mailings">Mailings</navsec>
+                }
+                @if (CheckUserRole(Roles.Administrator))
                 {
                     <navsec action="Panel" controller="Admin">Admin panel</navsec>
                 }

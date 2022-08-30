@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Razor.TagHelpers;
+﻿using System.Text.Encodings.Web;
+using Microsoft.AspNetCore.Mvc.TagHelpers;
+using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Mailings.Web.API.TagHelpers;
 [HtmlTargetElement(ElementTag, ParentTag = ListTagHelper.ElementTag)]
@@ -16,6 +18,6 @@ public sealed class ListElementTagHelper : TagHelper
 
         output.TagName = "li";
         output.TagMode = TagMode.StartTagAndEndTag;
-        output.Attributes.Add("class", elemClass);
+        output.AddClass(elemClass, HtmlEncoder.Default);
     }
 }

@@ -39,11 +39,18 @@ a.email {
     vertical-align: middle;
     line-height: normal;
 }
+.or {
+    color: white;
+    text-align: center;
+    font-size: 22px;
+}
 
 /*Creating of modal window*/
 
 .modal-window {
-    position: absolute;
+    position: fixed;
+    top: 0;
+    left: 0;
     height: 100%;
     width: 100%;
     background-color: rgba(0, 0, 0, 0.4);
@@ -52,7 +59,7 @@ a.email {
 .modal-block {
     height: 10%;
     width: 60%;
-    margin: -10% auto;
+    margin: 0 auto;
     background-color: white;
     z-index: 1;
     padding: 10px;
@@ -63,6 +70,23 @@ a.email {
 .modal-block-text {
     margin: 0;
     padding: 20px;
+}
+
+/*
+    Attachment specific style
+*/
+.attachment-group {
+    background-color: #696969;
+    margin: 5px 0;
+}
+/*
+    Specific entity styles
+*/
+.html-entity {
+    background-color: #e5ef41;
+}
+.text-entity {
+    background-color: #b14949;
 }
 @font-face {
     font-family: "Cabin";
@@ -75,8 +99,6 @@ a.email {
          url('fonts/Cabin/Cabin-SemiBold.ttf') format('truetype'),
          url('fonts/Cabin/Cabin-SemiBoldItalic.ttf') format('truetype');
 }
-
-
 body {
     margin: 0;
     padding: 0;
@@ -155,6 +177,10 @@ body {
     background-color: #494949;
     color: white;
 }
+.action-block {
+    padding: 10px 0;
+    text-align: center;
+}
 .text-block p {
     margin: 0;
     padding: 5px 0;
@@ -173,6 +199,35 @@ body {
 }
 .block-list-element:last-child {
     border-bottom: none;
+}
+.entity-list {
+    padding: 5px;
+    margin: 0;
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+}
+.entity-list-element {
+    color: white;   
+    margin-bottom: 10px;
+}
+.entity-list-element:last-child {
+    margin-bottom: 0;
+}
+.text-list {
+    padding: 10px;
+    background-color: #696969;
+    list-style-type: none;
+}
+.text-list-element {
+    background: #373737;
+    margin-bottom: 5px;
+    padding: 5px;
+}
+.text-list-element:last-child {
+    margin-bottom: 0;
 }
 .button {
     color: white;
@@ -201,7 +256,9 @@ body {
 */
 .validation-summary-errors {
     margin: 10px 0;
-    padding: 0 10px;
+    padding: 10px 0 10px 20%;
+    background-color: #ababab;
+    color: white;
 }
 .validation-summary-errors > ul {
     margin: 0;
@@ -209,10 +266,11 @@ body {
     list-style-type: none;
 }
 .form-section {
+    width: 250px;
     padding: 5px;
     border-radius: 5px;
     background-color: #ababab;
-    margin: 10px 0;
+    margin: 10px auto;
 }
 .form-group {
     padding: 5px;
@@ -223,20 +281,41 @@ body {
 .form-group > input {
     font-size: 18px;
     font-weight: 600;
-}
-.form-group > input[type=text] {
     outline: none;
+    padding: 2.5px;
+    border-radius: 5px;
+    border: 2px solid gray;
 }
-.buttons-section {
+.form-group > select {
+    font-size: 18px;
+    font-weight: 600;
+    outline: none;
+    padding: 2.5px;
+    border-radius: 5px;
+    border: 2px solid gray;
+}
+.textarea-section {
+    min-width: 250px;
+    width: 100%;
     padding: 5px;
     background-color: #ababab;
     border-radius: 5px;
     margin: 10px 0;
+}
+.textarea-section textarea {
+    resize: vertical;
+    height: 150px;
+    min-height: 250px;
+}
+.buttons-section {
+    width: 250px;
+    padding: 5px;
+    background-color: #ababab;
+    border-radius: 5px;
+    margin: 10px auto;
     text-align: center;
 }
 form {
-    width: 250px;
-    margin: 0 auto;
     padding: 10px;
 }
 .form-section-label {
@@ -246,7 +325,48 @@ form {
     font-size: 24px;
     text-align: center;
 }
+.upload-group {
+    width: 200px;
+    margin: 5px auto;
+    background-color: #696969;
+}
+.upload-button {
+    text-align: center;
+    border-radius: 5px;
+    background-color: #ababab;
+    padding: 3px;
+    cursor: pointer;
+}
+.file-choosen {
+    text-align: center;
+    margin: 0;
+    padding: 3px;
+}
 /*
     Common form style [END]
 */
 
+/*
+    Pagination style [BEGIN]
+*/
+
+.pagination {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding: 10px 0px;
+}
+.pagination > .pagination-element {
+    padding: 2.5px 7px;
+    margin-left: 5px;
+    background-color: #373737;
+    text-decoration: none;
+    color: white;
+    border-radius: 5px;
+}
+.pagination > .pagination-element:first-child {
+    margin-left: 0;
+}
+/*
+    Pagination style [END]
+*/

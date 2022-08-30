@@ -69,7 +69,7 @@ public sealed class TextMailsController : ControllerBase
         {
             try
             {
-                var htmlMail = await _mailsRepository.GetByKeyAsync(key: guid);
+                var htmlMail = await _mailsRepository.GetByIdAsync(key: guid);
                 var dto = ConvertToDto(htmlMail);
                 result = _responseFactory.CreateSuccess(result: dto);
             }
@@ -96,7 +96,7 @@ public sealed class TextMailsController : ControllerBase
         var mail = ConvertFromDto(dto: mailDto);
 
         var updatedEntity = await _mailsRepository
-            .SaveIntoDbAsync(entity: mail);
+            .SaveAsync(entity: mail);
         var dto = ConvertToDto(updatedEntity);
         var result = _responseFactory.CreateSuccess(result: dto);
 
@@ -106,13 +106,23 @@ public sealed class TextMailsController : ControllerBase
     public async Task<IActionResult> UpdateInDatabaseTextMail(
         [FromBody][FromForm] MailDto mailDto)
     {
-        var mail = ConvertFromDto(dto: mailDto);
+        Response? result = null;
+        try
+        {
+            var mail = ConvertFromDto(dto: mailDto);
 
-        var updatedEntity = await _mailsRepository
-            .SaveIntoDbAsync(entity: mail);
-        var dto = ConvertToDto(updatedEntity);
-        var result = _responseFactory.CreateSuccess(result: dto);
+            var updatedEntity = await _mailsRepository
+                .UpdateAsync(entity: mail);
+            var dto = ConvertToDto(updatedEntity);
 
+            result = _responseFactory.CreateSuccess(result: dto);
+        }
+        catch (ObjectNotFoundInDatabaseException)
+        {
+            result = _responseFactory.CreateFailedResponse(
+                failedType: FailedResponseType.NotFound,
+                message: TypicalTextResponses.EntityNotFoundById);
+        }
         return Ok(result);
     }
     [HttpDelete("id/{id:guid}")]
@@ -123,7 +133,7 @@ public sealed class TextMailsController : ControllerBase
 
         try
         {
-            await _mailsRepository.DeleteFromDbByKey(key: id);
+            await _mailsRepository.DeleteByIdAsync(key: id);
             result = _responseFactory.CreateSuccess();
         }
         catch (ObjectNotFoundInDatabaseException)

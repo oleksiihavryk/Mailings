@@ -77,7 +77,7 @@ public sealed class MailingGroupsController : ControllerBase
         {
             try
             {
-                var group = await _mailingRepository.GetByKeyAsync(key: guid);
+                var group = await _mailingRepository.GetByIdAsync(key: guid);
                 var dto = ConvertToDto(group);
                 result = _responseFactory.CreateSuccess(result: dto);
             }
@@ -104,7 +104,7 @@ public sealed class MailingGroupsController : ControllerBase
         var group = await ConvertFromDtoAsync(dto: groupDto);
 
         var updatedEntity = await _mailingRepository
-            .SaveIntoDbAsync(entity: group);
+            .SaveAsync(entity: group);
         
         var dto = ConvertToDto(updatedEntity);
         var result = _responseFactory.CreateSuccess(result: dto);
@@ -115,14 +115,23 @@ public sealed class MailingGroupsController : ControllerBase
     public async Task<IActionResult> UpdateMailingInDatabase(
         [FromForm][FromBody] MailingGroupDto groupDto)
     {
-        var group = await ConvertFromDtoAsync(dto: groupDto);
+        Response? result = null;
+        try
+        {
+            var group = await ConvertFromDtoAsync(dto: groupDto);
 
-        var updatedEntity = await _mailingRepository
-            .SaveIntoDbAsync(entity: group);
+            var updatedEntity = await _mailingRepository
+                .UpdateAsync(entity: group);
+            var dto = ConvertToDto(updatedEntity);
 
-        var dto = ConvertToDto(updatedEntity);
-        var result = _responseFactory.CreateSuccess(result: dto);
-
+            result = _responseFactory.CreateSuccess(result: dto);
+        }
+        catch (ObjectNotFoundInDatabaseException)
+        {
+            result = _responseFactory.CreateFailedResponse(
+                failedType: FailedResponseType.NotFound,
+                message: TypicalTextResponses.EntityNotFoundById);
+        }
         return Ok(result);
     }
     [HttpDelete("id/{id:required}")]
@@ -134,7 +143,7 @@ public sealed class MailingGroupsController : ControllerBase
         {
             try
             {
-                await _mailingRepository.DeleteFromDbByKey(key: guid);
+                await _mailingRepository.DeleteByIdAsync(key: guid);
                 result = _responseFactory.CreateSuccess();
             }
             catch (ObjectNotFoundInDatabaseException)
@@ -163,8 +172,8 @@ public sealed class MailingGroupsController : ControllerBase
 
         mailingGroup.Mail = dto.MailType switch
         {
-            "Html" => await _htmlMailsRepository.GetByKeyAsync(key: dto.MailId),
-            "Text" => await _textMailsRepository.GetByKeyAsync(key: dto.MailId),
+            "Html" => await _htmlMailsRepository.GetByIdAsync(key: dto.MailId),
+            "Text" => await _textMailsRepository.GetByIdAsync(key: dto.MailId),
             _ => throw new UnknownRequestMailTypeException()
         };
 

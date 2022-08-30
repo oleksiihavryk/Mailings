@@ -17,5 +17,29 @@
     "inputFiles": [
       "wwwroot/js/copy.js"
     ]
+  },
+  {
+    "outputFileName": "wwwroot/js/createMail.min.js",
+    "inputFiles": [
+      "wwwroot/js/createMail.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/modal.min.js",
+    "inputFiles": [
+      "wwwroot/js/modal.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/modules/modal.min.js",
+    "inputFiles": [
+      "wwwroot/js/modules/modal.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/modules/upload-text-content-button.min.js",
+    "inputFiles": [
+      "wwwroot/js/modules/upload-text-content-button.js"
+    ]
   }
 ]

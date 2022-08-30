@@ -3,4 +3,5 @@ public enum ListStructType
 {
     Block,
     Text,
+    Entity
 }

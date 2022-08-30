@@ -28,10 +28,10 @@ public sealed class AccountController : Controller
 
     [HttpGet]
     [Route("[action]")]
-    public ViewResult Login(string returnUrl) => View((object)returnUrl);
+    public ViewResult Login([FromQuery]string returnUrl) => View((object)returnUrl);
     [HttpGet]
     [Route("[action]")]
-    public ViewResult SignIn(string returnUrl)
+    public ViewResult SignIn([FromQuery] string returnUrl)
     {
         var viewModel = new LoginViewModel()
         {
@@ -41,9 +41,8 @@ public sealed class AccountController : Controller
     }
     [HttpGet]
     [Route("[action]")]
-    public ViewResult Register()
+    public ViewResult Register([FromQuery] string returnUrl)
     {
-        string returnUrl = ViewBag.ReturnUrl;
         var viewModel = new RegisterViewModel()
         {
             ReturnUrl = returnUrl
@@ -52,7 +51,7 @@ public sealed class AccountController : Controller
     }
     [HttpGet]
     [Route("[action]")]
-    public async Task<RedirectResult> Logout(string logoutId)
+    public async Task<RedirectResult> Logout([FromQuery] string logoutId)
     {
         await _signInManager.SignOutAsync();
         var context =await _interactionService.GetLogoutContextAsync(logoutId);

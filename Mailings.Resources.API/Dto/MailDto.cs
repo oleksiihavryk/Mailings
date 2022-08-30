@@ -43,6 +43,8 @@ public sealed class MailDto
             theme: dto.Theme,
             html: dto.Content);
 
+        mail.Id = dto.Id;
+
         var attachments = new List<Attachment>();
         foreach (var a in dto.Attachments)
             attachments.Add(new Attachment()
@@ -64,6 +66,8 @@ public sealed class MailDto
         TextMail mail = (TextMail)mailFactory.CreateTextMail(
             theme: dto.Theme,
             text: dto.Content);
+
+        mail.Id = dto.Id;
 
         var attachments = new List<Attachment>();
         foreach (var a in dto.Attachments)

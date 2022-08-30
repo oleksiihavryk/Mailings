@@ -1,11 +1,12 @@
 ﻿using Mailings.Web.Services.Core;
 using Mailings.Web.Services.Exceptions;
 using Mailings.Web.Shared.Dto;
+using Microsoft.AspNetCore.Http;
 
 namespace Mailings.Web.Services;
 public class TextMailsResourceService : ITextMailsResourceService
 {
-    protected const string RoutePrefix = "/api/mails/html";
+    protected const string RoutePrefix = "/api/mails/text";
 
     protected readonly ResourceService _resourceService;
 
@@ -40,7 +41,7 @@ public class TextMailsResourceService : ITextMailsResourceService
         //setup request
         var request = new ServiceRequest(HttpMethod.Get)
         {
-            RoutePrefix = RoutePrefix + $"/userId/{userId}"
+            RoutePrefix = RoutePrefix + $"/user-id/{userId}"
         };
 
         //send request
@@ -52,6 +53,9 @@ public class TextMailsResourceService : ITextMailsResourceService
             return result.Result ??
                    throw new UnknownResponseBodyFromRequestToServiceException(
                        nameOfService: nameof(ResourceService));
+
+        if (result.StatusCode == StatusCodes.Status404NotFound)
+            return Enumerable.Empty<MailDto>();
 
         throw new RequestToServiceIsFailedException(
             nameOfService: nameof(ResourceService));
@@ -102,7 +106,7 @@ public class TextMailsResourceService : ITextMailsResourceService
     public virtual async Task<MailDto> Update(MailDto mailDto)
     {
         //setup request
-        var request = new ServiceRequest(HttpMethod.Post)
+        var request = new ServiceRequest(HttpMethod.Put)
         {
             RoutePrefix = RoutePrefix,
             BodyObject = mailDto
@@ -124,7 +128,7 @@ public class TextMailsResourceService : ITextMailsResourceService
     public virtual async Task Delete(string id)
     {
         //setup request
-        var request = new ServiceRequest(HttpMethod.Post)
+        var request = new ServiceRequest(HttpMethod.Delete)
         {
             RoutePrefix = RoutePrefix + $"/id/{id}",
         };

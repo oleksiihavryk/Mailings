@@ -13,4 +13,16 @@ public sealed class AttachmentDto
         get => Convert.FromBase64String(EncodedContent);
         set => EncodedContent = Convert.ToBase64String(value);
     }
+
+
+    //Equals override
+    public override bool Equals(object? obj)
+        => ReferenceEquals(this, obj) || obj is AttachmentDto other && Equals(other);
+    public override int GetHashCode()
+        => HashCode.Combine(Id, Name, EncodedContent, ContentType);
+
+    private bool Equals(AttachmentDto other)
+        => Id.Equals(other.Id) && Name == other.Name &&
+           EncodedContent == other.EncodedContent &&
+           ContentType == other.ContentType;
 }

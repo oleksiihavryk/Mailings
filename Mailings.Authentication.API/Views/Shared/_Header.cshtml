@@ -3,7 +3,7 @@
 }
 <header class="header">
     <div class="header-block header-upper-block">
-        <a asp-action="Login" asp-controller="Account">
+        <a asp-action="Login" asp-controller="Account" asp-route-returnUrl="@returnUrl">
             <img class="company-logo" src="\img\logo.jpg"/>
         </a>
         <h1 class="header-text">Authentication</h1>

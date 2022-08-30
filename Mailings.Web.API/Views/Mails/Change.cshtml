@@ -1,0 +1,80 @@
+﻿@model MailViewModel
+@{
+    var items = Enum
+        .GetNames<MailTypeViewModel>()
+        .Where(el => Enum.Parse<MailTypeViewModel>(el) != 0)
+        .Select(i => new SelectListItem(i, i));
+}
+@section Content
+{
+    <h2 class="main-text">Change mail data</h2>
+    <div asp-validation-summary="All">
+    </div>
+    <form method="post" enctype="multipart/form-data"
+          asp-action="Change" asp-controller="Mails">
+        <input asp-for="Id" hidden />
+        <div class="form-section">
+            <h3 class="form-section-label">Mail</h3>
+            <div class="form-group">
+                <label asp-for="Type"></label>
+                <select asp-for="Type" asp-items="items">
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Theme"></label>
+                <input asp-for="Theme"/>
+            </div>
+        </div>
+        <div class="textarea-section">
+            <div class="form-group">
+                <label asp-for="Content"></label>
+                <textarea asp-for="Content"></textarea>
+            </div>
+            <p class="or">OR</p>
+            <div class="form-group upload-group">
+                <label for="UploadContent" class="upload-button">Upload</label>
+                <p class="file-choosen">Upload text or html page...</p>
+                <input id="UploadContent" type="file" name="UploadContent" hidden=""/>
+            </div>
+        </div>
+        <div class="text-block">
+            <p>Attachments automatically deleted from mail by every modifying.</p>
+            <p>If you want to keep attachments in mail, please, load them again on page.</p>
+        </div>
+        @if (Model.Attachments?.Any() == true)
+        {
+            <div class="form-section">
+                <h3 class="form-section-label">Attachments</h3>
+                <div class="form-group attachment-group">
+                    <label asp-for="Attachments" class="upload-button">
+                        Attachments
+                    </label>
+                    <p class="file-choosen">Previous attachments: @ViewBag.AttachmentsNames</p>
+                    <input asp-for="Attachments" hidden multiple=""/>
+                </div>
+            </div>
+        }
+        <div class="buttons-section">
+            <button type="button" id="AddAttachmentButton" class="button">
+                Add attachment
+            </button>
+            <button type="button" id="RemoveAttachmentButton" class="button">
+                Remove attachment
+            </button>
+            <button type="submit" class="button">Change</button>
+        </div>
+    </form>
+}
+@section Scripts
+{
+    <script asp-src-include="/lib/**.min.js" asp-src-exclude="**.slim.**js"></script>
+    <environment names="development">
+        <script asp-src-include="/js/modules/modal.js"></script>
+        <script asp-src-include="/js/modules/content-uploader.js"></script>
+        <script asp-src-include="/js/createMail.js"></script>
+    </environment>
+    <environment names="staging, production">
+        <script asp-src-include="/js/modules/content-uploader.min.js"></script>
+        <script asp-src-include="/js/createMail.min.js"></script>
+    </environment>
+}

@@ -41,7 +41,7 @@ public class MailingGroupsResourceService : IMailingGroupsResourceService
         //setup request
         var request = new ServiceRequest(HttpMethod.Get)
         {
-            RoutePrefix = RoutePrefix + $"/userId/{userId}"
+            RoutePrefix = RoutePrefix + $"/user-id/{userId}"
         };
 
         //send request
@@ -103,7 +103,7 @@ public class MailingGroupsResourceService : IMailingGroupsResourceService
     public virtual async Task<MailingGroupDto> Update(MailingGroupDto mailDto)
     {
         //setup request
-        var request = new ServiceRequest(HttpMethod.Post)
+        var request = new ServiceRequest(HttpMethod.Put)
         {
             RoutePrefix = RoutePrefix,
             BodyObject = mailDto

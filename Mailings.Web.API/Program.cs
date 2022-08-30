@@ -56,7 +56,7 @@ services.AddAuthorization(opt =>
     });
     opt.AddPolicy(AuthorizationPolicyConstants.BetaTest, config =>
     {
-        config.RequireRole(Roles.BetaTester.ToString());
+        config.RequireRole(Roles.BetaTester.ToString(), Roles.Administrator.ToString());
         config.RequireAuthenticatedUser();
     });
 });
@@ -88,6 +88,15 @@ app.UseMvc(routes =>
     routes.MapRoute(null,
         "admin/account-is-generated",
         defaults: new { controller = "Admin", action = "AccountIsGenerated" });
+    routes.MapRoute(null,
+        "mails/all/{page:int:min(0)}",
+        defaults: new { controller="Mails", action="All"});
+    routes.MapRoute(null,
+        "mails/delete/{type:required}/{id:required}",
+        defaults: new { controller = "Mails", action = "Delete" });
+    routes.MapRoute(null,
+        "mails/change/{type:required}/{id:required}",
+        defaults: new { controller = "Mails", action = "Change" });
     routes.MapRoute(null,
         "{controller=Home}/{action=Index}");
 });

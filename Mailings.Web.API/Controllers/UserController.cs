@@ -58,13 +58,13 @@ public sealed class UserController : Controller
                 "User is must be authorized on the system!");
 
         var email = userClaims
-            .FirstOrDefault(c => c.Type == JwtClaimTypes.Email)?
+            .FirstOrDefault(c => c.Type == ClaimTypes.Email)?
             .Value;
         var firstName = userClaims
-            .FirstOrDefault(c => c.Type == JwtClaimTypes.GivenName)?
+            .FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?
             .Value;
         var lastName = userClaims
-            .FirstOrDefault(c => c.Type == JwtClaimTypes.GivenName)?
+            .FirstOrDefault(c => c.Type == ClaimTypes.Surname)?
             .Value;
         var username = userClaims
             .FirstOrDefault(c => c.Type == JwtClaimTypes.PreferredUserName)?
@@ -94,19 +94,19 @@ public sealed class UserController : Controller
         var userData = new UserDataViewModel()
         {
             Email = arrayUseClaims
-                .FirstOrDefault(c => c.Type == JwtClaimTypes.Email)?
+                .FirstOrDefault(c => c.Type == ClaimTypes.Email)?
                 .Value ?? "[email address is missing]",
             FirstName = arrayUseClaims
-                .FirstOrDefault(c => c.Type == JwtClaimTypes.GivenName)?
+                .FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?
                 .Value ?? "[first name is missing]",
             LastName = arrayUseClaims
-                .FirstOrDefault(c => c.Type == JwtClaimTypes.FamilyName)?
+                .FirstOrDefault(c => c.Type == ClaimTypes.Surname)?
                 .Value ?? "[last name is missing]",
             UserName = arrayUseClaims
                 .FirstOrDefault(c => c.Type == JwtClaimTypes.PreferredUserName)?
                 .Value ?? "[username is missing]",
             Role = arrayUseClaims
-                .FirstOrDefault(c => c.Type == JwtClaimTypes.Role)?
+                .FirstOrDefault(c => c.Type == ClaimTypes.Role)?
                 .Value ?? "[role is missing]"
         };
 

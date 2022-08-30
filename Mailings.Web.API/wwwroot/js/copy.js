@@ -1,6 +1,4 @@
 ﻿$(function () {
-    const animTime = 150;
-
     $('#copy').click(copyAccountDataToClipboard);
     $('.data-for-copying').click(copyDataUnitToClipboard);
 
@@ -10,7 +8,8 @@
         copyDataToClipboard(dataForCopying);
         //invoke model window with text
         const text = `Data '${$(this).data('defenition')}' is copied in a clipboard!`;
-        invokeModalWindow(text);
+        const modal = new Modal(text);
+        modal.invokeModalWindow();
     }
     function copyAccountDataToClipboard() {
         //copying in buffer
@@ -18,8 +17,11 @@
         copyDataToClipboard(dataForCopying);
         //invoke model window with text
         const text = 'Account data is copied in a clipboard!';
-        invokeModalWindow(text);
+        const modal = new Modal(text);
+        modal.invokeModalWindow();
     }
+
+
     function getUnitDataForCopying(el) {
         const data = {};
         const jqEl = $(el);
@@ -52,10 +54,10 @@
 
         copyToClipboard(text);
     }
-    function copyToClipboard(str) {
+    function copyToClipboard(text) {
         {
             const el = document.createElement('textarea');
-            el.value = str;
+            el.value = text;
             el.setAttribute('readonly', '');
             el.style.position = 'absolute';
             el.style.left = '-9999px';
@@ -72,41 +74,5 @@
                 document.getSelection().addRange(selected);
             }
         }
-    }
-    function invokeModalWindow(text) {
-        const struct = $(`<div id="modal" class="modal-window">` +
-                           `<div class="modal-block">` +
-                               `<span id="close" class="button modal-close-button">close</span>` +
-                               `<p class="modal-block-text">${text}</p>` + 
-                            `</div>` +
-                         `</div>`);
-
-        //anim
-        struct.prependTo('body').fadeIn(animTime);
-        struct.children('.modal-block').animate({
-            margin: '20% auto'
-        }, animTime);;
-
-        const modalWindow = $('#modal');
-
-        modalWindow.click(closeModalWindow);
-        modalWindow.children('.modal-block').click(stopClickPropagation);
-
-        $('#close').click(closeModalWindow);
-    }
-    function closeModalWindow(e) {
-        e.stopPropagation();
-        const modal = $('#modal');
-
-        //anim and remove   
-        modal.fadeOut(animTime, function () { modal.stop() });
-        modal.children('.modal-block').animate({
-            margin: '-10% auto'
-        }, animTime, function () {
-            modal.remove();
-        });
-    }
-    function stopClickPropagation(e) {
-        e.stopPropagation();
     }
 });

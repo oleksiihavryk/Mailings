@@ -5,6 +5,7 @@ using Mailings.Resources.Data.DbContexts;
 using Mailings.Resources.Data.Repositories;
 using Mailings.Resources.Domain;
 using Mailings.Resources.Shared.StaticData;
+using Mailings.Resources.Shared.Updater;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -34,6 +35,7 @@ services.AddScoped<IHistoryNotesRepository, HistoryNotesRepository>();
 services.AddScoped<IHtmlMailsRepository, HtmlMailsRepository>();
 services.AddScoped<ITextMailsRepository, TextMailsRepository>();
 services.AddScoped<IMailingGroupsRepository, MailingGroupsRepository>();
+services.AddScoped<IUpdater, PropertyUpdater>();
 
 services.AddCors(opt =>
 {

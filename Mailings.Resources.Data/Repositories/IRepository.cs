@@ -2,7 +2,8 @@
 public interface IRepository<TDtoEntity, TKey>
 {
     IEnumerable<TDtoEntity> GetAll();
-    Task<TDtoEntity> GetByKeyAsync(TKey key);
-    Task<TDtoEntity> SaveIntoDbAsync(TDtoEntity entity);
-    Task DeleteFromDbByKey(TKey key);
+    Task<TDtoEntity> GetByIdAsync(TKey key);
+    Task<TDtoEntity> SaveAsync(TDtoEntity entity);
+    Task<TDtoEntity> UpdateAsync(TDtoEntity entity);
+    Task DeleteByIdAsync(TKey key);
 }

@@ -1,0 +1,21 @@
+﻿@model List<int> 
+<div class="pagination">
+    <a class="pagination-element"
+       asp-action="@ViewBag.Action" asp-controller="@ViewBag.Controller" 
+       asp-route-page="@ViewBag.FirstPage">
+        &#10094;
+    </a>
+    @foreach (var pageNumber in Model)
+    {
+        <a class="pagination-element"
+           asp-action="@ViewBag.Action" asp-controller="@ViewBag.Controller" 
+           asp-route-page="@pageNumber">
+            @pageNumber
+        </a>
+    }
+    <a class="pagination-element"
+       asp-action="@ViewBag.Action" asp-controller="@ViewBag.Controller" 
+       asp-route-page="@ViewBag.LastPage">
+        &#10095;
+    </a>
+</div>

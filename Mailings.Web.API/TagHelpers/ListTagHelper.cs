@@ -37,6 +37,11 @@ public sealed class ListTagHelper : TagHelper
                 Parent = "text-list",
                 Sibling = "text-list-element"
             },
+            ListStructType.Entity => new
+            {
+                Parent = "entity-list",
+                Sibling = "entity-list-element"
+            },
             _ => throw new InvalidOperationException(
                 "Struct field is not initialized")
         };
