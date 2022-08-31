@@ -1,0 +1,63 @@
+﻿@model (CreatedMailingsViewModel, IEnumerable<MailViewModel>)
+@section Content
+{
+    <h2 class="main-text">Create mail</h2>
+    <div asp-validation-summary="All">
+    </div>
+    <form method="post" enctype="multipart/form-data"
+          asp-action="Create" asp-controller="Mailings">
+        <div class="form-section">
+            <h3 class="form-section-label">Mailing</h3>
+            <div class="form-group">
+                <label asp-for="Item1.Name"></label>
+                <input asp-for="Item1.Name"/>
+            </div>
+        </div>
+        <div class="form-section">
+            <h3 class="form-section-label">Choose mail</h3>
+            <div class="form-group">
+                <label asp-for="Item1.MailId"></label>
+                <select asp-for="Item1.MailId">
+                    @foreach (var i in @Model.Item2)
+                    {
+                        <option value="@i.Id">Theme: @i.Theme, Type: @i.Type</option>
+                    }
+                </select>
+            </div>
+        </div>
+        @if (Model.Item1.To.Any())
+        {
+            <div class="form-section">
+                @for (int i = 0; i < @Model.Item1.To.Count; i++)
+                {
+                    <div class="form-group">
+                        <label asp-for="@Model.Item1.To[i]"></label>
+                        <input asp-for="@Model.Item1.To[i]"/>
+                    </div>
+                }
+            </div>
+        }
+        <div class="buttons-section">
+            <button type="button" id="AddReceiverButton" class="button">
+                Add attachment
+            </button>
+            <button type="button" id="RemoveReceiverButton" class="button">
+                Remove attachment
+            </button>
+            <button type="submit" class="button">Create</button>
+        </div>
+    </form>
+}
+@section Scripts
+{
+    <script asp-src-include="/lib/**.min.js" asp-src-exclude="**.slim.**js"></script>
+    <environment names="development">
+        <script asp-src-include="/js/modules/modal.js"></script>
+        <script asp-src-include="/js/createGroup.js"></script>
+    </environment>
+    <environment names="staging, production">
+        <script asp-src-include="/js/modules/modal.min.js"></script>
+        <script asp-src-include="/js/createGroup.min.js"></script>
+    </environment>
+}
+

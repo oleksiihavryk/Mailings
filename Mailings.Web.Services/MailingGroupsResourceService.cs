@@ -1,6 +1,7 @@
 ﻿using Mailings.Web.Services.Core;
 using Mailings.Web.Services.Exceptions;
 using Mailings.Web.Shared.Dto;
+using Microsoft.AspNetCore.Http;
 
 namespace Mailings.Web.Services;
 
@@ -53,6 +54,9 @@ public class MailingGroupsResourceService : IMailingGroupsResourceService
             return result.Result ??
                    throw new UnknownResponseBodyFromRequestToServiceException(
                        nameOfService: nameof(ResourceService));
+
+        if (result.StatusCode == StatusCodes.Status404NotFound)
+            return Enumerable.Empty<MailingGroupDto>();
 
         throw new RequestToServiceIsFailedException(
             nameOfService: nameof(ResourceService));
@@ -125,7 +129,7 @@ public class MailingGroupsResourceService : IMailingGroupsResourceService
     public virtual async Task Delete(string id)
     {
         //setup request
-        var request = new ServiceRequest(HttpMethod.Post)
+        var request = new ServiceRequest(HttpMethod.Delete)
         {
             RoutePrefix = RoutePrefix + $"/id/{id}",
         };
