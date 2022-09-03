@@ -59,7 +59,8 @@ public class DigitsCountPasswordValidator : PasswordValidator<User>
                  throw new InvalidOperationException(
                      "Impossible error in checking on count of digits in password");
     }
-    protected IdentityResult CreateFailedIdentityResult(IEnumerable<IdentityError> errors, 
+    protected IdentityResult CreateFailedIdentityResult(
+        IEnumerable<IdentityError> errors, 
         IdentityError? newError = null)
     {
         if (newError != null)

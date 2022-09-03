@@ -34,11 +34,11 @@ public sealed class ApiAccountController : ControllerBase
 
         if (user != null)
         {
-            if (userData.FirstName != null)
+            if (string.IsNullOrWhiteSpace(userData.FirstName))
                 user.FirstName = userData.FirstName;
-            if (userData.LastName != null)
+            if (string.IsNullOrWhiteSpace(userData.LastName))
                 user.LastName = userData.LastName;
-            if (userData.Email != null)
+            if (string.IsNullOrWhiteSpace(userData.Email))
             {
                 user.Email = userData.Email;
                 user.EmailConfirmed = false;

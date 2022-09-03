@@ -6,6 +6,8 @@ using Mailings.Authentication.Shared.ClaimProvider;
 using Mailings.Authentication.Shared.Exceptions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using FailedSignInException = Mailings.Authentication.API.Exceptions.FailedSignInException;
+using FailedSignUpException = Mailings.Authentication.API.Exceptions.FailedSignUpException;
 
 namespace Mailings.Authentication.API.Controllers;
 [Route("[controller]")]

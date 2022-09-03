@@ -22,15 +22,15 @@ internal static class IdentityServerStaticData
     public static IEnumerable<ApiResource> ApiResources
         => new List<ApiResource>()
         {
-            new ApiResource("_resourceServer", 
+            new ApiResource(IdentityPrivateData.ResourcesApiResource, 
                 "Api resource to access resources on server side.")
             {
                 Enabled = true,
                 Scopes =
                 {
-                    "readSecured_resourceServer",
-                    "writeDefault_resourceServer",
-                    "fullAccess_resourceServer"
+                    IdentityPrivateData.ReadSecuredScopeName,
+                    IdentityPrivateData.WriteDefaultScopeName,
+                    IdentityPrivateData.FullAccessScopeName
                 }
             },
             new ApiResource(IdentityServerConstants.LocalApi.ScopeName,
@@ -43,26 +43,26 @@ internal static class IdentityServerStaticData
         => new List<ApiScope>()
         {
             new ApiScope(
-                name: "readDefault_resourceServer",
+                name: IdentityPrivateData.ReadDefaultScopeName,
                 displayName: "Scope of resource server for any users")
             {
-                ShowInDiscoveryDocument = true,
+                ShowInDiscoveryDocument = false,
             },
             new ApiScope(
-                name: "readSecured_resourceServer",
+                name: IdentityPrivateData.ReadSecuredScopeName,
                 displayName: "Scope of resource server with extra permissions")
             {
-                ShowInDiscoveryDocument = true,
+                ShowInDiscoveryDocument = false,
             },
             new ApiScope(
-                name: "writeDefault_resourceServer",
+                name: IdentityPrivateData.WriteDefaultScopeName,
                 displayName: "Scope of resource server with rights to" +
                              " writing data on resource server")
             {
-                ShowInDiscoveryDocument = true,
+                ShowInDiscoveryDocument = false,
             },
             new ApiScope(
-                name: "fullAccess_resourceServer",
+                name: IdentityPrivateData.FullAccessScopeName,
                 displayName: "Scope of resource server with full access to " +
                              "any endpoint in resource server side")
             {
@@ -70,7 +70,7 @@ internal static class IdentityServerStaticData
             },
             new ApiScope(
                 name: IdentityServerConstants.LocalApi.ScopeName,
-                displayName: "Scope of auth server with access to advaned api.")
+                displayName: "Scope of auth server with access to advanced api.")
         };
 
     public static IEnumerable<Client> Clients
@@ -78,20 +78,18 @@ internal static class IdentityServerStaticData
         {
             new Client()
             {
-                ClientId = "webUser_Client",
+                ClientId = IdentityPrivateData.WebUser.ClientId,
                 ClientName = "MVC Web client application",
 
                 AllowedGrantTypes = GrantTypes.Code,
-                AllowedScopes = new[]
-                {
-                    OidcConstants.StandardScopes.OpenId,
-                    OidcConstants.StandardScopes.Email,
-                    OidcConstants.StandardScopes.Profile,
-                },
+                AllowedScopes = IdentityPrivateData.WebUser.Scopes,
 
                 AlwaysIncludeUserClaimsInIdToken = true,
 
-                ClientSecrets = {new Secret("webUser_Secret".ToSha256())},
+                ClientSecrets =
+                {
+                    new Secret(IdentityPrivateData.WebUser.ClientSecret.ToSha256())
+                },
 
                 RequirePkce = true,
 
@@ -106,15 +104,15 @@ internal static class IdentityServerStaticData
             },
             new Client()
             {
-                ClientId = "resourceServer_Client",
-                ClientSecrets = { new Secret("resourceServer_Secret".ToSha256()) },
+                ClientId = IdentityPrivateData.Resources.ClientId,
+                ClientSecrets =
+                {
+                    new Secret(IdentityPrivateData.Resources.ClientSecret.ToSha256())
+                },
 
                 AllowedGrantTypes = GrantTypes.ClientCredentials,
 
-                AllowedScopes =
-                {
-                    "fullAccess_resourceServer"
-                },
+                AllowedScopes = IdentityPrivateData.Resources.Scopes,
 
                 RedirectUris =
                 {
@@ -127,21 +125,23 @@ internal static class IdentityServerStaticData
             },
             new Client()
             {
-                ClientId = "authenticationServer_Client",
-                ClientSecrets = { new Secret("authenticationServer_Secret".ToSha256()) },
+                ClientId = IdentityPrivateData.Authentication.ClientId,
+                ClientSecrets =
+                {
+                    new Secret(IdentityPrivateData.Authentication.ClientSecret.ToSha256())
+                },
 
                 AllowedGrantTypes = GrantTypes.ClientCredentials,
 
-                AllowedScopes =
-                { IdentityServerConstants.LocalApi.ScopeName },
+                AllowedScopes = IdentityPrivateData.Authentication.Scopes,
 
                 RedirectUris =
                 {
-                    "https://localhost:7001" + "/signin-oidc"
+                    "https://localhost:7001/signin-oidc"
                 },
                 PostLogoutRedirectUris =
                 {
-                    "https://localhost:7001" + "/signout-callback-oidc"
+                    "https://localhost:7001/signout-callback-oidc"
                 },
             }
         };

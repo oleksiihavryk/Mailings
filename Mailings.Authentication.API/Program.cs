@@ -18,6 +18,8 @@ var config = builder.Configuration;
 
 //Configure services
 
+config.SetupIdentityPrivateData();
+
 var clients = config.GetSection("Clients");
 IdentityClients.ClientServer = clients["Client"];
 IdentityClients.ResourceServer = clients["Resource"];

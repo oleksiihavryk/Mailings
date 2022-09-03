@@ -4,14 +4,14 @@ namespace Mailings.Authentication.API.ResponseFactory;
 
 public class ResponseFactory : IResponseFactory
 {
-    public Response EmptySuccess => new Response()
+    public virtual Response EmptySuccess => new Response()
     {
         Result = null,
         IsSuccess = true,
         Messages = Array.Empty<string>(),
         StatusCode = StatusCodes.Status204NoContent
     };
-    public Response EmptyInternalServerError => new Response()
+    public virtual Response EmptyInternalServerError => new Response()
     {
         Result = null,
         IsSuccess = false,

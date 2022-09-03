@@ -49,29 +49,18 @@ public sealed class BetaTestController : ControllerBase
         var result = await _userManager.CreateAsync(user, pass);
         await _claimProvider.ProvideClaimsAsync(user, Roles.BetaTester);
 
-        if (result.Succeeded)
-            return Ok(new ResponseDto()
-            {
-                IsSuccess = true,
-                Messages = Array.Empty<string>(),
-                Result = new GeneratedUserDto()
-                {
-                    Email = user.Email,
-                    Password = pass,
-                    UserName = user.UserName
-                },
-                StatusCode = StatusCodes.Status201Created
-            });
+        var userData = new UserDataDto()
+        {
+            Email = user.Email,
+            Password = pass,
+            Username = user.UserName,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+        };
 
         response = result.Succeeded ? _response.CreateSuccess(
                 successType: SuccessResponseType.Created,
-                result: new GeneratedUserDto()
-                {
-                    Email = user.Email,
-                    Password = pass,
-                    UserName = user.UserName
-                }) : _response.EmptyInternalServerError;
-
+                result: userData) : _response.EmptyInternalServerError;
 
         return Ok(response);
     }

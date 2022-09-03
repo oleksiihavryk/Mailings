@@ -33,7 +33,7 @@ public class PasswordGenerator : IPasswordGenerator
             var lowerCaseLetter = (char)random.Next(65, 90);
             var upperCaseLetter = (char)random.Next(97, 122);
 
-            var symbol = random.Next(1, 3) switch
+            var symbol = random.Next(1, 4) switch
             {
                 1 => digit,
                 2 => lowerCaseLetter,
