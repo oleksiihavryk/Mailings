@@ -12,5 +12,21 @@ internal static class ConfigurationManagerExtensions
         var oidcSettings = config.GetSection("OidcSettings");
         OidcSettings.ClientId = oidcSettings["ClientId"];
         OidcSettings.ClientSecret = oidcSettings["ClientSecret"];
+
+        var cpd = config.GetSection("ClientsPrivateData");
+        IdentityPrivateData.SetupClientData(opt =>
+        {
+            var auth = cpd.GetSection("Authentication");
+            opt.ClientId = auth["ClientId"];
+            opt.ClientSecret = auth["ClientSecret"];
+            opt.Scopes = auth.GetSection("Scopes").Get<string[]>().ToList();
+        }, IdentityClient.Authentication);
+        IdentityPrivateData.SetupClientData(opt =>
+        {
+            var res = cpd.GetSection("Resources");
+            opt.ClientId = res["ClientId"];
+            opt.ClientSecret = res["ClientSecret"];
+            opt.Scopes = res.GetSection("Scopes").Get<string[]>().ToList();
+        }, IdentityClient.Resources);
     }
 }

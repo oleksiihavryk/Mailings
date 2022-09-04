@@ -17,6 +17,10 @@ var config = builder.Configuration;
 // Add services to the container.
 var serversConfig = config.GetSection("Servers");
 Servers.Authentication = serversConfig["Authentication"];
+var oidcSettings = config.GetSection("OidcSettings");
+OidcSettings.ApiResource = oidcSettings["ApiResource"];
+var swashbuckleSettings = config.GetSection("SwashbuckleOidcSettings");
+SwashbuckleSettings.ResourceScope = swashbuckleSettings["ResourceScope"];
 
 services.Configure<MailSettings>(config.GetSection("MailSettings"));
 
@@ -53,7 +57,7 @@ services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(opt =>
     {
         opt.Authority = Servers.Authentication;
-        opt.Audience = "_resourceServer";
+        opt.Audience = OidcSettings.ApiResource;
         opt.IncludeErrorDetails = true;
 
         if (builder.Environment.IsDevelopment())
@@ -79,7 +83,7 @@ services.AddSwaggerGen(opt =>
                 TokenUrl = new Uri(Servers.Authentication + "/connect/token"),
                 Scopes = new Dictionary<string, string>()
                 {
-                    ["fullAccess_resourceServer"] = 
+                    [SwashbuckleSettings.ResourceScope] = 
                         "Scope which provides full access to resource server."
                 },
             }

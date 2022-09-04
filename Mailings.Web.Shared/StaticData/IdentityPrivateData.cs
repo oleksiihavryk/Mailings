@@ -1,17 +1,10 @@
-﻿using Mailings.Authentication.Shared.Exceptions;
+﻿using Mailings.Web.Shared.Exceptions;
 
-namespace Mailings.Authentication.Shared.StaticData;
+namespace Mailings.Web.Shared.StaticData;
 public static class IdentityPrivateData
 {
     public static IdentityClientData Resources { get; } = new IdentityClientData();
-    public static IdentityClientData Authentication { get; }  = new IdentityClientData();
-    public static IdentityClientData WebUser { get; } = new IdentityClientData();
-    //must to be initialized!
-    public static string FullAccessScopeName { get; set; } = null!;
-    public static string WriteDefaultScopeName { get; set; } = null!;
-    public static string ReadDefaultScopeName { get; set; } = null!;
-    public static string ReadSecuredScopeName { get; set; } = null!;
-    public static string ResourcesApiResource { get; set; } = null!;
+    public static IdentityClientData Authentication { get; } = new IdentityClientData();
     
 
     public class IdentityClientData
@@ -29,7 +22,6 @@ public static class IdentityPrivateData
         {
             IdentityClient.Resources => Resources,
             IdentityClient.Authentication => Authentication,
-            IdentityClient.WebUser => WebUser,
             _ => throw new UnknownIdentityClientException()
         };
 

@@ -31,7 +31,8 @@ internal static class IdentityServerStaticData
                     IdentityPrivateData.ReadSecuredScopeName,
                     IdentityPrivateData.WriteDefaultScopeName,
                     IdentityPrivateData.FullAccessScopeName
-                }
+                },
+                ShowInDiscoveryDocument = true
             },
             new ApiResource(IdentityServerConstants.LocalApi.ScopeName,
                 "Api resource to access authentication server.")

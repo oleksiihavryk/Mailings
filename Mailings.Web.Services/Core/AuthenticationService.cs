@@ -21,9 +21,9 @@ public class AuthenticationService : BaseService
                 ServiceUri,
                 options: opt =>
                 {
-                    opt.ClientId = "authenticationServer_Client";
-                    opt.ClientSecret = "authenticationServer_Secret";
-                    opt.Scopes = new List<string> {"IdentityServerApi"};
+                    opt.ClientId = IdentityPrivateData.Authentication.ClientId;
+                    opt.ClientSecret = IdentityPrivateData.Authentication.ClientSecret;
+                    opt.Scopes = IdentityPrivateData.Authentication.Scopes;
                 });
 
         return await _client.SendAsync(responseMessage);

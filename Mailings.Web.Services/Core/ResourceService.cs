@@ -22,12 +22,9 @@ public class ResourceService : BaseService
                 ServiceUri,
                 options: opt =>
                 {
-                    opt.ClientId = "resourceServer_Client";
-                    opt.ClientSecret = "resourceServer_Secret";
-                    opt.Scopes = new System.Collections.Generic.List<string>
-                    {
-                        "fullAccess_resourceServer"
-                    };
+                    opt.ClientId = IdentityPrivateData.Resources.ClientId;
+                    opt.ClientSecret = IdentityPrivateData.Resources.ClientSecret;
+                    opt.Scopes = IdentityPrivateData.Resources.Scopes;
                 });
 
         return await _client.SendAsync(responseMessage);

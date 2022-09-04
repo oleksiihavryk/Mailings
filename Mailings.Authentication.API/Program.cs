@@ -24,6 +24,8 @@ var clients = config.GetSection("Clients");
 IdentityClients.ClientServer = clients["Client"];
 IdentityClients.ResourceServer = clients["Resource"];
 
+services.Configure<AdminCredentials>(config.GetSection("AdminCredentials"));
+
 services.Configure<RouteOptions>(opt =>
 {
     opt.AppendTrailingSlash = true;
