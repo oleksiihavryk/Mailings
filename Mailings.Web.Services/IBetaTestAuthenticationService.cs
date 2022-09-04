@@ -3,5 +3,5 @@
 namespace Mailings.Web.Services;
 public interface IBetaTestAuthenticationService
 {
-    Task<GeneratedUserDto> GenerateAccount();
+    Task<UserDataDto> GenerateAccount();
 }

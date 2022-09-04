@@ -1,8 +1,9 @@
 ﻿using System.Collections;
+using System.Runtime.Serialization;
 using Mailings.Web.Shared.Cloner;
+using Mailings.Web.Shared.Extensions;
 
 namespace Mailings.Web.Shared.Exceptions;
-
 [Serializable]
 public sealed class ObjectCloneException : Exception
 {
@@ -36,5 +37,21 @@ public sealed class ObjectCloneException : Exception
     {
         _object = cloningObject;
         _deepCloner = deepCloner;
+    }
+
+    private ObjectCloneException(
+        SerializationInfo info,
+        StreamingContext context)
+        :base(info, context)
+    {
+        _object = info.GetObject<object>(nameof(_object));
+        _deepCloner = info.GetObject<IDeepCloner>(nameof(_deepCloner));
+    }
+
+    public override void GetObjectData(SerializationInfo info, StreamingContext context)
+    {
+        base.GetObjectData(info, context);
+        info.AddValue(nameof(_object), _object);
+        info.AddValue(nameof(_deepCloner), _deepCloner);
     }
 }

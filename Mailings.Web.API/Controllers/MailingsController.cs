@@ -1,6 +1,8 @@
-﻿using System.Security.Claims;
+﻿using System.Collections.Immutable;
+using System.Security.Claims;
 using Mailings.Web.API.ViewModels;
 using Mailings.Web.Services;
+using Mailings.Web.Shared.Comparers;
 using Mailings.Web.Shared.Dto;
 using Mailings.Web.Shared.SystemConstants;
 using Microsoft.AspNetCore.Authorization;
@@ -53,39 +55,24 @@ public sealed class MailingsController : Controller
 
         return View(viewMails);
     }
-    public async Task<IActionResult> More(string id)
+    public IActionResult More(string id)
     {
         throw new NotImplementedException();
     }
-    public async Task<IActionResult> Create()
+    public async Task<ViewResult> Create()
     {
-        var viewModel = new CreatedMailingsViewModel();
-        var mails = await GetMailsByUser();
+        var mails = await GetUserMailsAsync();
+        ViewBag.Mails = mails;
 
-        return View((viewModel, mails));
+        return View();
     }
-    public async Task<IActionResult> Create((CreatedMailingsViewModel, IEnumerable<MailViewModel>) mailingAndMails)
+    [HttpPost]
+    public IActionResult Create(MailingViewModel viewModel)
     {
-        if (!mailingAndMails.Item1.To.Any())
-        {
-            ModelState.AddModelError("",
-                "Mailing must contain some addresses of receivers.");
-        }
-
-        if (!ModelState.IsValid)
-            return View(mailingAndMails);
-
-        var group = mailingAndMails.Item1;
-
-        var dto = new MailingGroupDto()
-        {
-            Id = group.Id,
-            MailId = group.MailId,
-            MailType = group.
-        };
+        throw new NotImplementedException();
     }
 
-    private async Task<IEnumerable<MailViewModel>> GetMailsByUser()
+    private async Task<List<MailViewModel>> GetUserMailsAsync()
     {
         var userId = (User.Identity as ClaimsIdentity)?.Claims?
             .FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?
@@ -95,17 +82,17 @@ public sealed class MailingsController : Controller
             throw new InvalidOperationException(
                 "User is not logged in in system!");
 
-        var htmlMails = (await _htmlMailsResourceService
-            .GetMailsByUserId(userId))
-            .Select(GetMailViewModel);
-        var textMails = (await _textMailsResourceService
-            .GetMailsByUserId(userId))
-            .Select(GetMailViewModel);
-        
+        var htmlMails = await _htmlMailsResourceService
+            .GetMailsByUserId(userId);
+        var textMails = await _textMailsResourceService
+            .GetMailsByUserId(userId);
         var mails = new List<MailViewModel>();
 
-        mails.AddRange(htmlMails);
-        mails.AddRange(textMails);
+        foreach (var htmlMail in htmlMails)
+            mails.Add(ConvertMailToViewModel(htmlMail, MailTypeViewModel.Html));
+
+        foreach (var textMail in textMails)
+            mails.Add(ConvertMailToViewModel(textMail, MailTypeViewModel.Text));
 
         return mails;
     }
@@ -126,18 +113,6 @@ public sealed class MailingsController : Controller
                 _ => throw new InvalidOperationException("Unknown mail type")
             }
         };
-    private async Task<IEnumerable<MailingGroupDto>> GetMailingsByUser()
-    {
-        var userId = (User.Identity as ClaimsIdentity)?.Claims
-            .FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?
-            .Value ?? throw new InvalidOperationException(
-                "User is not login in system");
-
-        var groups = await _groupsResourceService
-            .GetGroupsByUserId(userId);
-
-        return groups;
-    }
     private MailViewModel ConvertMailToViewModel(
         MailDto dto,
         MailTypeViewModel type)
@@ -170,11 +145,16 @@ public sealed class MailingsController : Controller
 
         return model;
     }
-    private MailViewModel GetMailViewModel(MailDto el)
-        => new MailViewModel()
-        {
-            Id = el.Id,
-            Theme = el.Theme,
-            Type = MailTypeViewModel.Html
-        };
+    private async Task<IEnumerable<MailingGroupDto>> GetMailingsByUser()
+    {
+        var userId = (User.Identity as ClaimsIdentity)?.Claims
+            .FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?
+            .Value ?? throw new InvalidOperationException(
+                "User is not login in system");
+
+        var groups = await _groupsResourceService
+            .GetGroupsByUserId(userId);
+
+        return groups;
+    }
 }

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 namespace Mailings.Web.Services;
 public class TextMailsResourceService : ITextMailsResourceService
 {
-    protected const string RoutePrefix = "/api/mails/text";
+    public const string RoutePrefix = "/api/mails/text";
 
     protected readonly ResourceService _resourceService;
 

@@ -38,4 +38,11 @@ public sealed class FailedSignUpException : Exception
         _user = info.GetObject<User>(nameof(_user));
         _identityResult = info.GetObject<IdentityResult>(nameof(_identityResult));
     }
+
+    public override void GetObjectData(SerializationInfo info, StreamingContext context)
+    {
+        base.GetObjectData(info, context);
+        info.AddValue(nameof(_user), _user);
+        info.AddValue(nameof(_identityResult), _identityResult);
+    }
 }

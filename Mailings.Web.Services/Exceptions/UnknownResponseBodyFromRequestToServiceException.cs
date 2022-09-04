@@ -1,7 +1,9 @@
 ﻿using System.Collections;
+using System.Runtime.Serialization;
+using Mailings.Web.Shared.Extensions;
 
 namespace Mailings.Web.Services.Exceptions;
-
+[Serializable]
 public sealed class UnknownResponseBodyFromRequestToServiceException : Exception
 {
     private readonly string _nameOfService;
@@ -27,5 +29,18 @@ public sealed class UnknownResponseBodyFromRequestToServiceException : Exception
         : base(message, inner)
     {
         _nameOfService = nameOfService;
+    }
+
+    private UnknownResponseBodyFromRequestToServiceException(
+        SerializationInfo info,
+        StreamingContext context)
+    {
+        _nameOfService = info.GetObject<string>(nameof(_nameOfService));
+    }
+
+    public override void GetObjectData(SerializationInfo info, StreamingContext context)
+    {
+        base.GetObjectData(info, context);
+        info.AddValue(nameof(_nameOfService), _nameOfService);
     }
 }

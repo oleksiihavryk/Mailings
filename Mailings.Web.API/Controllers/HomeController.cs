@@ -22,7 +22,7 @@ public sealed class HomeController : Controller
         return View();
     }
     [Authorize]
-    public IActionResult Login() => RedirectToAction(nameof(Index));
+    public RedirectToActionResult Login() => RedirectToAction(nameof(Index));
     [Authorize]
-    public IActionResult Logout() => SignOut("oidc", "Cookies");
+    public SignOutResult Logout() => SignOut("oidc", "Cookies");
 }

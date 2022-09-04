@@ -38,4 +38,11 @@ public sealed class FailedSignInException : Exception
         _user = info.GetObject<User>(nameof(_user));
         _signInResult = info.GetObject<SignInResult>(nameof(_signInResult));
     }
+
+    public override void GetObjectData(SerializationInfo info, StreamingContext context)
+    {
+        base.GetObjectData(info, context);
+        info.AddValue(nameof(_user), _user);
+        info.AddValue(nameof(_signInResult), _signInResult);
+    }
 }

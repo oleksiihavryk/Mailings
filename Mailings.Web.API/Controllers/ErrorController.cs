@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Mailings.Web.API.Controllers;
 public sealed class ErrorController : Controller
 {
-    public IActionResult Index()
+    public ViewResult Index()
     {
         var eh = HttpContext.RequestServices
             .GetRequiredService<IExceptionHandlerFeature>();

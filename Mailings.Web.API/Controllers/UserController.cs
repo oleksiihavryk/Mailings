@@ -18,19 +18,15 @@ public sealed class UserController : Controller
         _accountService = accountService;
     }
 
-    public IActionResult Profile()
+    public ViewResult Profile()
     {
-        var userClaims = (User.Identity as ClaimsIdentity)?.Claims;
-
-        var userData = PrepareUserData(userClaims);
+        var userData = PrepareUserData();
 
         return View(userData);
     }
-    public IActionResult Change()
+    public ViewResult Change()
     {
-        var userClaims = (User.Identity as ClaimsIdentity)?.Claims;
-
-        var userData = PrepareUserData(userClaims);
+        var userData = PrepareUserData();
 
         return View(new ChangingUserDataViewModel()
         {
@@ -83,29 +79,30 @@ public sealed class UserController : Controller
 
         return userDataDto;
     }
-
-    private UserDataViewModel PrepareUserData(IEnumerable<Claim> userClaims)
+    private UserDataViewModel PrepareUserData()
     {
+        var userClaims = (User.Identity as ClaimsIdentity)?.Claims;
+
         if (userClaims == null)
             throw new InvalidOperationException(
                 "User is must be authorized on the system!");
 
-        var arrayUseClaims = userClaims as Claim[] ?? userClaims.ToArray();
+        var arrayUserClaims = userClaims as Claim[] ?? userClaims.ToArray();
         var userData = new UserDataViewModel()
         {
-            Email = arrayUseClaims
+            Email = arrayUserClaims
                 .FirstOrDefault(c => c.Type == ClaimTypes.Email)?
                 .Value ?? "[email address is missing]",
-            FirstName = arrayUseClaims
+            FirstName = arrayUserClaims
                 .FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?
                 .Value ?? "[first name is missing]",
-            LastName = arrayUseClaims
+            LastName = arrayUserClaims
                 .FirstOrDefault(c => c.Type == ClaimTypes.Surname)?
                 .Value ?? "[last name is missing]",
-            UserName = arrayUseClaims
+            UserName = arrayUserClaims
                 .FirstOrDefault(c => c.Type == JwtClaimTypes.PreferredUserName)?
                 .Value ?? "[username is missing]",
-            Role = arrayUseClaims
+            Role = arrayUserClaims
                 .FirstOrDefault(c => c.Type == ClaimTypes.Role)?
                 .Value ?? "[role is missing]"
         };

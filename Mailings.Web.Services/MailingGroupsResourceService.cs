@@ -7,7 +7,7 @@ namespace Mailings.Web.Services;
 
 public class MailingGroupsResourceService : IMailingGroupsResourceService
 {
-    protected const string RoutePrefix = "/api/mailing-groups";
+    public const string RoutePrefix = "/api/mailing-groups";
 
     protected readonly ResourceService _resourceService;
 

@@ -7,7 +7,7 @@ namespace Mailings.Web.Services;
 
 public class HtmlMailsResourceService : IHtmlMailsResourceService
 {
-    protected const string RoutePrefix = "/api/mails/html";
+    public const string RoutePrefix = "/api/mails/html";
 
     protected readonly ResourceService _resourceService;
 
@@ -37,7 +37,7 @@ public class HtmlMailsResourceService : IHtmlMailsResourceService
         throw new RequestToServiceIsFailedException(
             nameOfService: nameof(ResourceService));
     }
-    public async Task<IEnumerable<MailDto>> GetMailsByUserId(string userId)
+    public virtual async Task<IEnumerable<MailDto>> GetMailsByUserId(string userId)
     {
         //setup request
         var request = new ServiceRequest(HttpMethod.Get)
@@ -61,7 +61,7 @@ public class HtmlMailsResourceService : IHtmlMailsResourceService
         throw new RequestToServiceIsFailedException(
             nameOfService: nameof(ResourceService));
     }
-    public async Task<MailDto> GetById(string id)
+    public virtual async Task<MailDto> GetById(string id)
     {
         //setup request
         var request = new ServiceRequest(HttpMethod.Get)
@@ -82,7 +82,7 @@ public class HtmlMailsResourceService : IHtmlMailsResourceService
         throw new RequestToServiceIsFailedException(
             nameOfService: nameof(ResourceService));
     }
-    public async Task<MailDto> Save(MailDto mailDto)
+    public virtual async Task<MailDto> Save(MailDto mailDto)
     {
         //setup request
         var request = new ServiceRequest(HttpMethod.Post)
@@ -104,7 +104,7 @@ public class HtmlMailsResourceService : IHtmlMailsResourceService
         throw new RequestToServiceIsFailedException(
             nameOfService: nameof(ResourceService));
     }
-    public async Task<MailDto> Update(MailDto mailDto)
+    public virtual async Task<MailDto> Update(MailDto mailDto)
     {
         //setup request
         var request = new ServiceRequest(HttpMethod.Put)
@@ -126,7 +126,7 @@ public class HtmlMailsResourceService : IHtmlMailsResourceService
         throw new RequestToServiceIsFailedException(
             nameOfService: nameof(ResourceService));
     }
-    public async Task Delete(string id)
+    public virtual async Task Delete(string id)
     {
         //setup request
         var request = new ServiceRequest(HttpMethod.Delete)

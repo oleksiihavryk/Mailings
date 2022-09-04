@@ -1,4 +1,6 @@
-﻿namespace Mailings.Web.API.Exceptions;
+﻿using System.Runtime.Serialization;
+
+namespace Mailings.Web.API.Exceptions;
 [Serializable]
 internal sealed class UrlIsNotGeneratedException : Exception
 {
@@ -12,6 +14,13 @@ internal sealed class UrlIsNotGeneratedException : Exception
     }
     public UrlIsNotGeneratedException(string? message, Exception? inner = null)
         : base(message, inner)
+    {
+    }
+
+    private UrlIsNotGeneratedException(
+        SerializationInfo info,
+        StreamingContext context)
+        : base(info, context)
     {
     }
 }

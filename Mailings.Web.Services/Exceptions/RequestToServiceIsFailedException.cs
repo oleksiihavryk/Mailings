@@ -1,7 +1,9 @@
 ﻿using System.Collections;
+using System.Runtime.Serialization;
+using Mailings.Web.Shared.Extensions;
 
 namespace Mailings.Web.Services.Exceptions;
-
+[Serializable]
 public sealed class RequestToServiceIsFailedException : Exception
 {
     private readonly string _nameOfService;
@@ -28,5 +30,19 @@ public sealed class RequestToServiceIsFailedException : Exception
         : base(message, inner)
     {
         _nameOfService = nameOfService;
+    }
+
+    private RequestToServiceIsFailedException(
+        SerializationInfo info,
+        StreamingContext context)
+        : base(info, context)
+    {
+        _nameOfService = info.GetObject<string>(nameof(_nameOfService));
+    }
+
+    public override void GetObjectData(SerializationInfo info, StreamingContext context)
+    {
+        base.GetObjectData(info, context);
+        info.AddValue(nameof(_nameOfService), _nameOfService);
     }
 }

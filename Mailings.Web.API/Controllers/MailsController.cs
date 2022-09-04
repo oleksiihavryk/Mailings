@@ -32,7 +32,7 @@ public sealed class MailsController : Controller
         if (page < StartPageIndex)
             return NotFound();
 
-        var mails = await GetMailsByUser();
+        var mails = await GetUserMails();
         var viewMails = mails
             .Skip(((int)page - StartPageIndex) * ViewConstants.MailsCapacityPerPage)
             .Take(ViewConstants.MailsCapacityPerPage)
@@ -54,7 +54,8 @@ public sealed class MailsController : Controller
     }
     public ViewResult Create() => View(new MailViewModel());
     [HttpPost]
-    public async Task<IActionResult> Create([FromForm][FromBody]MailViewModel viewModel)
+    public async Task<IActionResult> Create(
+        [FromForm][FromBody]MailViewModel viewModel)
     {
         if (GetCountOfBytesInAttachment(viewModel.Attachments) >= 1024 * 1024 * 25) //25 mb
         {
@@ -105,7 +106,7 @@ public sealed class MailsController : Controller
         string names = string
             .Join(", ", model.Attachments
                 .Select(f => f.Name));
-        @ViewBag.AttachmentsNames = names.Length > 15 ? 
+        ViewBag.AttachmentsNames = names.Length > 15 ? 
             names.Substring(0, 15) + "..." : 
             names;
 
@@ -212,7 +213,7 @@ public sealed class MailsController : Controller
 
         return mailDto;
     }
-    private async Task<ImmutableSortedDictionary<MailDto, MailTypeViewModel>> GetMailsByUser()
+    private async Task<ImmutableSortedDictionary<MailDto, MailTypeViewModel>> GetUserMails()
     {
         var userId = (User.Identity as ClaimsIdentity)?.Claims?
             .FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?

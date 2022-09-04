@@ -6,7 +6,7 @@ namespace Mailings.Web.Services;
 
 public class MailingsSenderResourceService : IMailingsSenderResourceService
 {
-    protected const string RoutePrefix = "/api/mailings";
+    public const string RoutePrefix = "/api/mailings";
 
     protected readonly ResourceService _resourceService;
 

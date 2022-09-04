@@ -16,25 +16,22 @@ public sealed class AdminController : Controller
         _betaTestService = betaTestService;
     }
 
-    public IActionResult Panel() => View();
-    public IActionResult GenerateAccount() => View();
+    public ViewResult Panel() => View();
+    public ViewResult GenerateAccount() => View();
+    public ViewResult AccountIsGenerated(GeneratedAccountViewModel viewModel)
+        => View(viewModel);
     [HttpPost]
-    public async Task<IActionResult> TryToGenerateAccount()
+    public async Task<RedirectToActionResult> TryToGenerateAccount()
     {
         var acc = await _betaTestService.GenerateAccount();
 
-        var viewModel = GetViewModel(acc);
-
-        return RedirectToAction(nameof(AccountIsGenerated), viewModel);
-    }
-    public IActionResult AccountIsGenerated(GeneratedAccountViewModel viewModel) 
-        => View(viewModel); 
-
-    private GeneratedAccountViewModel GetViewModel(GeneratedUserDto acc)
-        => new GeneratedAccountViewModel()
+        var viewModel = new GeneratedAccountViewModel()
         {
             Email = acc.Email,
             Password = acc.Password,
-            UserName = acc.UserName
+            UserName = acc.Username
         };
+
+        return RedirectToAction(nameof(AccountIsGenerated), viewModel);
+    }
 }

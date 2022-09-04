@@ -14,7 +14,7 @@ public class AccountAuthenticationService : IAccountAuthenticationService
         _authService = authService;
     }
 
-    public async Task ChangeUserData(UserDataDto userData)
+    public virtual async Task ChangeUserData(UserDataDto userData)
     {
         //setup request
         var request = new ServiceRequest(HttpMethod.Put)
