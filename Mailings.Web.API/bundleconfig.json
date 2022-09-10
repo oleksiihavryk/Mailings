@@ -41,5 +41,11 @@
     "inputFiles": [
       "wwwroot/js/modules/upload-text-content-button.js"
     ]
+  },
+  {
+    "outputFileName": "wwwroot/js/createGroup.min.js",
+    "inputFiles": [
+      "wwwroot/js/createGroup.js"
+    ]
   }
 ]

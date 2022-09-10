@@ -91,7 +91,7 @@ public sealed class TextMailsController : ControllerBase
     }
     [HttpPost]
     public async Task<IActionResult> SaveTextMail(
-        [FromBody][FromForm] MailDto mailDto)
+        [FromBody] MailDto mailDto)
     {
         var mail = ConvertFromDto(dto: mailDto);
 
@@ -104,7 +104,7 @@ public sealed class TextMailsController : ControllerBase
     }
     [HttpPut]
     public async Task<IActionResult> UpdateInDatabaseTextMail(
-        [FromBody][FromForm] MailDto mailDto)
+        [FromBody] MailDto mailDto)
     {
         Response? result = null;
         try

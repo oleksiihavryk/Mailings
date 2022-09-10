@@ -30,32 +30,42 @@ public sealed class ApiAccountController : ControllerBase
     [HttpPut("[action]")]
     public async Task<IActionResult> Change([FromBody][FromForm]UserDataDto userData)
     {
+        Response? response = null;
         var user = await _userManager.FindByNameAsync(userData.Username);
 
         if (user != null)
         {
-            if (string.IsNullOrWhiteSpace(userData.FirstName))
-                user.FirstName = userData.FirstName;
-            if (string.IsNullOrWhiteSpace(userData.LastName))
-                user.LastName = userData.LastName;
-            if (string.IsNullOrWhiteSpace(userData.Email))
+            if (!string.IsNullOrWhiteSpace(userData.FirstName) ||
+                !string.IsNullOrWhiteSpace(userData.LastName) ||
+                !string.IsNullOrWhiteSpace(userData.Email))
             {
-                user.Email = userData.Email;
-                user.EmailConfirmed = false;
+                Enum.TryParse<Roles>(
+                    value: (await _userManager
+                        .GetRolesAsync(user))
+                    .First(), 
+                    result: out var role);
+                await _claimProvider.RevertClaimsAsync(user);
+
+                if (!string.IsNullOrWhiteSpace(userData.FirstName))
+                    user.FirstName = userData.FirstName;
+                if (!string.IsNullOrWhiteSpace(userData.LastName))
+                    user.LastName = userData.LastName;
+                if (!string.IsNullOrWhiteSpace(userData.Email))
+                {
+                    user.Email = userData.Email;
+                    user.EmailConfirmed = false;
+                }
+
+                await _claimProvider.ProvideClaimsAsync(user, role);
             }
 
-            await RecreateClaimsAsync(user);
-
-            return Ok(_response.CreateSuccess(SuccessResponseType.Changed));
+            response = _response.CreateSuccess(SuccessResponseType.Changed);
+        }
+        else
+        {
+            response = _response.CreateFailedResponse(message: "User not found");
         }
 
-        return Ok(_response.CreateFailedResponse(message: "User not found"));
-    }
-
-    private async Task RecreateClaimsAsync(User user)
-    {
-        var role = (await _userManager.GetRolesAsync(user)).First();
-        await _claimProvider.RevertClaimsAsync(user);
-        await _claimProvider.ProvideClaimsAsync(user, Enum.Parse<Roles>(role));
+        return Ok(response);
     }
 }

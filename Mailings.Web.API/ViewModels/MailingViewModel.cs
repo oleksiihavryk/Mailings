@@ -1,8 +1,11 @@
-﻿namespace Mailings.Web.API.ViewModels;
+﻿using System.ComponentModel.DataAnnotations;
+using Mailings.Web.API.Controllers;
+
+namespace Mailings.Web.API.ViewModels;
 public class MailingViewModel
 {
-    public Guid Id { get; set; }
-    public MailViewModel Mail { get; set; }
-    public string Name { get; set; }
-    public IEnumerable<string> To { get; set; }
+    [Required] public Guid Id { get; set; } = Guid.Empty;
+    [Required] public MailingMailViewModel Mail { get; set; } = new MailingMailViewModel();
+    [Required] public string Name { get; set; } = string.Empty;
+    [Required] public List<string> To { get; set; } = new List<string>();
 }

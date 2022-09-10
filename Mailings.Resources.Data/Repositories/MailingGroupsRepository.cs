@@ -23,6 +23,7 @@ public class MailingGroupsRepository : IMailingGroupsRepository
         var entities = _dbContext.MailingGroups
             .Include(m => m.From)
             .Include(m => m.Mail)
+                .ThenInclude(m => m.Attachments)
             .Include(m => m.To)
                 .ThenInclude(t => t.Address)
             .ToArray();
@@ -34,6 +35,7 @@ public class MailingGroupsRepository : IMailingGroupsRepository
         var entity = await _dbContext.MailingGroups
             .Include(g => g.From)
             .Include(g => g.Mail)
+                .ThenInclude(m => m.Attachments)
             .Include(g => g.To)
                 .ThenInclude(t => t.Address)
             .FirstOrDefaultAsync(g => g.Id == key);
@@ -56,7 +58,12 @@ public class MailingGroupsRepository : IMailingGroupsRepository
         _updater.Update(
             obj1: ref dbEntity,
             obj2: entity,
-            namesOfIgnoredProperties: nameof(MailingGroup.Id));
+            namesOfIgnoredProperties: new[] 
+            { 
+                nameof(MailingGroup.Id), 
+                nameof(MailingGroup.From), 
+                nameof(MailingGroup.UserId)
+            });
 
         await _dbContext.SaveChangesAsync();
 

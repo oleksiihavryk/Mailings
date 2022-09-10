@@ -14,6 +14,6 @@ public class EmailAddressToConfiguration : IEntityTypeConfiguration<EmailAddress
 
         builder.HasOne(t => t.Group)
             .WithMany(m => m.To)
-            .OnDelete(DeleteBehavior.NoAction);
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

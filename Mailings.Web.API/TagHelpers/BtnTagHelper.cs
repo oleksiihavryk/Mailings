@@ -1,4 +1,5 @@
-﻿using Mailings.Web.API.Exceptions;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using Mailings.Web.API.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.Routing;
@@ -15,6 +16,7 @@ public sealed class BtnTagHelper : TagHelper
 
     private readonly IUrlHelperFactory _urlHelperFactory;
 
+    [NotMapped]
     [ViewContext]
     public ViewContext ViewContext { get; set; } = null!;
 

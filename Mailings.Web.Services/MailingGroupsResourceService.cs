@@ -79,6 +79,9 @@ public class MailingGroupsResourceService : IMailingGroupsResourceService
                    throw new UnknownResponseBodyFromRequestToServiceException(
                        nameOfService: nameof(ResourceService));
 
+        if (result.StatusCode == StatusCodes.Status404NotFound)
+            throw new ObjectNotFoundException();
+
         throw new RequestToServiceIsFailedException(
             nameOfService: nameof(ResourceService));
     }
@@ -123,6 +126,9 @@ public class MailingGroupsResourceService : IMailingGroupsResourceService
                    throw new UnknownResponseBodyFromRequestToServiceException(
                        nameOfService: nameof(ResourceService));
 
+        if (result.StatusCode == StatusCodes.Status404NotFound)
+            throw new ObjectNotFoundException();
+
         throw new RequestToServiceIsFailedException(
             nameOfService: nameof(ResourceService));
     }
@@ -137,6 +143,9 @@ public class MailingGroupsResourceService : IMailingGroupsResourceService
         //send request
         var result = await _resourceService
             .SendAndReceiveEmptyResponse(request);
+
+        if (result.StatusCode == StatusCodes.Status404NotFound)
+            throw new ObjectNotFoundException();
 
         //return result
         if (!result.IsSuccess)

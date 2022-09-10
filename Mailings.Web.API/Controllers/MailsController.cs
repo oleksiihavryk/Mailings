@@ -1,7 +1,9 @@
 ﻿using System.Collections.Immutable;
 using System.Security.Claims;
+using Mailings.Web.API.Filters;
 using Mailings.Web.API.ViewModels;
 using Mailings.Web.Services;
+using Mailings.Web.Services.Exceptions;
 using Mailings.Web.Shared.Comparers;
 using Mailings.Web.Shared.Dto;
 using Mailings.Web.Shared.SystemConstants;
@@ -25,6 +27,7 @@ public sealed class MailsController : Controller
         _textMailsService = textMailsService;
     }
 
+    [HttpGet]
     public async Task<IActionResult> All([FromRoute]int? page = null)
     {
         page = page ?? StartPageIndex;
@@ -52,67 +55,60 @@ public sealed class MailsController : Controller
 
         return View(viewMails);
     }
+    [HttpGet]
     public ViewResult Create() => View(new MailViewModel());
-    [HttpPost]
-    public async Task<IActionResult> Create(
-        [FromForm][FromBody]MailViewModel viewModel)
-    {
-        if (GetCountOfBytesInAttachment(viewModel.Attachments) >= 1024 * 1024 * 25) //25 mb
-        {
-            ModelState.AddModelError(string.Empty,
-                "Summary data of attachments is cannot be bigger than 25 megabytes. " +
-                "Please send attachments to google drive disk and insert link in email.");
-        }
-
-        if (!ModelState.IsValid)
-            return View(viewModel);
-
-        var mailDto = await PrepareMailDtoAsync(viewModel);
-
-        if (viewModel.Type == MailTypeViewModel.Text)
-            await _textMailsService.Save(mailDto);
-        else if (viewModel.Type == MailTypeViewModel.Html)
-            await _htmlMailsService.Save(mailDto);
-        else throw new InvalidOperationException("Unknown mail type");
-
-        return RedirectToAction(nameof(All));
-    }
+    [HttpGet]
+    [ServiceFilter(typeof(MailsUserSecuredServiceFilter))]
     public async Task<IActionResult> Delete(
         [FromRoute]string id,
         [FromRoute]MailTypeViewModel type)
     {
-        await (type switch
+        try
         {
-            MailTypeViewModel.Text => _textMailsService.Delete(id),
-            MailTypeViewModel.Html => _htmlMailsService.Delete(id),
-            _ => throw new InvalidOperationException("Unknown type of mail")
-        });
+            await (type switch
+            {
+                MailTypeViewModel.Text => _textMailsService.Delete(id),
+                MailTypeViewModel.Html => _htmlMailsService.Delete(id),
+                _ => throw new InvalidOperationException("Unknown type of mail")
+            });
+        }
+        catch (ObjectNotFoundException)
+        {
+            return NotFound();
+        }
 
         return RedirectToAction(nameof(All));
     }
+    [HttpGet]
+    [ServiceFilter(typeof(MailsUserSecuredServiceFilter))]
     public async Task<IActionResult> Change(
         [FromRoute] string id,
         [FromRoute]MailTypeViewModel type)
     {
-        var dto = await (type switch
-        {
-            MailTypeViewModel.Text => _textMailsService.GetById(id),
-            MailTypeViewModel.Html => _htmlMailsService.GetById(id),
-            _ => throw new InvalidOperationException("Unknown type of mail")
-        });
+        MailViewModel? model = null;
 
-        var model = ConvertToViewModel(dto, type);
+        //var dto = await (type switch
+        //{
+        //    MailTypeViewModel.Text => _textMailsService.GetById(id),
+        //    MailTypeViewModel.Html => _htmlMailsService.GetById(id),
+        //    _ => throw new InvalidOperationException("Unknown type of mail")
+        //});
+        var dto = RouteData
+            .Values[
+                MailsUserSecuredServiceFilter.CheckedMailKey] as MailDto;
+
+        model = ConvertToViewModel(dto, type);
 
         string names = string
             .Join(", ", model.Attachments
                 .Select(f => f.Name));
-        ViewBag.AttachmentsNames = names.Length > 15 ? 
-            names.Substring(0, 15) + "..." : 
+        ViewBag.AttachmentsNames = names.Length > 15 ?
+            names.Substring(0, 15) + "..." :
             names;
 
         return View(model);
     }
-    [HttpPost]
+    [ValidateAntiForgeryToken, HttpPost]
     public async Task<IActionResult> Change([FromForm][FromBody]MailViewModel viewModel)
     {
         if (GetCountOfBytesInAttachment(viewModel.Attachments) >= 1024 * 1024 * 25) //25 mb
@@ -136,6 +132,30 @@ public sealed class MailsController : Controller
             await _textMailsService.Update(mailDto);
         else if (viewModel.Type == MailTypeViewModel.Html)
             await _htmlMailsService.Update(mailDto);
+        else throw new InvalidOperationException("Unknown mail type");
+
+        return RedirectToAction(nameof(All));
+    }
+    [ValidateAntiForgeryToken, HttpPost]
+    public async Task<IActionResult> Create(
+        [FromForm][FromBody] MailViewModel viewModel)
+    {
+        if (GetCountOfBytesInAttachment(viewModel.Attachments) >= 1024 * 1024 * 25) //25 mb
+        {
+            ModelState.AddModelError(string.Empty,
+                "Summary data of attachments is cannot be bigger than 25 megabytes. " +
+                "Please send attachments to google drive disk and insert link in email.");
+        }
+
+        if (!ModelState.IsValid)
+            return View(viewModel);
+
+        var mailDto = await PrepareMailDtoAsync(viewModel);
+
+        if (viewModel.Type == MailTypeViewModel.Text)
+            await _textMailsService.Save(mailDto);
+        else if (viewModel.Type == MailTypeViewModel.Html)
+            await _htmlMailsService.Save(mailDto);
         else throw new InvalidOperationException("Unknown mail type");
 
         return RedirectToAction(nameof(All));

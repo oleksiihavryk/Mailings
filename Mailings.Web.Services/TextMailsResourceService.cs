@@ -78,6 +78,9 @@ public class TextMailsResourceService : ITextMailsResourceService
                    throw new UnknownResponseBodyFromRequestToServiceException(
                        nameOfService: nameof(ResourceService));
 
+        if (result.StatusCode == StatusCodes.Status404NotFound)
+            throw new ObjectNotFoundException();
+
         throw new RequestToServiceIsFailedException(
             nameOfService: nameof(ResourceService));
     }
@@ -122,6 +125,9 @@ public class TextMailsResourceService : ITextMailsResourceService
                    throw new UnknownResponseBodyFromRequestToServiceException(
                        nameOfService: nameof(ResourceService));
 
+        if (result.StatusCode == StatusCodes.Status404NotFound)
+            throw new ObjectNotFoundException();
+
         throw new RequestToServiceIsFailedException(
             nameOfService: nameof(ResourceService));
     }
@@ -136,7 +142,10 @@ public class TextMailsResourceService : ITextMailsResourceService
         //send request
         var result = await _resourceService
             .SendAndReceiveEmptyResponse(request);
-
+        
+        if (result.StatusCode == StatusCodes.Status404NotFound)
+            throw new ObjectNotFoundException();
+        
         //return result
         if (!result.IsSuccess)
             throw new RequestToServiceIsFailedException(

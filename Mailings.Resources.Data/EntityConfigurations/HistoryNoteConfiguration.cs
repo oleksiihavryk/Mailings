@@ -12,5 +12,9 @@ public class HistoryNoteConfiguration : IEntityTypeConfiguration<HistoryNoteMail
 
         builder.Property(h => h.When).IsRequired();
         builder.Property(h => h.IsSucceded).IsRequired();
+
+        builder.HasOne(n => n.Group)
+            .WithMany()
+            .OnDelete(DeleteBehavior.SetNull);
     }
 }

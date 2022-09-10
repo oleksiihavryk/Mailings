@@ -88,6 +88,9 @@ a.email {
 .text-entity {
     background-color: #b14949;
 }
+.mailing-entity {
+    background-color: #a9a9a9;
+}
 @font-face {
     font-family: "Cabin";
     src: url('fonts/Cabin/Cabin-Bold.ttf') format('truetype'),
@@ -181,6 +184,9 @@ body {
     padding: 10px 0;
     text-align: center;
 }
+.action-block > * {
+    margin: 5px;
+}
 .text-block p {
     margin: 0;
     padding: 5px 0;
@@ -200,6 +206,13 @@ body {
 .block-list-element:last-child {
     border-bottom: none;
 }
+.block-list-header {
+    background-color: #ababab;
+    padding: 5px;
+    border-bottom: 5px solid #373737;
+    text-align: center;
+    font-size: 22px;
+}
 .entity-list {
     padding: 5px;
     margin: 0;
@@ -216,10 +229,17 @@ body {
 .entity-list-element:last-child {
     margin-bottom: 0;
 }
+.entity-list-header {
+    color: white;
+    margin-bottom: 10px;
+    text-align: center;
+    font-size: 22px;
+}
 .text-list {
     padding: 10px;
     background-color: #696969;
     list-style-type: none;
+    color: white;
 }
 .text-list-element {
     background: #373737;
@@ -228,6 +248,13 @@ body {
 }
 .text-list-element:last-child {
     margin-bottom: 0;
+}
+.text-list-header {
+    background: #373737;
+    margin-bottom: 5px;
+    padding: 5px;
+    font-size: 22px;
+    text-align: center;
 }
 .button {
     color: white;

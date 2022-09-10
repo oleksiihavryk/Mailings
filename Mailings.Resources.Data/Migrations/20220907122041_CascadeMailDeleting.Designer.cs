@@ -4,6 +4,7 @@ using Mailings.Resources.Data.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Mailings.Resources.Data.Migrations
 {
     [DbContext(typeof(CommonResourcesDbContext))]
-    partial class CommonResourcesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220907122041_CascadeMailDeleting")]
+    partial class CascadeMailDeleting
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -216,7 +218,7 @@ namespace Mailings.Resources.Data.Migrations
                     b.HasOne("Mailings.Resources.Domain.MainModels.MailingGroup", "Group")
                         .WithMany("To")
                         .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Address");
@@ -228,8 +230,7 @@ namespace Mailings.Resources.Data.Migrations
                 {
                     b.HasOne("Mailings.Resources.Domain.MainModels.MailingGroup", "Group")
                         .WithMany()
-                        .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .HasForeignKey("GroupId");
 
                     b.Navigation("Group");
                 });

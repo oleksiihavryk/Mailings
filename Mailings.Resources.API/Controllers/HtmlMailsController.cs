@@ -90,7 +90,7 @@ public sealed class HtmlMailsController : ControllerBase
     }
     [HttpPost]
     public async Task<IActionResult> SaveHtmlMail(
-        [FromBody][FromForm] MailDto mailDto)
+        [FromBody] MailDto mailDto)
     {
         var mail = ConvertFromDto(dto: mailDto);
 
@@ -104,7 +104,7 @@ public sealed class HtmlMailsController : ControllerBase
     }
     [HttpPut]
     public async Task<IActionResult> UpdateInDatabaseHtmlMail(
-        [FromBody][FromForm] MailDto mailDto)
+        [FromBody] MailDto mailDto)
     {
         Response? result = null;
         try

@@ -64,8 +64,12 @@ public class AuthenticationRequestMode : IAuthServiceRequestMode
     {
         var obj = request.BodyObject;
 
-        if (obj != null) 
-            httpRequestMessage.Content = JsonContent.Create(obj);
+        if (obj != null)
+        {
+            httpRequestMessage.Content = JsonContent.Create(
+                inputValue: obj,
+                mediaType: new MediaTypeHeaderValue("application/json"));
+        }
     }
     protected virtual async Task ConfigureAuthentication(
         HttpRequestMessage httpRequestMessage,

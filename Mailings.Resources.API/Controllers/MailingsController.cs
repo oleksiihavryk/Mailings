@@ -36,7 +36,7 @@ public sealed class MailingsController : ControllerBase
         [FromBody][FromForm] MailingRequestDto sendRequestDto)
     {
         Response? result = null;
-
+        
         try
         {
             var sendRequest = await PrepareMailingSendRequestAsync(sendRequestDto);

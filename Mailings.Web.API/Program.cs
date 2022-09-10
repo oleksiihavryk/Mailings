@@ -98,6 +98,24 @@ app.UseMvc(routes =>
         "mails/change/{type:required}/{id:required}",
         defaults: new { controller = "Mails", action = "Change" });
     routes.MapRoute(null,
+        template: "mailings/more/{id:required}",
+        defaults: new { controller = "Mailings", action = "More" });
+    routes.MapRoute(null,
+        template: "mailings/setup/{id:required}",
+        defaults: new { controller = "Mailings", action = "Setup" });
+    routes.MapRoute(null,
+        template: "mailings/change/{id:required}",
+        defaults: new { controller = "Mailings", action = "Change" });
+    routes.MapRoute(null,
+        template: "mailings/delete/{id:required}",
+        defaults: new { controller = "Mailings", action = "Delete" });
+    routes.MapRoute(null,
+        template: "sender/settings/{id:required}",
+        defaults: new { controller = "Sender", action = "Settings" });
+    routes.MapRoute(null,
+        template: "sender/response",
+        defaults: new { controller = "Sender", action = "ShowResponse" });
+    routes.MapRoute(null,
         "{controller=Home}/{action=Index}");
 });
 

@@ -47,6 +47,7 @@ public sealed class BetaTestController : ControllerBase
         string pass = _passwordGen.Generate();
 
         var result = await _userManager.CreateAsync(user, pass);
+        await _userManager.AddToRoleAsync(user, Roles.BetaTester.ToString());
         await _claimProvider.ProvideClaimsAsync(user, Roles.BetaTester);
 
         var userData = new UserDataDto()

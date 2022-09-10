@@ -9,7 +9,7 @@
     {
         <list struct="Entity">
             @foreach (var el in Model) {
-                <el>
+                <el class="mailing-entity">
                     @await Component.InvokeAsync("MailingEntity", el)
                 </el>
             }
@@ -20,7 +20,7 @@
         <div class="text-block">
             <p>Currently you not create any groups.</p>
             <p>If you want to add new group in system:
-                <a class="text-value-marker" asp-action="Create" asp-controller="Mails">
+                <a class="text-value-marker" asp-action="Create" asp-controller="Mailings">
                     click here
                 </a>.
             </p>

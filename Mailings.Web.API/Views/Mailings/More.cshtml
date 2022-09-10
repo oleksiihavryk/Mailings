@@ -1,0 +1,42 @@
+﻿@model MailingViewModel
+@section Content 
+{
+    <h2 class="main-text">@Model.Name</h2>
+    <div class="action-block">
+        <a class="button"
+           asp-action="Delete" asp-controller="Mailings" 
+           asp-route-id="@Model.Id">
+            Delete
+        </a>
+        <a class="button"
+           asp-action="Change" asp-controller="Mailings" 
+           asp-route-id="@Model.Id">
+            Change
+        </a>
+        <a class="button"
+           asp-action="Settings" asp-controller="Sender" 
+           asp-route-id="@Model.Id">
+            Mailings settings
+        </a>
+    </div>
+    <list struct="Block">
+        <el>ID: @Model.Id</el>
+        <el>Name: @Model.Name</el>
+        <el>Mail ID: @Model.Mail.Id</el>
+        <el>Mail type: @Model.Mail.Type</el>
+        <el>Mail theme: @Model.Mail.Theme</el>
+    </list>
+    <list struct="Text">
+        <elhead>Receivers</elhead>
+        @{
+            int counter = 1;
+        }
+        @foreach (var r in @Model.To)
+        {
+            <el>@(counter++). @r</el>
+        }
+    </list>
+    <div class="action-block">
+        <btn action="All" controller="Mailings">Back to Mailings</btn>
+    </div>
+}

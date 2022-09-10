@@ -1,8 +1,10 @@
-﻿using System.Collections.Immutable;
+﻿using System.Net.Mail;
 using System.Security.Claims;
+using IdentityModel;
+using Mailings.Web.API.Filters;
 using Mailings.Web.API.ViewModels;
 using Mailings.Web.Services;
-using Mailings.Web.Shared.Comparers;
+using Mailings.Web.Services.Exceptions;
 using Mailings.Web.Shared.Dto;
 using Mailings.Web.Shared.SystemConstants;
 using Microsoft.AspNetCore.Authorization;
@@ -28,6 +30,7 @@ public sealed class MailingsController : Controller
         _htmlMailsResourceService = htmlMailsResourceService;
     }
 
+    [HttpGet]
     public async Task<IActionResult> All([FromRoute] int? page = null)
     {
         page = page ?? StartPageIndex;
@@ -55,24 +58,179 @@ public sealed class MailingsController : Controller
 
         return View(viewMails);
     }
-    public IActionResult More(string id)
+    [HttpGet]
+    [ServiceFilter(typeof(MailingsUserSecuredServiceFilter))]
+    public async Task<IActionResult> More([FromRoute] string id)
     {
-        throw new NotImplementedException();
+        var dto = RouteData
+            .Values[
+                MailingsUserSecuredServiceFilter.CheckedMailingKey] as MailingGroupDto;
+        var viewModel = await ConvertToViewModelAsync(dto);
+
+        return View(viewModel);
     }
+    [HttpGet]
+    [ServiceFilter(typeof(MailingsUserSecuredServiceFilter))]
+    public async Task<IActionResult> Change([FromRoute]string id)
+    {
+        var dto = RouteData
+            .Values[
+                MailingsUserSecuredServiceFilter.CheckedMailingKey] as MailingGroupDto;
+        var viewModel = await ConvertToViewModelAsync(dto);
+
+        var mails = await GetUserMailsAsync();
+        ViewData["Mails"] = mails;
+
+        return View(viewModel);
+    }
+    [HttpGet]
+    [ServiceFilter(typeof(MailingsUserSecuredServiceFilter))]
+    public async Task<IActionResult> Delete([FromRoute]string id)
+    {
+        try
+        {
+            await _groupsResourceService.Delete(id);
+        }
+        catch (ObjectNotFoundException)
+        {
+            return NotFound();
+        }
+
+        return RedirectToAction(nameof(All));
+    }
+    [HttpGet]
     public async Task<ViewResult> Create()
     {
         var mails = await GetUserMailsAsync();
-        ViewBag.Mails = mails;
+        ViewData["Mails"] = mails;
 
-        return View();
+        return View(new MailingViewModel() /*{To = { "amerika@gmail.com" }}*/);
     }
-    [HttpPost]
-    public IActionResult Create(MailingViewModel viewModel)
+    [ValidateAntiForgeryToken, HttpPost]
+    public async Task<IActionResult> Create(MailingViewModel viewModel)
     {
-        throw new NotImplementedException();
+        var mailsTask = GetUserMailsAsync();
+
+        if (viewModel.To.Any())
+        {
+            foreach (var m in viewModel.To)
+            { 
+                if (!MailAddress.TryCreate(m, out var parsedMail))
+                    ModelState.AddModelError(string.Empty,
+                        $"Input \"{m}\" is not valid for a email value.");
+            }
+        }
+        else
+        {
+            ModelState.AddModelError(string.Empty,
+                $"Mailings is does not have any receivers. Please, add at " +
+                $"least one to create mailings.");
+        }
+
+        if (!ModelState.IsValid)
+        {
+            ViewData["Mails"] = await mailsTask;
+            return View(viewModel);
+        }
+
+        var userData = GetUserData();
+        var mails = await mailsTask;
+        var mail = mails
+                       .FirstOrDefault(m => m.Id == viewModel.Mail.Id) ??
+                   throw new InvalidOperationException(
+                       "Mail is currently does not exist in system.");
+
+        var dto = new MailingGroupDto()
+        {
+            MailId = Guid.Parse(mail.Id),
+            MailType = mail.Type,
+            Name = viewModel.Name,
+            To = viewModel.To,
+            UserId = userData.UserId,
+            SenderPseudo = userData.Pseudo
+        };
+
+        await _groupsResourceService.Save(dto);
+
+        return RedirectToAction(nameof(All));
+    }
+    [ValidateAntiForgeryToken, HttpPost]
+    public async Task<IActionResult> Change(MailingViewModel viewModel)
+    {
+        var mailsTask = GetUserMailsAsync();
+
+        if (viewModel.To.Any())
+        {
+            foreach (var m in viewModel.To)
+            {
+                if (!MailAddress.TryCreate(m, out var parsedMail))
+                    ModelState.AddModelError(string.Empty,
+                        $"Input \"{m}\" is not valid for a email value.");
+            }
+        }
+        else
+        {
+            ModelState.AddModelError(string.Empty,
+                $"Mailings is does not have any receivers. Please, add at " +
+                $"least one to create mailings.");
+        }
+
+        if (!ModelState.IsValid)
+        {
+            ViewData["Mails"] = await mailsTask;
+            return View(viewModel);
+        }
+
+        var userData = GetUserData();
+        var mails = await mailsTask;
+        var mail = mails
+                       .FirstOrDefault(m => m.Id == viewModel.Mail.Id) ??
+                   throw new InvalidOperationException(
+                       "Mail is currently does not exist in system.");
+
+        var dto = new MailingGroupDto()
+        {
+            Id = viewModel.Id,
+            MailId = Guid.Parse(mail.Id),
+            MailType = mail.Type,
+            Name = viewModel.Name,
+            To = viewModel.To,
+            UserId = userData.UserId,
+            SenderPseudo = userData.Pseudo
+        };
+
+        await _groupsResourceService.Update(dto);
+
+        return RedirectToAction(nameof(All));
     }
 
-    private async Task<List<MailViewModel>> GetUserMailsAsync()
+    private UserData GetUserData()
+    {
+        var userClaims = (User.Identity as ClaimsIdentity)?
+                         .Claims ??
+                         throw new InvalidOperationException(
+                             "User is not authenticated in system.");
+
+        var userId = userClaims
+            .FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?
+            .Value ?? throw new InvalidOperationException(
+            "User is not authenticated in system.");
+        var pseudo = string.Join(" ", userClaims
+                                          .Where(c => c.Type is 
+                                              ClaimTypes.GivenName or 
+                                              ClaimTypes.Surname)
+                                          .Select(c => c.Value) ??
+                                      throw new InvalidOperationException(
+                                          "User is not authenticated in system."));
+
+        return new UserData()
+        {
+            UserId = userId,
+            Pseudo = pseudo
+        };
+    }
+
+    private async Task<List<MailingMailViewModel>> GetUserMailsAsync()
     {
         var userId = (User.Identity as ClaimsIdentity)?.Claims?
             .FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?
@@ -86,13 +244,17 @@ public sealed class MailingsController : Controller
             .GetMailsByUserId(userId);
         var textMails = await _textMailsResourceService
             .GetMailsByUserId(userId);
-        var mails = new List<MailViewModel>();
+        var mails = new List<MailingMailViewModel>();
 
         foreach (var htmlMail in htmlMails)
-            mails.Add(ConvertMailToViewModel(htmlMail, MailTypeViewModel.Html));
+            mails.Add(ConvertMailToViewModel(
+                dto: htmlMail, 
+                type: MailTypeViewModel.Html));
 
         foreach (var textMail in textMails)
-            mails.Add(ConvertMailToViewModel(textMail, MailTypeViewModel.Text));
+            mails.Add(ConvertMailToViewModel(
+                dto: textMail, 
+                type: MailTypeViewModel.Text));
 
         return mails;
     }
@@ -101,7 +263,7 @@ public sealed class MailingsController : Controller
         {
             Id = dto.Id,
             Name = dto.Name,
-            To = dto.To,
+            To = dto.To.ToList(),
             Mail = dto.MailType switch
             {
                 "Html" => ConvertMailToViewModel(
@@ -113,38 +275,15 @@ public sealed class MailingsController : Controller
                 _ => throw new InvalidOperationException("Unknown mail type")
             }
         };
-    private MailViewModel ConvertMailToViewModel(
+    private MailingMailViewModel ConvertMailToViewModel(
         MailDto dto,
         MailTypeViewModel type)
-    {
-        var model = new MailViewModel()
+        => new MailingMailViewModel()
         {
-            Id = dto.Id,
-            Content = dto.Content,
+            Id = dto.Id.ToString(),
             Theme = dto.Theme,
-            Type = type
+            Type = type.ToString()
         };
-
-        model.Attachments = dto.Attachments
-            .Select(arg =>
-            {
-                using var ms = new MemoryStream(arg.BytesContent);
-                IFormFile ff = new FormFile(
-                    baseStream: ms,
-                    baseStreamOffset: 0,
-                    length: ms.Length,
-                    name: arg.Name,
-                    fileName: arg.Name)
-                {
-                    Headers = new HeaderDictionary(),
-                    ContentType = arg.ContentType
-                };
-                return ff;
-            })
-            .ToList();
-
-        return model;
-    }
     private async Task<IEnumerable<MailingGroupDto>> GetMailingsByUser()
     {
         var userId = (User.Identity as ClaimsIdentity)?.Claims
@@ -156,5 +295,11 @@ public sealed class MailingsController : Controller
             .GetGroupsByUserId(userId);
 
         return groups;
+    }
+
+    private class UserData
+    {
+        public string UserId { get; set; }
+        public string Pseudo { get; set; }
     }
 }

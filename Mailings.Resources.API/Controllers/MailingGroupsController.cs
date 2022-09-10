@@ -99,7 +99,7 @@ public sealed class MailingGroupsController : ControllerBase
     }
     [HttpPost]
     public async Task<IActionResult> SaveMailingInDatabase(
-        [FromForm][FromBody] MailingGroupDto groupDto)
+        [FromBody] MailingGroupDto groupDto)
     {
         var group = await ConvertFromDtoAsync(dto: groupDto);
 
@@ -113,7 +113,7 @@ public sealed class MailingGroupsController : ControllerBase
     }
     [HttpPut]
     public async Task<IActionResult> UpdateMailingInDatabase(
-        [FromForm][FromBody] MailingGroupDto groupDto)
+        [FromBody] MailingGroupDto groupDto)
     {
         Response? result = null;
         try
@@ -167,7 +167,7 @@ public sealed class MailingGroupsController : ControllerBase
     {
         var mailingGroup = new MailingGroup(dto.Name, dto.UserId)
         {
-            Id = dto.Id
+            Id = dto.Id ?? Guid.Empty
         };
 
         mailingGroup.Mail = dto.MailType switch

@@ -1,0 +1,23 @@
+﻿@model MailingRequestViewModel
+@section Content
+{
+    <h2 class="main-text">Settings of @Model.Name</h2>
+    <form method="post" 
+          asp-action="Send" asp-controller="Sender">
+        <div class="form-section">
+            <input asp-for="Id" hidden/>
+            <input asp-for="MailType" hidden/>
+            <input asp-for="Name" hidden/>
+            <h3 class="form-section-label">
+                Main settings
+            </h3>
+            <div class="text-block">
+                <p>Currently settings of mailing is does not released.</p>
+                <p>At now you may send a mailing only 1 time per operation.</p>
+            </div>
+        </div>
+        <div class="buttons-section">
+            <button type="submit" class="button">Send</button>
+        </div>
+    </form>
+}

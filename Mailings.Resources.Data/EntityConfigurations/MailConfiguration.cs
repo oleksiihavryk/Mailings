@@ -12,5 +12,9 @@ public class MailConfiguration : IEntityTypeConfiguration<Mail>
 
         builder.Property(m => m.UserId).IsRequired();
         builder.Property(m => m.Theme).IsRequired();
+
+        builder.HasMany<MailingGroup>()
+            .WithOne(mg => mg.Mail)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

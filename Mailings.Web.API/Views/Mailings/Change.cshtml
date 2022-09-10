@@ -1,11 +1,11 @@
 ﻿@model MailingViewModel
 @section Content
 {
-    <h2 class="main-text">Create mailing</h2>
+    <h2 class="main-text">Change mailing</h2>
     <div asp-validation-summary="All">
     </div>
     <form method="post" enctype="multipart/form-data"
-          asp-action="Create" asp-controller="Mailings">
+          asp-action="Change" asp-controller="Mailings">
         <div class="form-section">
             <h3 class="form-section-label">Mailing</h3>
             <div class="form-group">
@@ -16,7 +16,7 @@
         <div class="form-section">
             <h3 class="form-section-label">Choose mail</h3>
             <div class="form-group">
-                <label asp-for="Mail.Id"></label>
+                <label asp-for="Mail.Id">Mail</label>
                 <select asp-for="Mail.Id"
                         asp-items="@(new SelectList(
                                        items: ViewData["Mails"] as 
@@ -45,7 +45,7 @@
             <button type="button" id="RemoveReceiverButton" class="button">
                 Remove receiver
             </button>
-            <button type="submit" class="button">Create</button>
+            <button type="submit" class="button">Change</button>
         </div>
     </form>
 }

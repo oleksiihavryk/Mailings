@@ -4,6 +4,7 @@ using Mailings.Resources.Data.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Mailings.Resources.Data.Migrations
 {
     [DbContext(typeof(CommonResourcesDbContext))]
-    partial class CommonResourcesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220910054300_CascadeMailDeleting5")]
+    partial class CascadeMailDeleting5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
