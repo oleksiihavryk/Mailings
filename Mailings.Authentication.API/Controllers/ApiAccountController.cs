@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Mailings.Authentication.API.Controllers;
+/// <summary>
+///     Api controller for provide access to changing account data.
+/// </summary>
 [ApiController]
 [Route("api/account")]
 [Authorize(Policy = IdentityServerConstants.LocalApi.PolicyName)]
@@ -27,7 +30,12 @@ public sealed class ApiAccountController : ControllerBase
         _response = response;
     }
 
-    [HttpPut("[action]")]
+    /// <summary>
+    ///     Endpoint of changing private account data
+    /// </summary>
+    /// <param name="userData">User data which exactly was been changed.</param>
+    /// <returns>Result object of current api result.</returns>
+    [HttpPut]
     public async Task<IActionResult> Change([FromBody]UserDataDto userData)
     {
         Response? response = null;

@@ -8,14 +8,12 @@ public class DigitsCountPasswordValidator : PasswordValidator<User>
 
     public int MinimalDigitCount { get; }
 
-    public DigitsCountPasswordValidator(int minimalDigitCount)
+    public DigitsCountPasswordValidator(int? minimalDigitCount = null)
         : base()
     {
-        MinimalDigitCount = minimalDigitCount;
-    }
-    public DigitsCountPasswordValidator()
-        :this (DefaultMinimalDigitCount)
-    {
+        MinimalDigitCount = minimalDigitCount is null or < DefaultMinimalDigitCount ? 
+            DefaultMinimalDigitCount : 
+            (int)minimalDigitCount;
     }
 
     public override async Task<IdentityResult> ValidateAsync(

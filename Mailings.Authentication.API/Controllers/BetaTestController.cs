@@ -9,6 +9,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Mailings.Authentication.API.Controllers;
+/// <summary>
+///     Api controller for provide creating a new beta test accounts.
+/// </summary>
 [ApiController]
 [Route("/api/account/beta-test")]
 [Authorize(Policy = IdentityServerConstants.LocalApi.PolicyName)]
@@ -31,6 +34,10 @@ public sealed class BetaTestController : ControllerBase
         _response = response;
     }
 
+    /// <summary>
+    ///     Endpoint of generating a new beta test accounts.
+    /// </summary>
+    /// <returns>Result object of generated beta test account.</returns>
     [HttpPost]
     public async Task<IActionResult> GenerateAccount()
     {

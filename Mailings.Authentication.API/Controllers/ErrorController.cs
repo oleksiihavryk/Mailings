@@ -2,8 +2,15 @@
 using Microsoft.AspNetCore.Mvc;
 
 namespace Mailings.Authentication.API.Controllers;
+/// <summary>
+///     Controller for handling unhandled errors on web site
+/// </summary>
 public sealed class ErrorController : Controller
 {
+    /// <summary>
+    ///     Endpoint for handling errors
+    /// </summary>
+    /// <returns>View of error</returns>
     [HttpGet("/error")]
     public async Task<ViewResult> Index()
         => await Task.Run(() =>
