@@ -1,9 +1,17 @@
 [
   {
+    "outputFileName": "wwwroot/js/login.js",
+    "inputFiles": [
+      "wwwroot/js/modules/modal.js",
+      "wwwroot/js/unavailable-feature.js"
+    ]
+  },
+  {
     "outputFileName": "wwwroot/css/styles.css",
     "inputFiles": [
       "wwwroot/css/auth.css",
-      "wwwroot/css/base.css"
+      "wwwroot/css/base.css",
+      "wwwroot/css/specific-styles.css"
     ]
   }
 ]

@@ -143,6 +143,8 @@ var app = builder.Build();
 app.SeedData();
 
 //Configure middleware
+app.UseExceptionHandler("/Error");
+
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();

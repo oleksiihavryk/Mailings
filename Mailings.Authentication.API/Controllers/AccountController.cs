@@ -1,13 +1,10 @@
 ﻿using IdentityServer4.Services;
-using Mailings.Authentication.API.Dto;
 using Mailings.Authentication.API.ViewModels;
 using Mailings.Authentication.Shared;
 using Mailings.Authentication.Shared.ClaimProvider;
-using Mailings.Authentication.Shared.Exceptions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using FailedSignInException = Mailings.Authentication.API.Exceptions.FailedSignInException;
-using FailedSignUpException = Mailings.Authentication.API.Exceptions.FailedSignUpException;
+using Mailings.Authentication.API.Exceptions;
 
 namespace Mailings.Authentication.API.Controllers;
 [Route("[controller]")]
@@ -28,40 +25,40 @@ public sealed class AccountController : Controller
             (userManager, signInManager, interactionService, claimProvider);
     }
 
-    [HttpGet]
-    [Route("[action]")]
-    public ViewResult Login([FromQuery]string returnUrl) => View((object)returnUrl);
-    [HttpGet]
-    [Route("[action]")]
-    public ViewResult SignIn([FromQuery] string returnUrl)
-    {
-        var viewModel = new LoginViewModel()
+    [HttpGet("[action]")]
+    public async Task<ViewResult> Login([FromQuery]string returnUrl) => 
+        await Task.Run(() => View((object)returnUrl));
+
+    [HttpGet("[action]")]
+    public async Task<ViewResult> SignIn([FromQuery] string returnUrl)
+        => await Task.Run(() =>
         {
-            ReturnUrl = returnUrl
-        };
-        return View(viewModel);
-    }
-    [HttpGet]
-    [Route("[action]")]
-    public ViewResult Register([FromQuery] string returnUrl)
-    {
-        var viewModel = new RegisterViewModel()
+            var viewModel = new LoginViewModel()
+            {
+                ReturnUrl = returnUrl
+            };
+            return View(viewModel);
+        });
+
+    [HttpGet("[action]")]
+    public async Task<ViewResult> Register([FromQuery] string returnUrl)
+        => await Task.Run(() =>
         {
-            ReturnUrl = returnUrl
-        };
-        return View(viewModel);
-    }
-    [HttpGet]
-    [Route("[action]")]
+            var viewModel = new RegisterViewModel()
+            {
+                ReturnUrl = returnUrl
+            };
+            return View(viewModel);
+        });
+    [HttpGet("[action]")]
     public async Task<RedirectResult> Logout([FromQuery] string logoutId)
     {
         await _signInManager.SignOutAsync();
         var context =await _interactionService.GetLogoutContextAsync(logoutId);
         return Redirect(context.PostLogoutRedirectUri);
     }
-    [HttpPost]
-    [Route("[action]")]
-    public async Task<IActionResult> SignIn(LoginViewModel viewModel)
+    [HttpPost("[action]")]
+    public async Task<IActionResult> SignIn([FromForm]LoginViewModel viewModel)
     {
         if (!ModelState.IsValid)
             return View(viewModel);
@@ -82,28 +79,38 @@ public sealed class AccountController : Controller
 
         return Redirect(viewModel.ReturnUrl);
     }
-
     [HttpPost]
     [Route("[action]")]
     public async Task<IActionResult> Register(RegisterViewModel viewModel)
     {
-
-        if (!ModelState.IsValid)
-            return View(viewModel);
-
         if (viewModel.Password != viewModel.PasswordConfirmation)
         {
             ModelState.AddModelError(
-                key: "",
+                key: string.Empty,
                 errorMessage: "Password and confirmation of password is not equals");
-            return View();
         }
+
+        if (await _userManager.FindByEmailAsync(viewModel.Email) != null)
+        {
+            ModelState.AddModelError(
+                key: string.Empty,
+                errorMessage: "User with current email is already exist in system.");
+        }
+
+        if (await _userManager.FindByNameAsync(viewModel.Username) != null)
+        {
+            ModelState.AddModelError(
+                key: string.Empty,
+                errorMessage: "User with current username is already exist in system.");
+        }
+
+        if (!ModelState.IsValid)
+            return View(viewModel);
 
         User? user = null;
         try
         {
             user = await CreateUserAsync(viewModel);
-            await _claimProvider.ProvideClaimsAsync(user, Roles.Default);
             var result = await _signInManager.PasswordSignInAsync(
                 user: user,
                 password: viewModel.Password,
@@ -131,6 +138,8 @@ public sealed class AccountController : Controller
 
     private async Task<User> CreateUserAsync(RegisterViewModel viewModel)
     {
+        const Roles role = Roles.Default;
+
         User user = new User()
         {
             UserName = viewModel.Username,
@@ -142,16 +151,14 @@ public sealed class AccountController : Controller
         var creatingResult = await _userManager.CreateAsync(user, viewModel.Password);
 
         if (!creatingResult.Succeeded)
-        {
             throw new FailedSignUpException(user, creatingResult);
-        }
 
-        var roleAddingResult = await _userManager.AddToRoleAsync(user, Roles.Default.ToString());
+        var roleAddingResult = await _userManager.AddToRoleAsync(user, role.ToString());
 
         if (!roleAddingResult.Succeeded)
-        {
             throw new FailedSignUpException(user, roleAddingResult);
-        }
+
+        await _claimProvider.ProvideClaimsAsync(user, role);
 
         return user;
     }

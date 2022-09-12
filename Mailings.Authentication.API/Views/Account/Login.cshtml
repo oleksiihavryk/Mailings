@@ -7,7 +7,18 @@
            asp-route-returnUrl="@Model">
             Mailings authentication
         </a>
-        <a class="authentication-type" href="#">Facebook authentication</a>
-        <a class="authentication-type" href="#">Gmail authentication</a>
+        <a id="Facebook" class="authentication-type" href="#">Facebook authentication</a>
+        <a id="Gmail" class="authentication-type" href="#">Gmail authentication</a>
     </div>
+}
+@section Scripts
+{
+    <script asp-src-include="/lib/**.min.js" asp-src-exclude="**.slim.**js"></script>
+    <environment names="development">
+        <script asp-src-include="/js/modules/modal.js"></script>
+        <script asp-src-include="/js/unavailable-feature.js"></script>
+    </environment>
+    <environment names="staging, production">
+        <script asp-src-include="/js/login.min.js"></script>
+    </environment>
 }

@@ -28,38 +28,46 @@ public sealed class ApiAccountController : ControllerBase
     }
 
     [HttpPut("[action]")]
-    public async Task<IActionResult> Change([FromBody][FromForm]UserDataDto userData)
+    public async Task<IActionResult> Change([FromBody]UserDataDto userData)
     {
         Response? response = null;
         var user = await _userManager.FindByNameAsync(userData.Username);
 
         if (user != null)
         {
-            if (!string.IsNullOrWhiteSpace(userData.FirstName) ||
-                !string.IsNullOrWhiteSpace(userData.LastName) ||
-                !string.IsNullOrWhiteSpace(userData.Email))
+            if (await _userManager.FindByEmailAsync(userData.Email) != null)
             {
-                Enum.TryParse<Roles>(
-                    value: (await _userManager
-                        .GetRolesAsync(user))
-                    .First(), 
-                    result: out var role);
-                await _claimProvider.RevertClaimsAsync(user);
-
-                if (!string.IsNullOrWhiteSpace(userData.FirstName))
-                    user.FirstName = userData.FirstName;
-                if (!string.IsNullOrWhiteSpace(userData.LastName))
-                    user.LastName = userData.LastName;
-                if (!string.IsNullOrWhiteSpace(userData.Email))
+                if (!string.IsNullOrWhiteSpace(userData.FirstName) ||
+                    !string.IsNullOrWhiteSpace(userData.LastName) ||
+                    !string.IsNullOrWhiteSpace(userData.Email))
                 {
-                    user.Email = userData.Email;
-                    user.EmailConfirmed = false;
+                    Enum.TryParse<Roles>(
+                        value: (await _userManager
+                            .GetRolesAsync(user))
+                        .First(), 
+                        result: out var role);
+                    await _claimProvider.RevertClaimsAsync(user);
+
+                    if (!string.IsNullOrWhiteSpace(userData.FirstName))
+                        user.FirstName = userData.FirstName;
+                    if (!string.IsNullOrWhiteSpace(userData.LastName))
+                        user.LastName = userData.LastName;
+                    if (!string.IsNullOrWhiteSpace(userData.Email))
+                    {
+                        user.Email = userData.Email;
+                        user.EmailConfirmed = false;
+                    }
+
+                    await _claimProvider.ProvideClaimsAsync(user, role);
                 }
-
-                await _claimProvider.ProvideClaimsAsync(user, role);
+                response = _response.CreateSuccess(SuccessResponseType.Changed);
             }
-
-            response = _response.CreateSuccess(SuccessResponseType.Changed);
+            else
+            {
+                response = _response.CreateFailedResponse(
+                    failedType: FailedResponseType.BadRequest,
+                    message: "User with current email is already exist in system");
+            }
         }
         else
         {
