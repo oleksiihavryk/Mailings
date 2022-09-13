@@ -5,15 +5,30 @@ using Mailings.Authentication.Shared.Extensions;
 using Microsoft.AspNetCore.Identity;
 
 namespace Mailings.Authentication.API.Exceptions;
+/// <summary>
+///     Failed sign up exception model
+/// </summary>
 [Serializable]
 public sealed class FailedSignUpException : Exception
 {
+    /// <summary>
+    ///     Data of user which occurred exception
+    /// </summary>
     private readonly User _user;
+    /// <summary>
+    ///     Identity result of exception
+    /// </summary>
     private readonly IdentityResult _identityResult;
 
+    /// <summary>
+    ///     Message of exception
+    /// </summary>
     public override string Message => base.Message ??
         $"Failed sign-up operation for user with username {_user.UserName}. " +
         $"Identity result: {_identityResult}";
+    /// <summary>
+    ///     Data of exception
+    /// </summary>
     public override IDictionary Data => new Dictionary<string, object>()
     {
         ["user"] = _user,

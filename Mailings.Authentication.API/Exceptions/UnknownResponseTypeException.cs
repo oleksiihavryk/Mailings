@@ -1,9 +1,15 @@
 ﻿using System.Runtime.Serialization;
 
 namespace Mailings.Authentication.API.Exceptions;
+/// <summary>
+///     Unknown response type exception model
+/// </summary>
 [Serializable]
 internal sealed class UnknownResponseTypeException : Exception
 {
+    /// <summary>
+    ///     Message of exception
+    /// </summary>
     public override string Message => base.Message ??
                                       "Unknown response type of ResponseDto." +
                                       "Check what exactly you choose as a response type " +

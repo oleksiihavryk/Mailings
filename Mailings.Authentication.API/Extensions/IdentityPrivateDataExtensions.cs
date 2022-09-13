@@ -1,8 +1,17 @@
 ﻿using Mailings.Authentication.Shared.StaticData;
 
 namespace Mailings.Authentication.API.Extensions;
+/// <summary>
+///     Class of configuration of IdentityPrivateData static class.
+/// </summary>
 public static class IdentityPrivateDataExtensions
 {
+    /// <summary>
+    ///     Extension method of configuration of IdentityPrivateData static class.
+    /// </summary>
+    /// <param name="config">
+    ///     Configuration class (access to appsettings.json file)
+    /// </param>
     public static void SetupIdentityPrivateData(this IConfiguration config)
     {
         var clientPrivateData = config.GetSection("ClientsPrivateData");

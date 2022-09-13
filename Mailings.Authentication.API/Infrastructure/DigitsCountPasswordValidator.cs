@@ -2,10 +2,20 @@
 using Microsoft.AspNetCore.Identity;
 
 namespace Mailings.Authentication.API.Infrastructure;
+/// <summary>
+///     Service class of password validator used for provide a new rule of password validation,
+///     minimal count of digits in password.
+/// </summary>
 public class DigitsCountPasswordValidator : PasswordValidator<User>
 {
+    /// <summary>
+    ///     Default minimal count of digits.
+    /// </summary>
     public const int DefaultMinimalDigitCount = 2;
 
+    /// <summary>
+    ///     Minimal digit count in service.
+    /// </summary>
     public int MinimalDigitCount { get; }
 
     public DigitsCountPasswordValidator(int? minimalDigitCount = null)
@@ -16,6 +26,21 @@ public class DigitsCountPasswordValidator : PasswordValidator<User>
             (int)minimalDigitCount;
     }
 
+    /// <summary>
+    ///     Method for password validation.
+    /// </summary>
+    /// <param name="manager">
+    ///     Users manager.
+    /// </param>
+    /// <param name="user">
+    ///     Validated user.
+    /// </param>
+    /// <param name="password">
+    ///     Password which validated.
+    /// </param>
+    /// <returns>
+    ///     Result of validate operation.
+    /// </returns>
     public override async Task<IdentityResult> ValidateAsync(
         UserManager<User> manager, 
         User user, 
@@ -28,6 +53,18 @@ public class DigitsCountPasswordValidator : PasswordValidator<User>
         return result;
     }
 
+    /// <summary>
+    ///     Check password on digit count
+    /// </summary>
+    /// <param name="password">
+    ///     Password which validated.
+    /// </param>
+    /// <param name="minDigitCount">
+    ///     Minimal digit count.
+    /// </param>
+    /// <param name="result">
+    ///     Returned operation result.
+    /// </param>
     protected virtual void CheckOnDigitCount(
         string password, 
         int minDigitCount, 
@@ -50,14 +87,24 @@ public class DigitsCountPasswordValidator : PasswordValidator<User>
                 });
         else if (!result.Succeeded)
             newResult = CreateFailedIdentityResult(result.Errors);
-        else 
-            newResult = IdentityResult.Success;
+        else newResult = IdentityResult.Success;
 
-        result = newResult ?? 
-                 throw new InvalidOperationException(
-                     "Impossible error in checking on count of digits in password");
+        result = newResult;
     }
-    protected IdentityResult CreateFailedIdentityResult(
+
+    /// <summary>
+    ///     Shortcut method for creating failed identity result
+    /// </summary>
+    /// <param name="errors">
+    ///     All errors in identity result
+    /// </param>
+    /// <param name="newError">
+    ///     New error of some operation while validating password
+    /// </param>
+    /// <returns>
+    ///     New identity result of operation.
+    /// </returns>
+    private IdentityResult CreateFailedIdentityResult(
         IEnumerable<IdentityError> errors, 
         IdentityError? newError = null)
     {
