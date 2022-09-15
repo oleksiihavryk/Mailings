@@ -1,0 +1,44 @@
+﻿@model RegisterViewModel
+@section Content
+{
+    <h2 class="main-text">Registration</h2>
+    <div asp-validation-summary="All">
+    </div>
+    <form method="post" asp-action="Register" asp-controller="Account">
+        <div class="form-section">
+            <h3 class="form-section-label">Account data</h3>
+            <div class="form-group">
+                <label asp-for="Username"></label>
+                <input asp-for="Username"/>
+            </div>
+            <div class="form-group">
+                <label asp-for="Password"></label>
+                <input asp-for="Password"/>
+            </div>
+            <div class="form-group">
+                <label asp-for="PasswordConfirmation"></label>
+                <input asp-for="PasswordConfirmation"/>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email"></label>
+                <input asp-for="Email"/>
+            </div>
+        </div>
+        <div class="form-section">
+            <h3 class="form-section-label">User data</h3>
+            <div class="form-group">
+                <label asp-for="FirstName"></label>
+                <input asp-for="FirstName"/>
+            </div>
+            <div class="form-group">
+                <label asp-for="LastName"></label>
+                <input asp-for="LastName"/>
+            </div>
+        </div>
+        <div class="buttons-section">
+            <button type="submit" class="button">Register</button>
+            <a class="button" href="@Model.ReturnUrl">Back</a>
+        </div>
+        <input asp-for="ReturnUrl" hidden/>
+    </form>
+}

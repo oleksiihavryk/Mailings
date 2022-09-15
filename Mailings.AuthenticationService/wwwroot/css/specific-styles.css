@@ -1,0 +1,93 @@
+﻿a.email {
+    color: #B14949;
+}
+.text-value-marker {
+    color: #B14949;
+    font-size: 16px;
+    font-weight: 700;
+}
+.data-for-copying {
+    color: #E5EF41;
+    font-size: 16px;
+    font-weight: 500;
+}
+.admin-panel-options {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+.admin-panel-option {
+    text-align: center;
+    flex-basis: 30%;
+    height: 150px;
+    line-height: 150px;
+    line-height: 150px;
+    margin: 10px 0;
+    background-color: #a9a9a9;
+    text-decoration: none;
+    color: white;
+    font-size: 22px;
+    border-radius: 20px;
+    transition-duration: 0.4s;
+}
+.admin-panel-option:hover {
+    transform: scale(1.1);
+    background-color: black;
+}
+.admin-panel-option > * {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: normal;
+}
+.or {
+    color: white;
+    text-align: center;
+    font-size: 22px;
+}
+
+/*Creating of modal window*/
+
+.modal-window {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: none;
+}
+.modal-block {
+    height: 10%;
+    width: 60%;
+    margin: 0 auto;
+    background-color: white;
+    z-index: 1;
+    padding: 10px;
+}
+.modal-close-button {
+    float: right;
+}
+.modal-block-text {
+    margin: 0;
+    padding: 20px;
+}
+
+/*
+    Attachment specific style
+*/
+.attachment-group {
+    background-color: #696969;
+    margin: 5px 0;
+}
+/*
+    Specific entity styles
+*/
+.html-entity {
+    background-color: #e5ef41;
+}
+.text-entity {
+    background-color: #b14949;
+}
+.mailing-entity {
+    background-color: #a9a9a9;
+}

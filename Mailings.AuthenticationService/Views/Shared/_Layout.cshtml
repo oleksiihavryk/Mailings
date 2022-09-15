@@ -1,0 +1,25 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" charset="utf-8"/>
+    <title>Mailings | Authentication</title>
+    <link rel="shortcut icon" type="image/png" href="/img/mailings-favicon.png"/>
+    <environment names="development">
+        <link rel="stylesheet" type="text/css" asp-href-include="/css/styles.css" />
+    </environment>
+    <environment names="staging, production">
+        <link rel="stylesheet" type="text/css" asp-href-include="/css/styles.min.css" />
+    </environment>
+    @await RenderSectionAsync("Links", false)
+</head>
+<body>
+    @await Html.PartialAsync("_Header")
+    <div class="content">
+        @await RenderSectionAsync("Content")
+    </div>
+    @await RenderSectionAsync("Scripts", false)
+</body>
+</html>

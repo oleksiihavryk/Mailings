@@ -1,0 +1,23 @@
+﻿@{
+    var returnUrl = ViewContext.ModelState["returnUrl"]?.RawValue as string;
+}
+<header class="header">
+    <div class="header-block header-upper-block">
+        <a asp-action="Login" asp-controller="Account" asp-route-returnUrl="@returnUrl">
+            <img class="company-logo" src="\img\logo.jpg"/>
+        </a>
+        <h1 class="header-text">Authentication</h1>
+    </div>
+    <div class="header-block">
+        <nav class="navigation">
+            <a class="navigation-section" asp-action="SignIn" asp-controller="Account"
+               asp-route-returnUrl="@returnUrl">
+                Sign in
+            </a>
+            <a class="navigation-section" asp-action="Register" asp-controller="Account"
+               asp-route-returnUrl="@returnUrl">
+                Sign up
+            </a>
+        </nav>
+    </div>
+</header>
