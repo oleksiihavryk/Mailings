@@ -38,9 +38,8 @@ internal static class IdentityServerStaticData
                 Enabled = true,
                 Scopes =
                 {
-                    IdentityPrivateData.ReadSecuredScopeName,
-                    IdentityPrivateData.WriteDefaultScopeName,
-                    IdentityPrivateData.FullAccessScopeName
+                    IdentityPrivateData.PartialAccessApiResource,
+                    IdentityPrivateData.FullAcessApiResource
                 },
                 ShowInDiscoveryDocument = true
             },
@@ -57,28 +56,16 @@ internal static class IdentityServerStaticData
         => new List<ApiScope>()
         {
             new ApiScope(
-                name: IdentityPrivateData.ReadDefaultScopeName,
-                displayName: "Scope of resource server for any users")
-            {
-                ShowInDiscoveryDocument = false,
-            },
-            new ApiScope(
-                name: IdentityPrivateData.ReadSecuredScopeName,
-                displayName: "Scope of resource server with extra permissions")
-            {
-                ShowInDiscoveryDocument = false,
-            },
-            new ApiScope(
-                name: IdentityPrivateData.WriteDefaultScopeName,
-                displayName: "Scope of resource server with rights to" +
-                             " writing data on resource server")
-            {
-                ShowInDiscoveryDocument = false,
-            },
-            new ApiScope(
-                name: IdentityPrivateData.FullAccessScopeName,
+                name: IdentityPrivateData.FullAcessApiResource,
                 displayName: "Scope of resource server with full access to " +
                              "any endpoint in resource server side")
+            {
+                ShowInDiscoveryDocument = true,
+            },
+            new ApiScope(
+                name: IdentityPrivateData.PartialAccessApiResource,
+                displayName: "Scope of resource server with partial access to " +
+                             "endpoints in resource server side")
             {
                 ShowInDiscoveryDocument = true,
             },

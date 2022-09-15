@@ -41,10 +41,8 @@ public static class ConfigurationExtensions
             opt.ClientSecret = authData["ClientSecret"];
             opt.Scopes = authData.GetSection("Scopes").Get<string[]>().ToList();
         }, IdentityClient.WebUser);
-        IdentityPrivateData.FullAccessScopeName = clientPrivateData["FullAccessScopeName"];
-        IdentityPrivateData.WriteDefaultScopeName = clientPrivateData["WriteDefaultScopeName"];
-        IdentityPrivateData.ReadDefaultScopeName = clientPrivateData["ReadDefaultScopeName"];
-        IdentityPrivateData.ReadSecuredScopeName = clientPrivateData["ReadSecuredScopeName"];
+        IdentityPrivateData.PartialAccessApiResource = clientPrivateData["PartialAccessApiResource"];
+        IdentityPrivateData.FullAcessApiResource = clientPrivateData["FullAccessApiResource"];
         IdentityPrivateData.ResourcesApiResource = clientPrivateData["ResourcesApiResource"];
         return config;
     }

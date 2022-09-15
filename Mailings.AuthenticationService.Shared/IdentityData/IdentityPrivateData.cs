@@ -21,26 +21,18 @@ public static class IdentityPrivateData
 
     //must to be initialized!
     /// <summary>
-    ///     Data of full access scope
+    ///     Scope of partial access to api resource
     /// </summary>
-    public static string FullAccessScopeName { get; set; } = null!;
+    public static string PartialAccessApiResource { get; set; } = null!;
     /// <summary>
-    ///     Data of write access with default rights scope
+    ///     Scope of full access to api resource
     /// </summary>
-    public static string WriteDefaultScopeName { get; set; } = null!;
-    /// <summary>
-    ///     Data of read access with default rights scope
-    /// </summary>
-    public static string ReadDefaultScopeName { get; set; } = null!;
-    /// <summary>
-    ///     Data of read access with special rights scope
-    /// </summary>
-    public static string ReadSecuredScopeName { get; set; } = null!;
+    public static string FullAcessApiResource { get; set; } = null!;
     /// <summary>
     ///     API resource of resources server
     /// </summary>
     public static string ResourcesApiResource { get; set; } = null!;
-    
+
     /// <summary>
     ///     Inner class is denotes a identity client data
     /// </summary>
