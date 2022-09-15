@@ -8,5 +8,5 @@ public enum IdentityClient
     Unknown,
     Resources,
     Authentication,
-    WebUser
+    MvcClient
 }

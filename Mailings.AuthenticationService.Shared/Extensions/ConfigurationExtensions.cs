@@ -40,7 +40,7 @@ public static class ConfigurationExtensions
             opt.ClientId = authData["ClientId"];
             opt.ClientSecret = authData["ClientSecret"];
             opt.Scopes = authData.GetSection("Scopes").Get<string[]>().ToList();
-        }, IdentityClient.WebUser);
+        }, IdentityClient.MvcClient);
         IdentityPrivateData.PartialAccessApiResource = clientPrivateData["PartialAccessApiResource"];
         IdentityPrivateData.FullAcessApiResource = clientPrivateData["FullAccessApiResource"];
         IdentityPrivateData.ResourcesApiResource = clientPrivateData["ResourcesApiResource"];
@@ -58,7 +58,7 @@ public static class ConfigurationExtensions
     public static IConfiguration ConfigureStaticIdentityClients(this IConfiguration config)
     {
         var clients = config.GetSection("Clients");
-        IdentityClients.ClientServer = clients["Client"];
+        IdentityClients.MvcClient = clients["Client"];
         IdentityClients.ResourceServer = clients["Resource"];
         return config;
     }

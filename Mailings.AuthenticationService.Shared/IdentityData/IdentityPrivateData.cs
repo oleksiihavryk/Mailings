@@ -72,7 +72,7 @@ public static class IdentityPrivateData
         {
             IdentityClient.Resources => Resources,
             IdentityClient.Authentication => Authentication,
-            IdentityClient.WebUser => MvcClient,
+            IdentityClient.MvcClient => MvcClient,
             _ => throw new UnknownIdentityClientException()
         };
 

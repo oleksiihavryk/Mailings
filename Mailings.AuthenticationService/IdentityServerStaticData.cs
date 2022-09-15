@@ -98,10 +98,10 @@ internal static class IdentityServerStaticData
 
                 RedirectUris =
                 {
-                    IdentityClients.ClientServer + "/signin-oidc",
+                    IdentityClients.MvcClient + "/signin-oidc",
                 },
                 PostLogoutRedirectUris =
-                    { IdentityClients.ClientServer + "/signout-callback-oidc" },
+                    { IdentityClients.MvcClient + "/signout-callback-oidc" },
 
                 AllowAccessTokensViaBrowser = true,
             },

@@ -11,5 +11,5 @@ public static class IdentityClients
     /// <summary>
     ///     Base URI of client server
     /// </summary>
-    public static string ClientServer { get; set; } = string.Empty;
+    public static string MvcClient { get; set; } = string.Empty;
 }

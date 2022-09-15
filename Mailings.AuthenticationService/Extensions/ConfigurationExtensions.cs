@@ -104,7 +104,7 @@ public static class ConfigurationExtensions
             {
                 builder.AllowAnyHeader();
                 builder.AllowAnyMethod();
-                builder.WithOrigins(IdentityClients.ClientServer, IdentityClients.ResourceServer);
+                builder.WithOrigins(IdentityClients.MvcClient, IdentityClients.ResourceServer);
             });
         });
         return services;
