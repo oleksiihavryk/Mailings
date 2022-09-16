@@ -36,14 +36,15 @@ public sealed class ApiAccountController : ControllerBase
     /// <param name="userData">User data which exactly was been changed.</param>
     /// <returns>Result object of current api result.</returns>
     [HttpPut]
-    public async Task<IActionResult> Change([FromBody]UserDataDto userData)
+    public async Task<IActionResult> Change(UserDataDto userData)
     {
         Response? response = null;
         var user = await _userManager.FindByNameAsync(userData.Username);
 
         if (user != null)
         {
-            if (await _userManager.FindByEmailAsync(userData.Email) != null)
+            if (userData.Email == null || 
+                await _userManager.FindByEmailAsync(userData.Email) != null)
             {
                 if (!string.IsNullOrWhiteSpace(userData.FirstName) ||
                     !string.IsNullOrWhiteSpace(userData.LastName) ||

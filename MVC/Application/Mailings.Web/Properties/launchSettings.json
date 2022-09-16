@@ -1,0 +1,31 @@
+﻿{
+  "profiles": {
+    "Mailings.Web": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:5001;http://localhost:5000",
+      "dotnetRunMessages": true
+    },
+    "Mailings.Web_Staging": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Staging"
+      },
+      "applicationUrl": "https://localhost:5001;http://localhost:5000",
+      "dotnetRunMessages": true
+    },
+    "Mailings.Web_Production": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Production"
+      },
+      "applicationUrl": "https://localhost:5001;http://localhost:5000",
+      "dotnetRunMessages": true
+    }
+  }
+}

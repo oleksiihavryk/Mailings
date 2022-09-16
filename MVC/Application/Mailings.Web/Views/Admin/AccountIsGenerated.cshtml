@@ -1,0 +1,32 @@
+﻿@model Mailings.Web.ViewModels.GeneratedAccountViewModel
+@section Content
+{
+    <h2 class="main-text">Account is successfully generated!</h2>
+    <p>Printed or copy this access data from beta test account.</p>
+    <list struct="Block">
+        <el>Username: <span class="data-for-copying" data-defenition="username">
+            @Model.UserName
+        </span></el>
+        <el>Password: <span class="data-for-copying" data-defenition="password">
+            @Model.Password
+        </span></el>
+        <el>Email: <span class="data-for-copying" data-defenition="email">
+            @Model.Email
+        </span></el>
+    </list>
+    <div class="center-text">
+        <button id="copy" class="button">Copy</button>
+    </div>
+}
+@section Scripts
+{
+    <script asp-src-include="/lib/**.min.js" asp-src-exclude="**.slim.**js"></script>
+    <environment names="development">
+        <script asp-src-include="/js/modules/modal.js"></script>
+        <script asp-src-include="/js/copy.js"></script>
+    </environment>
+    <environment names="staging, production">
+        <script asp-src-include="/js/modules/modal.min.js"></script>
+        <script asp-src-include="/js/copy.min.js"></script>
+    </environment>
+}

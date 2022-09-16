@@ -1,0 +1,49 @@
+﻿@using Mailings.Web.ViewModels
+@model IEnumerable<MailViewModel>
+@section Content 
+{
+    <h2 class="main-text">All mails in system</h2>
+    <div class="text-block">
+        <p>Yellow mails - Html mails which can contains styles and other things</p>
+        <p>Red mails - Text mails which just a typical string or set of strings</p>
+    </div>
+    <div class="action-block">
+        <btn action="Create" controller="Mails">Create</btn>
+    </div>
+    @if (Model.Any())
+        {
+            <list struct="Entity">
+                @foreach (var el in Model)
+                {
+                    var c = el.Type switch 
+                    {
+                        MailTypeViewModel.Html => "html-entity",
+                        MailTypeViewModel.Text => "text-entity",
+                        _ => throw new InvalidOperationException(
+                            "Unknown type of entity")
+                    };
+                    <el class="@c">
+                        @await Component.InvokeAsync("MailEntity", el)
+                    </el>
+                }
+            </list>
+        }
+        else
+        {
+            <div class="text-block">
+                <p>Currently you not write any mails.</p>
+                <p>If you want to add new mail in system: 
+                    <a class="text-value-marker" asp-action="Create" asp-controller="Mails">
+                        click here
+                    </a>.
+                </p>
+            </div>
+        }
+
+    @await Component.InvokeAsync("Pagination", new
+    {
+        viewModel = ViewBag.Pagination,
+        action = "All",
+        controller = "Mails"
+    })
+}
