@@ -1,7 +1,7 @@
 ﻿using Mailings.Web.Core.Exceptions;
 using Mailings.Web.Core.Services.Core;
 using Mailings.Web.Core.Services.Interfaces;
-using Mailings.Web.Domain.Dto;
+using Mailings.Web.Domain.ServicesModels;
 using Microsoft.AspNetCore.Http;
 
 namespace Mailings.Web.Core.Services;
@@ -16,7 +16,7 @@ public class TextMailsResourceService : ITextMailsResourceService
         _resourceService = resourceService;
     }
 
-    public virtual async Task<IEnumerable<MailDto>> GetMails()
+    public virtual async Task<IEnumerable<Mail>> GetMails()
     {
         //setup request
         var request = new ServiceRequest(HttpMethod.Get)
@@ -26,7 +26,7 @@ public class TextMailsResourceService : ITextMailsResourceService
 
         //send request
         var result = await _resourceService
-            .SendAndReceiveResponse<IEnumerable<MailDto>>(request);
+            .SendAndReceiveResponse<IEnumerable<Mail>>(request);
 
         //return result
         if (result.IsSuccess)
@@ -37,7 +37,7 @@ public class TextMailsResourceService : ITextMailsResourceService
         throw new RequestToServiceIsFailedException(
             nameOfService: nameof(ResourceService));
     }
-    public virtual async Task<IEnumerable<MailDto>> GetMailsByUserId(string userId)
+    public virtual async Task<IEnumerable<Mail>> GetMailsByUserId(string userId)
     {
         //setup request
         var request = new ServiceRequest(HttpMethod.Get)
@@ -47,7 +47,7 @@ public class TextMailsResourceService : ITextMailsResourceService
 
         //send request
         var result = await _resourceService
-            .SendAndReceiveResponse<IEnumerable<MailDto>>(request);
+            .SendAndReceiveResponse<IEnumerable<Mail>>(request);
 
         //return result
         if (result.IsSuccess)
@@ -56,12 +56,12 @@ public class TextMailsResourceService : ITextMailsResourceService
                        nameOfService: nameof(ResourceService));
 
         if (result.StatusCode == StatusCodes.Status404NotFound)
-            return Enumerable.Empty<MailDto>();
+            return Enumerable.Empty<Mail>();
 
         throw new RequestToServiceIsFailedException(
             nameOfService: nameof(ResourceService));
     }
-    public virtual async Task<MailDto> GetById(string id)
+    public virtual async Task<Mail> GetById(string id)
     {
         //setup request
         var request = new ServiceRequest(HttpMethod.Get)
@@ -71,7 +71,7 @@ public class TextMailsResourceService : ITextMailsResourceService
 
         //send request
         var result = await _resourceService
-            .SendAndReceiveResponse<MailDto>(request);
+            .SendAndReceiveResponse<Mail>(request);
 
         //return result
         if (result.IsSuccess)
@@ -85,7 +85,7 @@ public class TextMailsResourceService : ITextMailsResourceService
         throw new RequestToServiceIsFailedException(
             nameOfService: nameof(ResourceService));
     }
-    public virtual async Task<MailDto> Save(MailDto mailDto)
+    public virtual async Task<Mail> Save(Mail mailDto)
     {
         //setup request
         var request = new ServiceRequest(HttpMethod.Post)
@@ -96,7 +96,7 @@ public class TextMailsResourceService : ITextMailsResourceService
 
         //send request
         var result = await _resourceService
-            .SendAndReceiveResponse<MailDto>(request);
+            .SendAndReceiveResponse<Mail>(request);
 
         //return result
         if (result.IsSuccess)
@@ -107,7 +107,7 @@ public class TextMailsResourceService : ITextMailsResourceService
         throw new RequestToServiceIsFailedException(
             nameOfService: nameof(ResourceService));
     }
-    public virtual async Task<MailDto> Update(MailDto mailDto)
+    public virtual async Task<Mail> Update(Mail mailDto)
     {
         //setup request
         var request = new ServiceRequest(HttpMethod.Put)
@@ -118,7 +118,7 @@ public class TextMailsResourceService : ITextMailsResourceService
 
         //send request
         var result = await _resourceService
-            .SendAndReceiveResponse<MailDto>(request);
+            .SendAndReceiveResponse<Mail>(request);
 
         //return result
         if (result.IsSuccess)

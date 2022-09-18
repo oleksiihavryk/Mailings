@@ -2,7 +2,7 @@
 using System.Security.Claims;
 using Mailings.Web.Core.Exceptions;
 using Mailings.Web.Core.Services.Interfaces;
-using Mailings.Web.Domain.Dto;
+using Mailings.Web.Domain.ServicesModels;
 using Mailings.Web.Filters;
 using Mailings.Web.Shared.SystemConstants;
 using Mailings.Web.ViewModels;
@@ -63,7 +63,7 @@ public sealed class MailingsController : Controller
     {
         var dto = RouteData
             .Values[
-                MailingsUserSecuredServiceFilter.CheckedMailingKey] as MailingGroupDto;
+                MailingsUserSecuredServiceFilter.CheckedMailingKey] as MailingGroup;
         var viewModel = await ConvertToViewModelAsync(dto);
 
         return View(viewModel);
@@ -74,7 +74,7 @@ public sealed class MailingsController : Controller
     {
         var dto = RouteData
             .Values[
-                MailingsUserSecuredServiceFilter.CheckedMailingKey] as MailingGroupDto;
+                MailingsUserSecuredServiceFilter.CheckedMailingKey] as MailingGroup;
         var viewModel = await ConvertToViewModelAsync(dto);
 
         var mails = await GetUserMailsAsync();
@@ -139,7 +139,7 @@ public sealed class MailingsController : Controller
                    throw new InvalidOperationException(
                        "Mail is currently does not exist in system.");
 
-        var dto = new MailingGroupDto()
+        var dto = new MailingGroup()
         {
             MailId = Guid.Parse(mail.Id),
             MailType = mail.Type,
@@ -187,7 +187,7 @@ public sealed class MailingsController : Controller
                    throw new InvalidOperationException(
                        "Mail is currently does not exist in system.");
 
-        var dto = new MailingGroupDto()
+        var dto = new MailingGroup()
         {
             Id = viewModel.Id,
             MailId = Guid.Parse(mail.Id),
@@ -257,7 +257,7 @@ public sealed class MailingsController : Controller
 
         return mails;
     }
-    private async Task<MailingViewModel> ConvertToViewModelAsync(MailingGroupDto dto)
+    private async Task<MailingViewModel> ConvertToViewModelAsync(MailingGroup dto)
         => new MailingViewModel
         {
             Id = dto.Id,
@@ -275,7 +275,7 @@ public sealed class MailingsController : Controller
             }
         };
     private MailingMailViewModel ConvertMailToViewModel(
-        MailDto dto,
+        Mail dto,
         MailTypeViewModel type)
         => new MailingMailViewModel()
         {
@@ -283,7 +283,7 @@ public sealed class MailingsController : Controller
             Theme = dto.Theme,
             Type = type.ToString()
         };
-    private async Task<IEnumerable<MailingGroupDto>> GetMailingsByUser()
+    private async Task<IEnumerable<MailingGroup>> GetMailingsByUser()
     {
         var userId = (User.Identity as ClaimsIdentity)?.Claims
             .FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?

@@ -1,7 +1,7 @@
 ﻿using Mailings.Web.Core.Exceptions;
 using Mailings.Web.Core.Services.Core;
 using Mailings.Web.Core.Services.Interfaces;
-using Mailings.Web.Domain.Dto;
+using Mailings.Web.Domain.ServicesModels;
 
 namespace Mailings.Web.Core.Services;
 public class BetaTestAuthenticationService : IBetaTestAuthenticationService
@@ -15,7 +15,7 @@ public class BetaTestAuthenticationService : IBetaTestAuthenticationService
         _authService = authService;
     }
 
-    public virtual async Task<UserDataDto> GenerateAccount()
+    public virtual async Task<UserData> GenerateAccount()
     {
         //setup request
         var request = new ServiceRequest(HttpMethod.Post)
@@ -25,7 +25,7 @@ public class BetaTestAuthenticationService : IBetaTestAuthenticationService
 
         //send request
         var result = await _authService
-            .SendAndReceiveResponse<UserDataDto>(request);
+            .SendAndReceiveResponse<UserData>(request);
 
         //return result
         if (result.IsSuccess)

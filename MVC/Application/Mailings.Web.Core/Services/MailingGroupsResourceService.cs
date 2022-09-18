@@ -1,7 +1,7 @@
 ﻿using Mailings.Web.Core.Exceptions;
 using Mailings.Web.Core.Services.Core;
 using Mailings.Web.Core.Services.Interfaces;
-using Mailings.Web.Domain.Dto;
+using Mailings.Web.Domain.ServicesModels;
 using Microsoft.AspNetCore.Http;
 
 namespace Mailings.Web.Core.Services;
@@ -17,7 +17,7 @@ public class MailingGroupsResourceService : IMailingGroupsResourceService
         _resourceService = resourceService;
     }
 
-    public virtual async Task<IEnumerable<MailingGroupDto>> GetGroups()
+    public virtual async Task<IEnumerable<MailingGroup>> GetGroups()
     {
         //setup request
         var request = new ServiceRequest(HttpMethod.Get)
@@ -27,7 +27,7 @@ public class MailingGroupsResourceService : IMailingGroupsResourceService
 
         //send request
         var result = await _resourceService
-            .SendAndReceiveResponse<IEnumerable<MailingGroupDto>>(request);
+            .SendAndReceiveResponse<IEnumerable<MailingGroup>>(request);
 
         //return result
         if (result.IsSuccess)
@@ -38,7 +38,7 @@ public class MailingGroupsResourceService : IMailingGroupsResourceService
         throw new RequestToServiceIsFailedException(
             nameOfService: nameof(ResourceService));
     }
-    public virtual async Task<IEnumerable<MailingGroupDto>> GetGroupsByUserId(string userId)
+    public virtual async Task<IEnumerable<MailingGroup>> GetGroupsByUserId(string userId)
     {
         //setup request
         var request = new ServiceRequest(HttpMethod.Get)
@@ -48,7 +48,7 @@ public class MailingGroupsResourceService : IMailingGroupsResourceService
 
         //send request
         var result = await _resourceService
-            .SendAndReceiveResponse<IEnumerable<MailingGroupDto>>(request);
+            .SendAndReceiveResponse<IEnumerable<MailingGroup>>(request);
 
         //return result
         if (result.IsSuccess)
@@ -57,12 +57,12 @@ public class MailingGroupsResourceService : IMailingGroupsResourceService
                        nameOfService: nameof(ResourceService));
 
         if (result.StatusCode == StatusCodes.Status404NotFound)
-            return Enumerable.Empty<MailingGroupDto>();
+            return Enumerable.Empty<MailingGroup>();
 
         throw new RequestToServiceIsFailedException(
             nameOfService: nameof(ResourceService));
     }
-    public virtual async Task<MailingGroupDto> GetById(string id)
+    public virtual async Task<MailingGroup> GetById(string id)
     {
         //setup request
         var request = new ServiceRequest(HttpMethod.Get)
@@ -72,7 +72,7 @@ public class MailingGroupsResourceService : IMailingGroupsResourceService
 
         //send request
         var result = await _resourceService
-            .SendAndReceiveResponse<MailingGroupDto>(request);
+            .SendAndReceiveResponse<MailingGroup>(request);
 
         //return result
         if (result.IsSuccess)
@@ -86,7 +86,7 @@ public class MailingGroupsResourceService : IMailingGroupsResourceService
         throw new RequestToServiceIsFailedException(
             nameOfService: nameof(ResourceService));
     }
-    public virtual async Task<MailingGroupDto> Save(MailingGroupDto mailDto)
+    public virtual async Task<MailingGroup> Save(MailingGroup mailDto)
     {
         //setup request
         var request = new ServiceRequest(HttpMethod.Post)
@@ -97,7 +97,7 @@ public class MailingGroupsResourceService : IMailingGroupsResourceService
 
         //send request
         var result = await _resourceService
-            .SendAndReceiveResponse<MailingGroupDto>(request);
+            .SendAndReceiveResponse<MailingGroup>(request);
 
         //return result
         if (result.IsSuccess)
@@ -108,7 +108,7 @@ public class MailingGroupsResourceService : IMailingGroupsResourceService
         throw new RequestToServiceIsFailedException(
             nameOfService: nameof(ResourceService));
     }
-    public virtual async Task<MailingGroupDto> Update(MailingGroupDto mailDto)
+    public virtual async Task<MailingGroup> Update(MailingGroup mailDto)
     {
         //setup request
         var request = new ServiceRequest(HttpMethod.Put)
@@ -119,7 +119,7 @@ public class MailingGroupsResourceService : IMailingGroupsResourceService
 
         //send request
         var result = await _resourceService
-            .SendAndReceiveResponse<MailingGroupDto>(request);
+            .SendAndReceiveResponse<MailingGroup>(request);
 
         //return result
         if (result.IsSuccess)

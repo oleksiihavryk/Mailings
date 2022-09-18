@@ -1,7 +1,7 @@
 ﻿using Mailings.Web.Core.Exceptions;
 using Mailings.Web.Core.Services.Core;
 using Mailings.Web.Core.Services.Interfaces;
-using Mailings.Web.Domain.Dto;
+using Mailings.Web.Domain.ServicesModels;
 
 namespace Mailings.Web.Core.Services;
 
@@ -16,7 +16,7 @@ public class MailingsSenderResourceService : IMailingsSenderResourceService
         _resourceService = resourceService;
     }
 
-    public virtual async Task<MailingResponseDto> Send(MailingRequestDto requestDto)
+    public virtual async Task<MailingResponse> Send(MailingRequest requestDto)
     {
         //setup request
         var request = new ServiceRequest(HttpMethod.Post)
@@ -27,7 +27,7 @@ public class MailingsSenderResourceService : IMailingsSenderResourceService
 
         //send request
         var result = await _resourceService
-            .SendAndReceiveResponse<MailingResponseDto>(request);
+            .SendAndReceiveResponse<MailingResponse>(request);
 
         //return result
         if (result.IsSuccess)

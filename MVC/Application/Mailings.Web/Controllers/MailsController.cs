@@ -2,7 +2,7 @@
 using System.Security.Claims;
 using Mailings.Web.Core.Exceptions;
 using Mailings.Web.Core.Services.Interfaces;
-using Mailings.Web.Domain.Dto;
+using Mailings.Web.Domain.ServicesModels;
 using Mailings.Web.Filters;
 using Mailings.Web.Shared.Comparers;
 using Mailings.Web.Shared.SystemConstants;
@@ -95,7 +95,7 @@ public sealed class MailsController : Controller
         //});
         var dto = RouteData
             .Values[
-                MailsUserSecuredServiceFilter.CheckedMailKey] as MailDto;
+                MailsUserSecuredServiceFilter.CheckedMailKey] as Mail;
 
         model = ConvertToViewModel(dto, type);
 
@@ -163,7 +163,7 @@ public sealed class MailsController : Controller
 
     private long GetCountOfBytesInAttachment(List<IFormFile> attachments)
         => attachments.Sum(a => a.Length);
-    private MailViewModel ConvertToViewModel(MailDto dto, MailTypeViewModel type)
+    private MailViewModel ConvertToViewModel(Mail dto, MailTypeViewModel type)
     {
         var model = new MailViewModel()
         {
@@ -193,20 +193,20 @@ public sealed class MailsController : Controller
 
         return model;
     }
-    private async Task<MailDto> PrepareMailDtoAsync(MailViewModel viewModel)
+    private async Task<Mail> PrepareMailDtoAsync(MailViewModel viewModel)
     {
-        var mailDto = new MailDto()
+        var mailDto = new Mail()
         {
             Content = viewModel.Content,
             Theme = viewModel.Theme,
             Id = viewModel.Id
         };
 
-        var attachmentList = new List<AttachmentDto>();
+        var attachmentList = new List<Attachment>();
         
         foreach (var a in viewModel.Attachments)
         {
-            var attachment = new AttachmentDto()
+            var attachment = new Attachment()
             {
                 ContentType = a.ContentType,
                 Name = a.FileName
@@ -233,7 +233,7 @@ public sealed class MailsController : Controller
 
         return mailDto;
     }
-    private async Task<ImmutableSortedDictionary<MailDto, MailTypeViewModel>> GetUserMails()
+    private async Task<ImmutableSortedDictionary<Mail, MailTypeViewModel>> GetUserMails()
     {
         var userId = (User.Identity as ClaimsIdentity)?.Claims?
             .FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?
@@ -245,7 +245,7 @@ public sealed class MailsController : Controller
 
         var htmlMails = await _htmlMailsService.GetMailsByUserId(userId);
         var textMails = await _textMailsService.GetMailsByUserId(userId);
-        var markedMails = new Dictionary<MailDto, MailTypeViewModel>();
+        var markedMails = new Dictionary<Mail, MailTypeViewModel>();
         
         foreach (var htmlMail in htmlMails)
             markedMails[htmlMail] = MailTypeViewModel.Html;

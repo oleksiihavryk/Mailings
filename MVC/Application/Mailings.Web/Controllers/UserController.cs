@@ -1,7 +1,7 @@
 ﻿using System.Security.Claims;
 using IdentityModel;
 using Mailings.Web.Core.Services.Interfaces;
-using Mailings.Web.Domain.Dto;
+using Mailings.Web.Domain.ServicesModels;
 using Mailings.Web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -45,7 +45,7 @@ public sealed class UserController : Controller
         return RedirectToAction("Logout", "Home");
     }
 
-    private UserDataDto PrepareChangingUserData(ChangingUserDataViewModel viewModel)
+    private UserData PrepareChangingUserData(ChangingUserDataViewModel viewModel)
     {
         var userClaims = (User.Identity as ClaimsIdentity)?.Claims;
 
@@ -66,7 +66,7 @@ public sealed class UserController : Controller
             .FirstOrDefault(c => c.Type == JwtClaimTypes.PreferredUserName)?
             .Value ?? throw new InvalidOperationException("Impossible error");
 
-        var userDataDto = new UserDataDto()
+        var userDataDto = new UserData()
         {
             Email = email != viewModel.Email ? 
                 viewModel.Email : null,

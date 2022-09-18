@@ -1,6 +1,6 @@
-﻿namespace Mailings.Web.Domain.Dto;
+﻿namespace Mailings.Web.Domain.ServicesModels;
 
-public sealed class UserDataDto
+public sealed class UserData
 {
     public string Email { get; set; } = string.Empty;
     public string Username { get; set; } = string.Empty;

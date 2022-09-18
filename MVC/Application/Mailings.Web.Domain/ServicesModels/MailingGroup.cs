@@ -1,5 +1,5 @@
-﻿namespace Mailings.Web.Domain.Dto;
-public sealed class MailingGroupDto
+﻿namespace Mailings.Web.Domain.ServicesModels;
+public sealed class MailingGroup
 {
     public Guid Id { get; set; } = Guid.Empty;
     public Guid MailId { get; set; } = Guid.Empty;

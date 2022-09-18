@@ -1,7 +1,7 @@
 ﻿using Mailings.Web.Core.Exceptions;
 using Mailings.Web.Core.Services.Core;
 using Mailings.Web.Core.Services.Interfaces;
-using Mailings.Web.Domain.Dto;
+using Mailings.Web.Domain.ServicesModels;
 
 namespace Mailings.Web.Core.Services;
 public class AccountAuthenticationService : IAccountAuthenticationService
@@ -15,7 +15,7 @@ public class AccountAuthenticationService : IAccountAuthenticationService
         _authService = authService;
     }
 
-    public virtual async Task ChangeUserData(UserDataDto userData)
+    public virtual async Task ChangeUserData(UserData userData)
     {
         //setup request
         var request = new ServiceRequest(HttpMethod.Put)

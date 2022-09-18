@@ -1,7 +1,7 @@
-﻿using Mailings.Web.Domain.Dto;
+﻿using Mailings.Web.Domain.ServicesModels;
 
 namespace Mailings.Web.Core.Services.Interfaces;
 public interface IBetaTestAuthenticationService
 {
-    Task<UserDataDto> GenerateAccount();
+    Task<UserData> GenerateAccount();
 }

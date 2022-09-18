@@ -1,6 +1,6 @@
 ﻿using Mailings.Web.Core.Exceptions;
 using Mailings.Web.Core.Services.Interfaces;
-using Mailings.Web.Domain.Dto;
+using Mailings.Web.Domain.ServicesModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
@@ -31,11 +31,11 @@ public class MailsUserSecuredServiceFilter : UserSecuredServiceFilter
                 "ONLY on actions which already include Authorize filter and parameters " +
                 "contains id of object");
 
-        List<MailDto> mails = new List<MailDto>();
+        List<Mail> mails = new List<Mail>();
         mails.AddRange(await _htmlMailsResourceService.GetMailsByUserId(id));
         mails.AddRange(await _textMailsResourceService.GetMailsByUserId(id));
 
-        MailDto? mail = null;
+        Mail? mail = null;
 
         try
         {

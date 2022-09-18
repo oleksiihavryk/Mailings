@@ -1,16 +1,16 @@
-﻿using Mailings.Web.Domain.Dto;
+﻿using Mailings.Web.Domain.ServicesModels;
 
 namespace Mailings.Web.Shared.Comparers;
-public class MailComparer : IComparer<MailDto>
+public class MailComparer : IComparer<Mail>
 {
-    protected readonly Func<MailDto, MailDto, int> _predicate;
+    protected readonly Func<Mail, Mail, int> _predicate;
 
-    public MailComparer(Func<MailDto, MailDto, int> predicate)
+    public MailComparer(Func<Mail, Mail, int> predicate)
     {
         _predicate = predicate;
     }
 
-    public virtual int Compare(MailDto? x, MailDto? y)
+    public virtual int Compare(Mail? x, Mail? y)
     {
         if (x == null && y == null)
             return 0;

@@ -1,5 +1,5 @@
 ﻿using Mailings.Web.Core.Services.Interfaces;
-using Mailings.Web.Domain.Dto;
+using Mailings.Web.Domain.ServicesModels;
 using Mailings.Web.Filters;
 using Mailings.Web.Shared.SystemConstants;
 using Mailings.Web.ViewModels;
@@ -22,7 +22,7 @@ public sealed class SenderController : Controller
     public ViewResult Settings([FromRoute]string id)
     {
         var dto = RouteData.Values[
-            MailingsUserSecuredServiceFilter.CheckedMailingKey] as MailingGroupDto;
+            MailingsUserSecuredServiceFilter.CheckedMailingKey] as MailingGroup;
 
         if (dto == null)
             throw new InvalidOperationException(
@@ -61,7 +61,7 @@ public sealed class SenderController : Controller
         if (!ModelState.IsValid)
             return View(nameof(Settings));
 
-        var request = new MailingRequestDto()
+        var request = new MailingRequest()
         {
             MailingId = viewModel.Id,
             SendType = viewModel.MailType

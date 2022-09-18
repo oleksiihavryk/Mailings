@@ -1,6 +1,6 @@
 ﻿using Mailings.Web.Core.Exceptions;
 using Mailings.Web.Core.Services.Interfaces;
-using Mailings.Web.Domain.Dto;
+using Mailings.Web.Domain.ServicesModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
@@ -28,7 +28,7 @@ public class MailingsUserSecuredServiceFilter : UserSecuredServiceFilter
                 "ONLY on actions which already include Authorize filter and parameters " +
                 "contains id of object");
 
-        MailingGroupDto? group = null;
+        MailingGroup? group = null;
 
         try
         {
