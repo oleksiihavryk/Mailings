@@ -1,65 +1,27 @@
-using IdentityModel;
+using Mailings.Web.Core.Extensions;
 using Mailings.Web.Extensions;
-using Mailings.Web.Shared.StaticData;
-using Mailings.Web.Shared.SystemConstants;
+using Mailings.Web.Shared.Extensions;
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder();
 var config = builder.Configuration;
 var services = builder.Services;
 
-//extension methods
-config.SetupStaticData();
-services.ConfigureDIContainer();
+//Setup static data and configurations
+config.SetupServersStaticData(); // resource and authentication servers
+config.SetupOidcOptionsStaticData(); // OpendIdConnect options
+config.SetupServicesAuthenticationStaticData(); // identity private data (for services authentication)
+services.SetupRouteOptions(); // route options
 
-services.Configure<RouteOptions>(opt =>
-{
-    opt.AppendTrailingSlash = true;
-    opt.LowercaseUrls = true;
-});
+//Setup DI Container
+services.AddServiceFilters(); // standard service filters
+services.AddDeepCloner(); // deep cloner IDeepCloner
+services.AddServersServices(); // interfaces for connect with authentication and resource service
 
-services.AddMvc(opt => opt.EnableEndpointRouting = false);
-
+//Setup framework features
+services.AddMvcWithDefaultOptions(); // mvc with default options
 services.AddHttpClient();
-
-services.AddAuthentication(opt =>
-    {
-        opt.DefaultScheme = AuthenticationSchemes.CookiesScheme;
-        opt.DefaultAuthenticateScheme = AuthenticationSchemes.OidcScheme;
-        opt.DefaultChallengeScheme = AuthenticationSchemes.OidcScheme;
-    })
-    .AddCookie(AuthenticationSchemes.CookiesScheme)
-    .AddOpenIdConnect(AuthenticationSchemes.OidcScheme, opt =>
-    {
-        opt.Authority = Servers.Authentication;
-        opt.ResponseType = OidcConstants.ResponseTypes.Code;
-
-        opt.ClientId = OidcSettings.ClientId;
-        opt.ClientSecret = OidcSettings.ClientSecret;
-
-        opt.UsePkce = true;
-
-        opt.SaveTokens = true;
-
-        opt.GetClaimsFromUserInfoEndpoint = true;
-
-        opt.Scope.Clear();
-        opt.Scope.Add(OidcConstants.StandardScopes.Email);
-        opt.Scope.Add(OidcConstants.StandardScopes.OpenId);
-        opt.Scope.Add(OidcConstants.StandardScopes.Profile);
-    });
-services.AddAuthorization(opt =>
-{
-    opt.AddPolicy(AuthorizationPolicyConstants.Admin, config =>
-    {
-        config.RequireRole(Roles.Administrator.ToString());
-        config.RequireAuthenticatedUser();
-    });
-    opt.AddPolicy(AuthorizationPolicyConstants.BetaTest, config =>
-    {
-        config.RequireRole(Roles.BetaTester.ToString(), Roles.Administrator.ToString());
-        config.RequireAuthenticatedUser();
-    });
-});
+services.AddDefaultServiceAuthentication(); // configured to interact with authentication service
+services.AddDefaultServiceAuthorization(); // configured to interact with authentication service
 
 var app = builder.Build();
 
@@ -72,7 +34,7 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
-    app.UseExceptionHandler("/Error");
+    app.UseDefaultExceptionHandler(); // exception handler by /error route
 }
 
 app.UseStaticFiles();
@@ -80,43 +42,6 @@ app.UseStaticFiles();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseMvc(routes =>
-{
-    routes.MapRoute(null,
-        "admin/generate-account",
-        defaults: new { controller = "Admin", action = "GenerateAccount" });
-    routes.MapRoute(null,
-        "admin/account-is-generated",
-        defaults: new { controller = "Admin", action = "AccountIsGenerated" });
-    routes.MapRoute(null,
-        "mails/all/{page:int:min(0)}",
-        defaults: new { controller="Mails", action="All"});
-    routes.MapRoute(null,
-        "mails/delete/{type:required}/{id:required}",
-        defaults: new { controller = "Mails", action = "Delete" });
-    routes.MapRoute(null,
-        "mails/change/{type:required}/{id:required}",
-        defaults: new { controller = "Mails", action = "Change" });
-    routes.MapRoute(null,
-        template: "mailings/more/{id:required}",
-        defaults: new { controller = "Mailings", action = "More" });
-    routes.MapRoute(null,
-        template: "mailings/setup/{id:required}",
-        defaults: new { controller = "Mailings", action = "Setup" });
-    routes.MapRoute(null,
-        template: "mailings/change/{id:required}",
-        defaults: new { controller = "Mailings", action = "Change" });
-    routes.MapRoute(null,
-        template: "mailings/delete/{id:required}",
-        defaults: new { controller = "Mailings", action = "Delete" });
-    routes.MapRoute(null,
-        template: "sender/settings/{id:required}",
-        defaults: new { controller = "Sender", action = "Settings" });
-    routes.MapRoute(null,
-        template: "sender/response",
-        defaults: new { controller = "Sender", action = "ShowResponse" });
-    routes.MapRoute(null,
-        "{controller=Home}/{action=Index}");
-});
+app.UseMvcWithConfiguredApplicationRoutes(); // already configured routes for application
 
 app.Run();
