@@ -22,7 +22,7 @@ public sealed class ErrorController : Controller
                            $"su={subject}&" +
                            $"body={message}&";
 
-        ViewBag.EmailLing = emailLink;
+        ViewBag.EmailLink = emailLink;
 
         return View((object)path);
     }

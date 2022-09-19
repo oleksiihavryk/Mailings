@@ -8,25 +8,22 @@ namespace Mailings.Web.Controllers;
 [Authorize(AuthorizationPolicyConstants.Admin)]
 public sealed class AdminController : Controller
 {
-    private readonly IBetaTestAuthenticationService _betaTestService;
-
-    public AdminController(IBetaTestAuthenticationService betaTestService)
-    {
-        _betaTestService = betaTestService;
-    }
-
     public ViewResult Panel() => View();
     public ViewResult GenerateAccount() => View();
-    public ViewResult AccountIsGenerated(GeneratedAccountViewModel viewModel)
+    public ViewResult AccountIsGenerated(
+        [FromQuery]GeneratedAccountViewModel viewModel) 
         => View(viewModel);
-    [HttpPost]
-    public async Task<RedirectToActionResult> TryToGenerateAccount()
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<RedirectToActionResult> TryToGenerateAccount(
+        [FromServices]IBetaTestAuthenticationService betaTestService)
     {
-        var acc = await _betaTestService.GenerateAccount();
+        var acc = await betaTestService.GenerateAccount();
 
         var viewModel = new GeneratedAccountViewModel()
         {
-            Email = acc.Email,
+            Email = acc.Email ?? throw new InvalidOperationException(
+                message: "Service is not respond with correct data inside. " +
+                "Impossible error in common situation"),
             Password = acc.Password,
             UserName = acc.Username
         };

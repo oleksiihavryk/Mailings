@@ -18,12 +18,8 @@ public sealed class UserController : Controller
         _accountService = accountService;
     }
 
-    public ViewResult Profile()
-    {
-        var userData = PrepareUserData();
-
-        return View(userData);
-    }
+    public ViewResult Profile() 
+        => View(model: PrepareUserData());
     public ViewResult Change()
     {
         var userData = PrepareUserData();
@@ -35,8 +31,8 @@ public sealed class UserController : Controller
             LastName = userData.LastName,
         });
     }
-    [HttpPost]
-    public async Task<IActionResult> Change(ChangingUserDataViewModel viewModel)
+    [ValidateAntiForgeryToken, HttpPost]
+    public async Task<IActionResult> Change([FromForm]ChangingUserDataViewModel viewModel)
     {
         var userData = PrepareChangingUserData(viewModel);
 

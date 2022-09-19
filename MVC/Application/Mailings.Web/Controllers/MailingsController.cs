@@ -30,7 +30,8 @@ public sealed class MailingsController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> All([FromRoute] int? page = null)
+    public async Task<IActionResult> All(
+        [FromRoute] int? page = null)
     {
         page = page ?? StartPageIndex;
 
@@ -59,22 +60,38 @@ public sealed class MailingsController : Controller
     }
     [HttpGet]
     [ServiceFilter(typeof(MailingsUserSecuredServiceFilter))]
-    public async Task<IActionResult> More([FromRoute] string id)
+    public async Task<ViewResult> More(
+        [FromRoute] string id)
     {
         var dto = RouteData
             .Values[
                 MailingsUserSecuredServiceFilter.CheckedMailingKey] as MailingGroup;
+
+        if (dto == null)
+            throw new InvalidOperationException(
+                "Dto is cannot be null because service filter " +
+                "is checked email group by existing and " + 
+                "returned that into route data.");
+
         var viewModel = await ConvertToViewModelAsync(dto);
 
         return View(viewModel);
     }
     [HttpGet]
     [ServiceFilter(typeof(MailingsUserSecuredServiceFilter))]
-    public async Task<IActionResult> Change([FromRoute]string id)
+    public async Task<ViewResult> Change(
+        [FromRoute]string id)
     {
         var dto = RouteData
             .Values[
                 MailingsUserSecuredServiceFilter.CheckedMailingKey] as MailingGroup;
+
+        if (dto == null)
+            throw new InvalidOperationException(
+                "Dto is cannot be null because service filter " +
+                "is checked email group by existing and " + 
+                "returned that into route data.");
+
         var viewModel = await ConvertToViewModelAsync(dto);
 
         var mails = await GetUserMailsAsync();
@@ -84,7 +101,8 @@ public sealed class MailingsController : Controller
     }
     [HttpGet]
     [ServiceFilter(typeof(MailingsUserSecuredServiceFilter))]
-    public async Task<IActionResult> Delete([FromRoute]string id)
+    public async Task<IActionResult> Delete(
+        [FromRoute]string id)
     {
         try
         {
@@ -103,10 +121,11 @@ public sealed class MailingsController : Controller
         var mails = await GetUserMailsAsync();
         ViewData["Mails"] = mails;
 
-        return View(new MailingViewModel() /*{To = { "amerika@gmail.com" }}*/);
+        return View(new MailingViewModel());
     }
-    [ValidateAntiForgeryToken, HttpPost]
-    public async Task<IActionResult> Create(MailingViewModel viewModel)
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create(
+        [FromForm] MailingViewModel viewModel)
     {
         var mailsTask = GetUserMailsAsync();
 
@@ -153,8 +172,9 @@ public sealed class MailingsController : Controller
 
         return RedirectToAction(nameof(All));
     }
-    [ValidateAntiForgeryToken, HttpPost]
-    public async Task<IActionResult> Change(MailingViewModel viewModel)
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> Change(
+        [FromForm] MailingViewModel viewModel)
     {
         var mailsTask = GetUserMailsAsync();
 
@@ -228,7 +248,6 @@ public sealed class MailingsController : Controller
             Pseudo = pseudo
         };
     }
-
     private async Task<List<MailingMailViewModel>> GetUserMailsAsync()
     {
         var userId = (User.Identity as ClaimsIdentity)?.Claims?
@@ -298,7 +317,7 @@ public sealed class MailingsController : Controller
 
     private class UserData
     {
-        public string UserId { get; set; }
-        public string Pseudo { get; set; }
+        public string UserId { get; init; } = string.Empty;
+        public string Pseudo { get; init; } = string.Empty;
     }
 }

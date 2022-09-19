@@ -60,8 +60,8 @@ public sealed class MailsController : Controller
     [HttpGet]
     [ServiceFilter(typeof(MailsUserSecuredServiceFilter))]
     public async Task<IActionResult> Delete(
-        [FromRoute]string id,
-        [FromRoute]MailTypeViewModel type)
+        [FromRoute] string id,
+        [FromRoute] MailTypeViewModel type)
     {
         try
         {
@@ -81,21 +81,21 @@ public sealed class MailsController : Controller
     }
     [HttpGet]
     [ServiceFilter(typeof(MailsUserSecuredServiceFilter))]
-    public async Task<IActionResult> Change(
+    public ViewResult Change(
         [FromRoute] string id,
-        [FromRoute]MailTypeViewModel type)
+        [FromRoute] MailTypeViewModel type)
     {
         MailViewModel? model = null;
-
-        //var dto = await (type switch
-        //{
-        //    MailTypeViewModel.Text => _textMailsService.GetById(id),
-        //    MailTypeViewModel.Html => _htmlMailsService.GetById(id),
-        //    _ => throw new InvalidOperationException("Unknown type of mail")
-        //});
+        
         var dto = RouteData
             .Values[
                 MailsUserSecuredServiceFilter.CheckedMailKey] as Mail;
+
+        if (dto == null)
+            throw new InvalidOperationException(
+                "Dto is cannot be null because service filter " +
+                "is checked mail by existing in system and " + 
+                "returned that into route data.");
 
         model = ConvertToViewModel(dto, type);
 
@@ -109,7 +109,8 @@ public sealed class MailsController : Controller
         return View(model);
     }
     [ValidateAntiForgeryToken, HttpPost]
-    public async Task<IActionResult> Change([FromForm][FromBody]MailViewModel viewModel)
+    public async Task<IActionResult> Change(
+        [FromForm]MailViewModel viewModel)
     {
         if (GetCountOfBytesInAttachment(viewModel.Attachments) >= 1024 * 1024 * 25) //25 mb
         {
@@ -138,7 +139,7 @@ public sealed class MailsController : Controller
     }
     [ValidateAntiForgeryToken, HttpPost]
     public async Task<IActionResult> Create(
-        [FromForm][FromBody] MailViewModel viewModel)
+        [FromForm] MailViewModel viewModel)
     {
         if (GetCountOfBytesInAttachment(viewModel.Attachments) >= 1024 * 1024 * 25) //25 mb
         {

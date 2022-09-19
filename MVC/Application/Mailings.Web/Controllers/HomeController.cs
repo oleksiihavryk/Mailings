@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Mailings.Web.Shared.SystemConstants;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Mailings.Web.Controllers;
@@ -24,5 +25,7 @@ public sealed class HomeController : Controller
     [Authorize]
     public RedirectToActionResult Login() => RedirectToAction(nameof(Index));
     [Authorize]
-    public SignOutResult Logout() => SignOut("oidc", "Cookies");
+    public SignOutResult Logout() => SignOut(
+        AuthenticationSchemes.OidcScheme, 
+        AuthenticationSchemes.CookiesScheme);
 }

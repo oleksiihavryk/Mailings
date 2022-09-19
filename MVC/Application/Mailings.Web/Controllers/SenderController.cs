@@ -54,8 +54,7 @@ public sealed class SenderController : Controller
 
         return View(result);
     }
-    [HttpPost]
-    [AutoValidateAntiforgeryToken]
+    [HttpPost, AutoValidateAntiforgeryToken]
     public async Task<IActionResult> Send([FromForm] MailingRequestViewModel viewModel)
     {
         if (!ModelState.IsValid)
