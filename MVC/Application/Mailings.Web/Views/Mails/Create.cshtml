@@ -65,12 +65,9 @@
 {
     <script asp-src-include="/lib/**.min.js" asp-src-exclude="**.slim.**js"></script>
     <environment names="development">
-        <script asp-src-include="/js/modules/modal.js"></script>
-        <script asp-src-include="/js/modules/content-uploader.js"></script>
-        <script asp-src-include="/js/createMail.js"></script>
+        <script asp-src-include="/js/bundles/mail.js"></script>
     </environment>
     <environment names="staging, production">
-        <script asp-src-include="/js/modules/content-uploader.min.js"></script>
-        <script asp-src-include="/js/createMail.min.js"></script>
+        <script asp-src-include="/js/bundles/mail.min.js"></script>
     </environment>
 }

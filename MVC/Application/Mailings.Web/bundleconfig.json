@@ -5,5 +5,27 @@
       "wwwroot/css/specific-styles.css",
       "wwwroot/css/base.css"
     ]
+  },
+  {
+    "outputFileName": "wwwroot/js/bundles/copy.js",
+    "inputFiles": [
+      "wwwroot/js/modules/modal.js",
+      "wwwroot/js/copy.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/bundles/create-group.js",
+    "inputFiles": [
+      "wwwroot/js/modules/modal.js",
+      "wwwroot/js/createGroup.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/bundles/mail.js",
+    "inputFiles": [
+      "wwwroot/js/modules/modal.js",
+      "wwwroot/js/modules/content-uploader.js",
+      "wwwroot/js/createMail.js"
+    ]
   }
 ]

@@ -54,11 +54,9 @@
 {
     <script asp-src-include="/lib/**.min.js" asp-src-exclude="**.slim.**js"></script>
     <environment names="development">
-        <script asp-src-include="/js/modules/modal.js"></script>
-        <script asp-src-include="/js/createGroup.js"></script>
+        <script asp-src-include="/js/bundles/group.js"></script>
     </environment>
     <environment names="staging, production">
-        <script asp-src-include="/js/modules/modal.min.js"></script>
-        <script asp-src-include="/js/createGroup.min.js"></script>
+        <script asp-src-include="/js/bundles/group.min.js"></script>
     </environment>
 }

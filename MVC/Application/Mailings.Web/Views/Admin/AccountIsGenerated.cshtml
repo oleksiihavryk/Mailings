@@ -22,11 +22,9 @@
 {
     <script asp-src-include="/lib/**.min.js" asp-src-exclude="**.slim.**js"></script>
     <environment names="development">
-        <script asp-src-include="/js/modules/modal.js"></script>
-        <script asp-src-include="/js/copy.js"></script>
+        <script asp-src-include="/js/bundles/copy.js"></script>
     </environment>
     <environment names="staging, production">
-        <script asp-src-include="/js/modules/modal.min.js"></script>
-        <script asp-src-include="/js/copy.min.js"></script>
+        <script asp-src-include="/js/bundles/copy.min.js"></script>
     </environment>
 }

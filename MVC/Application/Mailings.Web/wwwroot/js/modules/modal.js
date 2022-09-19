@@ -23,7 +23,7 @@
         this["#text"] = text;
     }
 
-    async invokeModalWindow() {
+    invokeModalWindow() {
         const struct = $(`<div id="modal" class="modal-window">` +
             `<div class="modal-block">` +
             `<span id="close" class="button modal-close-button">close</span>` +
