@@ -3,9 +3,17 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Mailings.Web.Controllers;
-
+/// <summary>
+///     Main page and default site functions controller
+/// </summary>
 public sealed class HomeController : Controller
 {
+    /// <summary>
+    ///     Main page action
+    /// </summary>
+    /// <returns>
+    ///     View of main page
+    /// </returns>
     public ViewResult Index()
     {
         string subject = "Mailings beta test access";
@@ -22,8 +30,20 @@ public sealed class HomeController : Controller
 
         return View();
     }
+    /// <summary>
+    ///     Login to site
+    /// </summary>
+    /// <returns>
+    ///     Redirect to main page
+    /// </returns>
     [Authorize]
     public RedirectToActionResult Login() => RedirectToAction(nameof(Index));
+    /// <summary>
+    ///     Logout from site
+    /// </summary>
+    /// <returns>
+    ///     Redirect to main page
+    /// </returns>
     [Authorize]
     public SignOutResult Logout() => SignOut(
         AuthenticationSchemes.OidcScheme, 

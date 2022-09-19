@@ -11,12 +11,24 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Mailings.Web.Controllers;
+/// <summary>
+///     Mails entities controller
+/// </summary>
 [Authorize(AuthorizationPolicyConstants.BetaTest)]
 public sealed class MailsController : Controller
 {
+    /// <summary>
+    ///     Pagination started page anchor 
+    /// </summary>
     public const int StartPageIndex = 1;
 
+    /// <summary>
+    ///     Html mails service
+    /// </summary>
     private readonly IHtmlMailsResourceService _htmlMailsService;
+    /// <summary>
+    ///     Text mails service
+    /// </summary>
     private readonly ITextMailsResourceService _textMailsService;
 
     public MailsController(
@@ -27,6 +39,15 @@ public sealed class MailsController : Controller
         _textMailsService = textMailsService;
     }
 
+    /// <summary>
+    ///     Get all mail entities by user in view
+    /// </summary>
+    /// <param name="page">
+    ///     Index of current page
+    /// </param>
+    /// <returns>
+    ///     View of all groups 
+    /// </returns>
     [HttpGet]
     public async Task<IActionResult> All([FromRoute]int? page = null)
     {
@@ -55,8 +76,29 @@ public sealed class MailsController : Controller
 
         return View(viewMails);
     }
+    /// <summary>
+    ///     View for created a mail by form input
+    /// </summary>
+    /// <returns>
+    ///     View with form for creating a mail
+    /// </returns>
     [HttpGet]
     public ViewResult Create() => View(new MailViewModel());
+    /// <summary>
+    ///     Delete a mail with current type and identifier
+    /// </summary>
+    /// <param name="id">
+    ///     Identifier of mail what was be deleted
+    /// </param>
+    /// <param name="type">
+    ///     Type of mail what was be deleted
+    /// </param>
+    /// <returns>
+    ///     Redirect to action with all mails
+    /// </returns>
+    /// <exception cref="InvalidOperationException">
+    ///     Occurred when mail type is unsupported with this action
+    /// </exception>
     [HttpGet]
     [ServiceFilter(typeof(MailsUserSecuredServiceFilter))]
     public async Task<IActionResult> Delete(
@@ -79,6 +121,22 @@ public sealed class MailsController : Controller
 
         return RedirectToAction(nameof(All));
     }
+    /// <summary>
+    ///     Changing of mail with chosen identifier and type with form
+    /// </summary>
+    /// <param name="id">
+    ///     Identifier of mail what was be changed
+    /// </param>
+    /// <param name="type">
+    ///     Type of mail what was be changed
+    /// </param>
+    /// <returns>
+    ///     View with form to changing mail
+    /// </returns>
+    /// <exception cref="InvalidOperationException">
+    ///     Occurred if service filter is worked incorrect and not return into
+    ///     route data find by identifier model
+    /// </exception>
     [HttpGet]
     [ServiceFilter(typeof(MailsUserSecuredServiceFilter))]
     public ViewResult Change(
@@ -108,6 +166,18 @@ public sealed class MailsController : Controller
 
         return View(model);
     }
+    /// <summary>
+    ///     Changing a mail from form input
+    /// </summary>
+    /// <param name="viewModel">
+    ///     Form input view model
+    /// </param>
+    /// <returns>
+    ///     Redirect to action with all mails
+    /// </returns>
+    /// <exception cref="InvalidOperationException">
+    ///     Occurred when mail type in view model is unhandled with this action
+    /// </exception>
     [ValidateAntiForgeryToken, HttpPost]
     public async Task<IActionResult> Change(
         [FromForm]MailViewModel viewModel)
@@ -137,6 +207,18 @@ public sealed class MailsController : Controller
 
         return RedirectToAction(nameof(All));
     }
+    /// <summary>
+    ///     Create a mail with input from form
+    /// </summary>
+    /// <param name="viewModel">
+    ///     Form input view model
+    /// </param>
+    /// <returns>
+    ///     Redirect to action with all mails
+    /// </returns>
+    /// <exception cref="InvalidOperationException">
+    ///     Occurred when mail type in view model is unhandled with this action
+    /// </exception>
     [ValidateAntiForgeryToken, HttpPost]
     public async Task<IActionResult> Create(
         [FromForm] MailViewModel viewModel)
@@ -162,9 +244,32 @@ public sealed class MailsController : Controller
         return RedirectToAction(nameof(All));
     }
 
+    /// <summary>
+    ///     Get count of bytes in attachments
+    /// </summary>
+    /// <param name="attachments">
+    ///     List of attachments from form
+    /// </param>
+    /// <returns>
+    ///     Number of all bytes in attachments
+    /// </returns>
     private long GetCountOfBytesInAttachment(List<IFormFile> attachments)
         => attachments.Sum(a => a.Length);
-    private MailViewModel ConvertToViewModel(Mail dto, MailTypeViewModel type)
+    /// <summary>
+    ///     Convert mail from model object to view model
+    /// </summary>
+    /// <param name="dto">
+    ///     Mail object model
+    /// </param>
+    /// <param name="type">
+    ///     Type of mail
+    /// </param>
+    /// <returns>
+    ///     View model of object
+    /// </returns>
+    private MailViewModel ConvertToViewModel(
+        Mail dto,
+        MailTypeViewModel type)
     {
         var model = new MailViewModel()
         {
@@ -194,6 +299,18 @@ public sealed class MailsController : Controller
 
         return model;
     }
+    /// <summary>
+    ///     Prepare mail with view model
+    /// </summary>
+    /// <param name="viewModel">
+    ///     View model for preparing service model object
+    /// </param>
+    /// <returns>
+    ///     Mail service object
+    /// </returns>
+    /// <exception cref="InvalidOperationException">
+    ///     Occurred when user is not logged in system
+    /// </exception>
     private async Task<Mail> PrepareMailDtoAsync(MailViewModel viewModel)
     {
         var mailDto = new Mail()
@@ -234,6 +351,15 @@ public sealed class MailsController : Controller
 
         return mailDto;
     }
+    /// <summary>
+    ///     Get all user mails of current user
+    /// </summary>
+    /// <returns>
+    ///     All mails of user
+    /// </returns>
+    /// <exception cref="InvalidOperationException">
+    ///     Occurred when user is not logged in system
+    /// </exception>
     private async Task<ImmutableSortedDictionary<Mail, MailTypeViewModel>> GetUserMails()
     {
         var userId = (User.Identity as ClaimsIdentity)?.Claims?

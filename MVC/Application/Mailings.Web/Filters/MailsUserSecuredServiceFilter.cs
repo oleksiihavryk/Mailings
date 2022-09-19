@@ -5,11 +5,23 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Mailings.Web.Filters;
+/// <summary>
+///     Service for checking of user access to defined mail groups by identifier
+/// </summary>
 public class MailsUserSecuredServiceFilter : UserSecuredServiceFilter
 {
+    /// <summary>
+    ///     Key of checked mails
+    /// </summary>
     public const string CheckedMailKey = "checked mail key";
 
+    /// <summary>
+    ///     Html mails service
+    /// </summary>
     private readonly IHtmlMailsResourceService _htmlMailsResourceService;
+    /// <summary>
+    ///     Text mails service
+    /// </summary>
     private readonly ITextMailsResourceService _textMailsResourceService;
 
     public MailsUserSecuredServiceFilter(
@@ -20,6 +32,18 @@ public class MailsUserSecuredServiceFilter : UserSecuredServiceFilter
         _textMailsResourceService = textMailsResourceService;
     }
 
+    /// <summary>
+    ///     Checking id of mail on access to current user
+    /// </summary>
+    /// <param name="context">
+    ///     Context of user request
+    /// </param>
+    /// <returns>
+    ///     Task of async operation by checking identifier of mail for user
+    /// </returns>
+    /// <exception cref="InvalidOperationException">
+    ///     Occurred when filter was been applied unsuccessfully to action
+    /// </exception>
     public override async Task OnAuthorizationAsync(AuthorizationFilterContext context)
     {
         var id = GetUserId(context);

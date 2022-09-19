@@ -10,13 +10,28 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Mailings.Web.Controllers;
+/// <summary>
+///     Mailings entities controller
+/// </summary>
 [Authorize(AuthorizationPolicyConstants.BetaTest)]
 public sealed class MailingsController : Controller
 {
+    /// <summary>
+    ///     Pagination started page anchor 
+    /// </summary>
     public const int StartPageIndex = 1;
 
+    /// <summary>
+    ///     Groups service
+    /// </summary>
     private readonly IMailingGroupsResourceService _groupsResourceService;
+    /// <summary>
+    ///     Text mails service
+    /// </summary>
     private readonly ITextMailsResourceService _textMailsResourceService;
+    /// <summary>
+    ///     Html mails service
+    /// </summary>
     private readonly IHtmlMailsResourceService _htmlMailsResourceService;
 
     public MailingsController(
@@ -28,7 +43,15 @@ public sealed class MailingsController : Controller
         _textMailsResourceService = textMailsResourceService;
         _htmlMailsResourceService = htmlMailsResourceService;
     }
-
+    /// <summary>
+    ///     Get all group entities by user in view
+    /// </summary>
+    /// <param name="page">
+    ///     Index of current page
+    /// </param>
+    /// <returns>
+    ///     View of all groups 
+    /// </returns>
     [HttpGet]
     public async Task<IActionResult> All(
         [FromRoute] int? page = null)
@@ -58,6 +81,18 @@ public sealed class MailingsController : Controller
 
         return View(viewMails);
     }
+    /// <summary>
+    ///     View with chosen group options
+    /// </summary>
+    /// <param name="id">
+    ///     Identifier of chosen group
+    /// </param>
+    /// <returns>
+    ///     View of group options
+    /// </returns>
+    /// <exception cref="InvalidOperationException">
+    ///     Occurred when service filter is working incorrect
+    /// </exception>
     [HttpGet]
     [ServiceFilter(typeof(MailingsUserSecuredServiceFilter))]
     public async Task<ViewResult> More(
@@ -77,6 +112,18 @@ public sealed class MailingsController : Controller
 
         return View(viewModel);
     }
+    /// <summary>
+    ///     Change some data in mailing group
+    /// </summary>
+    /// <param name="id">
+    ///     Identifier of chosen mailing group
+    /// </param>
+    /// <returns>
+    ///     Redirect to action with all mailing group
+    /// </returns>
+    /// <exception cref="InvalidOperationException">
+    ///     Occurred when service filter is working incorrect
+    /// </exception>
     [HttpGet]
     [ServiceFilter(typeof(MailingsUserSecuredServiceFilter))]
     public async Task<ViewResult> Change(
@@ -99,6 +146,15 @@ public sealed class MailingsController : Controller
 
         return View(viewModel);
     }
+    /// <summary>
+    ///     Delete chosen mailing group from system
+    /// </summary>
+    /// <param name="id">
+    ///     Identifier of mailing group what will be deleted
+    /// </param>
+    /// <returns>
+    ///     Redirect ot action with all mailing groups
+    /// </returns>
     [HttpGet]
     [ServiceFilter(typeof(MailingsUserSecuredServiceFilter))]
     public async Task<IActionResult> Delete(
@@ -115,6 +171,12 @@ public sealed class MailingsController : Controller
 
         return RedirectToAction(nameof(All));
     }
+    /// <summary>
+    ///     View for creating mailing group
+    /// </summary>
+    /// <returns>
+    ///     View with form for creating mailing group
+    /// </returns>
     [HttpGet]
     public async Task<ViewResult> Create()
     {
@@ -123,6 +185,15 @@ public sealed class MailingsController : Controller
 
         return View(new MailingViewModel());
     }
+    /// <summary>
+    ///     Creating mailing group by form input
+    /// </summary>
+    /// <param name="viewModel">
+    ///     View model of mailing group from form
+    /// </param>
+    /// <returns>
+    ///     Redirect to action with all mailing groups
+    /// </returns>
     [HttpPost, ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(
         [FromForm] MailingViewModel viewModel)
@@ -154,9 +225,15 @@ public sealed class MailingsController : Controller
         var userData = GetUserData();
         var mails = await mailsTask;
         var mail = mails
-                       .FirstOrDefault(m => m.Id == viewModel.Mail.Id) ??
-                   throw new InvalidOperationException(
-                       "Mail is currently does not exist in system.");
+            .FirstOrDefault(m => m.Id == viewModel.Mail.Id);
+
+        if (mail == null)
+        {
+            ModelState.AddModelError(string.Empty,
+                errorMessage: "While mailing group is creating, mail of current " +
+                              "mailing group is deleted. Try again with another mail.");
+            return View(viewModel);
+        }
 
         var dto = new MailingGroup()
         {
@@ -172,6 +249,15 @@ public sealed class MailingsController : Controller
 
         return RedirectToAction(nameof(All));
     }
+    /// <summary>
+    ///     Changing created mailing group by form input
+    /// </summary>
+    /// <param name="viewModel">
+    ///     View model of mailing group from form
+    /// </param>
+    /// <returns>
+    ///     Redirect to action with all mailing groups
+    /// </returns>
     [HttpPost, ValidateAntiForgeryToken]
     public async Task<IActionResult> Change(
         [FromForm] MailingViewModel viewModel)
@@ -203,9 +289,15 @@ public sealed class MailingsController : Controller
         var userData = GetUserData();
         var mails = await mailsTask;
         var mail = mails
-                       .FirstOrDefault(m => m.Id == viewModel.Mail.Id) ??
-                   throw new InvalidOperationException(
-                       "Mail is currently does not exist in system.");
+            .FirstOrDefault(m => m.Id == viewModel.Mail.Id);
+
+        if (mail == null)
+        {
+            ModelState.AddModelError(string.Empty,
+                errorMessage: "While mailing group is creating, mail of current " +
+                              "mailing group is deleted. Try again with another mail.");
+            return View(viewModel);
+        }
 
         var dto = new MailingGroup()
         {
@@ -223,6 +315,15 @@ public sealed class MailingsController : Controller
         return RedirectToAction(nameof(All));
     }
 
+    /// <summary>
+    ///     Get authenticated user data
+    /// </summary>
+    /// <returns>
+    ///     UserData object with encapsulated user data
+    /// </returns>
+    /// <exception cref="InvalidOperationException">
+    ///     Occurred if user is not authenticate in system
+    /// </exception>
     private UserData GetUserData()
     {
         var userClaims = (User.Identity as ClaimsIdentity)?
@@ -248,6 +349,15 @@ public sealed class MailingsController : Controller
             Pseudo = pseudo
         };
     }
+    /// <summary>
+    ///     Get from system all mails by current user
+    /// </summary>
+    /// <returns>
+    ///     Mails list of user 
+    /// </returns>
+    /// <exception cref="InvalidOperationException">
+    ///     Occurred if user is not authenticate in system
+    /// </exception>
     private async Task<List<MailingMailViewModel>> GetUserMailsAsync()
     {
         var userId = (User.Identity as ClaimsIdentity)?.Claims?
@@ -276,6 +386,16 @@ public sealed class MailingsController : Controller
 
         return mails;
     }
+    /// <summary>
+    ///     Convert from model object to view model
+    /// </summary>
+    /// <param name="dto">
+    ///     Model object what has been converted
+    /// </param>
+    /// <returns>
+    ///     View model of mailing group
+    /// </returns>
+    /// <exception cref="InvalidOperationException"></exception>
     private async Task<MailingViewModel> ConvertToViewModelAsync(MailingGroup dto)
         => new MailingViewModel
         {
@@ -293,6 +413,18 @@ public sealed class MailingsController : Controller
                 _ => throw new InvalidOperationException("Unknown mail type")
             }
         };
+    /// <summary>
+    ///     Convert mail from object model to view model
+    /// </summary>
+    /// <param name="dto">
+    ///     Object model what has been converted
+    /// </param>
+    /// <param name="type">
+    ///     Type of mail
+    /// </param>
+    /// <returns>
+    ///     View model of mail
+    /// </returns>
     private MailingMailViewModel ConvertMailToViewModel(
         Mail dto,
         MailTypeViewModel type)
@@ -302,6 +434,15 @@ public sealed class MailingsController : Controller
             Theme = dto.Theme,
             Type = type.ToString()
         };
+    /// <summary>
+    ///     Get all mailing groups by user
+    /// </summary>
+    /// <returns>
+    ///     Mailing groups enumerable
+    /// </returns>
+    /// <exception cref="InvalidOperationException">
+    ///     Occurred when user is not logged in system
+    /// </exception>
     private async Task<IEnumerable<MailingGroup>> GetMailingsByUser()
     {
         var userId = (User.Identity as ClaimsIdentity)?.Claims
@@ -315,9 +456,18 @@ public sealed class MailingsController : Controller
         return groups;
     }
 
+    /// <summary>
+    ///     Class of encapsulated user data
+    /// </summary>
     private class UserData
     {
+        /// <summary>
+        ///     Identifier of user
+        /// </summary>
         public string UserId { get; init; } = string.Empty;
+        /// <summary>
+        ///     Pseudo of user
+        /// </summary>
         public string Pseudo { get; init; } = string.Empty;
     }
 }

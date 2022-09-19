@@ -7,10 +7,15 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Mailings.Web.Controllers;
-
+/// <summary>
+///     User profile controller
+/// </summary>
 [Authorize]
 public sealed class UserController : Controller
 {
+    /// <summary>
+    ///     Account controller service
+    /// </summary>
     private readonly IAccountAuthenticationService _accountService;
 
     public UserController(IAccountAuthenticationService accountService)
@@ -18,8 +23,19 @@ public sealed class UserController : Controller
         _accountService = accountService;
     }
 
-    public ViewResult Profile() 
-        => View(model: PrepareUserData());
+    /// <summary>
+    ///     User profile view
+    /// </summary>
+    /// <returns>
+    ///     View of user profile
+    /// </returns>
+    public ViewResult Profile() => View(model: PrepareUserData());
+    /// <summary>
+    ///     View for changing profile data
+    /// </summary>
+    /// <returns>
+    ///     View with form for changing profile data
+    /// </returns>
     public ViewResult Change()
     {
         var userData = PrepareUserData();
@@ -31,6 +47,15 @@ public sealed class UserController : Controller
             LastName = userData.LastName,
         });
     }
+    /// <summary>
+    ///     Changing profile data by form input
+    /// </summary>
+    /// <param name="viewModel">
+    ///     Form input view model
+    /// </param>
+    /// <returns>
+    ///     Logout from system and changing profile data
+    /// </returns>
     [ValidateAntiForgeryToken, HttpPost]
     public async Task<IActionResult> Change([FromForm]ChangingUserDataViewModel viewModel)
     {
@@ -41,6 +66,18 @@ public sealed class UserController : Controller
         return RedirectToAction("Logout", "Home");
     }
 
+    /// <summary>
+    ///     Prepare to changing user data 
+    /// </summary>
+    /// <param name="viewModel">
+    ///     View model from form to changing user data
+    /// </param>
+    /// <returns>
+    ///     Model service user data
+    /// </returns>
+    /// <exception cref="InvalidOperationException">
+    ///     Occurred when user is not logged in system
+    /// </exception>
     private UserData PrepareChangingUserData(ChangingUserDataViewModel viewModel)
     {
         var userClaims = (User.Identity as ClaimsIdentity)?.Claims;
@@ -75,6 +112,15 @@ public sealed class UserController : Controller
 
         return userDataDto;
     }
+    /// <summary>
+    ///     Prepare user data from authenticate user claims
+    /// </summary>
+    /// <returns>
+    ///     View model of user data
+    /// </returns>
+    /// <exception cref="InvalidOperationException">
+    ///     Occurred when user is not authentication in system
+    /// </exception>
     private UserDataViewModel PrepareUserData()
     {
         var userClaims = (User.Identity as ClaimsIdentity)?.Claims;

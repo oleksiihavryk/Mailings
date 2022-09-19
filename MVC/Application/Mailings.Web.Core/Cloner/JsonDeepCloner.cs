@@ -1,5 +1,4 @@
-﻿using Mailings.Web.Shared.Exceptions;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using ObjectCloneException = Mailings.Web.Core.Exceptions.ObjectCloneException;
 
 namespace Mailings.Web.Core.Cloner;

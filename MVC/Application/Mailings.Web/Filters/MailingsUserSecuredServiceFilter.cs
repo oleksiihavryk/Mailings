@@ -5,10 +5,19 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Mailings.Web.Filters;
+/// <summary>
+///     Service for checking of user access to defined mailing groups by identifier
+/// </summary>
 public class MailingsUserSecuredServiceFilter : UserSecuredServiceFilter
 {
+    /// <summary>
+    ///     Key of checked mailing group
+    /// </summary>
     public const string CheckedMailingKey = "checked mail key";
 
+    /// <summary>
+    ///     Mailing groups service
+    /// </summary>
     private readonly IMailingGroupsResourceService _groupsResourceService;
 
     public MailingsUserSecuredServiceFilter(
@@ -17,6 +26,18 @@ public class MailingsUserSecuredServiceFilter : UserSecuredServiceFilter
         _groupsResourceService = groupsResourceService;
     }
 
+    /// <summary>
+    ///     Checking id of mailing group on access to current user
+    /// </summary>
+    /// <param name="context">
+    ///     Context of user request
+    /// </param>
+    /// <returns>
+    ///     Task of async operation by checking identifier of mailing group for user
+    /// </returns>
+    /// <exception cref="InvalidOperationException">
+    ///     Occurred when filter was been applied unsuccessfully to action
+    /// </exception>
     public override async Task OnAuthorizationAsync(AuthorizationFilterContext context)
     {
         var id = GetUserId(context);

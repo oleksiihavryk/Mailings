@@ -2,8 +2,17 @@
 using Microsoft.AspNetCore.Mvc;
 
 namespace Mailings.Web.Controllers;
+/// <summary>
+///     Error handler controller
+/// </summary>
 public sealed class ErrorController : Controller
 {
+    /// <summary>
+    ///     Error handler action
+    /// </summary>
+    /// <returns>
+    ///     View of error
+    /// </returns>
     public ViewResult Index()
     {
         var eh = HttpContext.RequestServices

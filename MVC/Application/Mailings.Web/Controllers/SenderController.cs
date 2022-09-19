@@ -7,9 +7,15 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Mailings.Web.Controllers;
+/// <summary>
+///     Controller of sender and configuration mailing groups
+/// </summary>
 [Authorize(AuthorizationPolicyConstants.BetaTest)]
 public sealed class SenderController : Controller
 {
+    /// <summary>
+    ///     Mailings sender service
+    /// </summary>
     private readonly IMailingsSenderResourceService _senderResourceService;
 
     public SenderController(IMailingsSenderResourceService senderResourceService)
@@ -17,6 +23,18 @@ public sealed class SenderController : Controller
         _senderResourceService = senderResourceService;
     }
 
+    /// <summary>
+    ///     View form for setting mailing group
+    /// </summary>
+    /// <param name="id">
+    ///     Identifier of mailing group what was be configured
+    /// </param>
+    /// <returns>
+    ///     View with form for configuration mailing group
+    /// </returns>
+    /// <exception cref="InvalidOperationException">
+    ///     Occurred when service filter is working incorrect
+    /// </exception>
     [HttpGet]
     [ServiceFilter(typeof(MailingsUserSecuredServiceFilter))]
     public ViewResult Settings([FromRoute]string id)
@@ -36,6 +54,15 @@ public sealed class SenderController : Controller
         };
         return View(viewModel);
     }
+    /// <summary>
+    ///     Show view response from mailing group configuration
+    /// </summary>
+    /// <param name="result">
+    ///     Result of group configuration from service
+    /// </param>
+    /// <returns>
+    ///     Mailing configuration response view
+    /// </returns>
     [HttpGet]
     public ViewResult ShowResponse([FromQuery] MailingResponseViewModel result)
     {
@@ -54,6 +81,15 @@ public sealed class SenderController : Controller
 
         return View(result);
     }
+    /// <summary>
+    ///     Configuration of mailing group by form input
+    /// </summary>
+    /// <param name="viewModel">
+    ///     View model from form input
+    /// </param>
+    /// <returns>
+    ///     Redirection to action for showing response of configurated
+    /// </returns>
     [HttpPost, AutoValidateAntiforgeryToken]
     public async Task<IActionResult> Send([FromForm] MailingRequestViewModel viewModel)
     {
