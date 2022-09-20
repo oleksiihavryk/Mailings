@@ -1,6 +1,10 @@
-﻿using Mailings.Web.Shared.StaticData;
+﻿using Mailings.Web.Core.Services.Interfaces;
+using Mailings.Web.Shared.StaticData;
 
 namespace Mailings.Web.Core.Services.Core;
+/// <summary>
+///     Service which make a request to authentication service
+/// </summary>
 public class AuthenticationService : BaseService
 {
     public AuthenticationService( 
@@ -12,6 +16,15 @@ public class AuthenticationService : BaseService
     {
     }
 
+    /// <summary>
+    ///     Sending service request to authentication service and receive raw response
+    /// </summary>
+    /// <param name="request">
+    ///     Service request
+    /// </param>
+    /// <returns>
+    ///     Http response message object
+    /// </returns>
     public override async Task<HttpResponseMessage> SendAndReceiveRawAsync(
         ServiceRequest request)
     {

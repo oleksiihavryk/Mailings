@@ -3,12 +3,18 @@ using System.Net.Http.Json;
 using System.Security.Authentication;
 using IdentityModel;
 using IdentityModel.Client;
+using Mailings.Web.Core.Services.Interfaces;
 using Mailings.Web.Shared.StaticData;
 
 namespace Mailings.Web.Core.Services.Core;
-
+/// <summary>
+///     Implementation of authentication service request mode
+/// </summary>
 public class AuthenticationRequestMode : IAuthServiceRequestMode
 {
+    /// <summary>
+    ///     Http client 
+    /// </summary>
     protected readonly HttpClient _client;
 
     public AuthenticationRequestMode(
@@ -16,7 +22,22 @@ public class AuthenticationRequestMode : IAuthServiceRequestMode
     {
         _client = clientFactory.CreateClient();
     }
-
+    
+    /// <summary>
+    ///     Mode implementation of authentication service request
+    /// </summary>
+    /// <param name="request">
+    ///     Service request
+    /// </param>
+    /// <param name="serviceUri">
+    ///     Uri of service 
+    /// </param>
+    /// <param name="options">
+    ///     Authentication options action
+    /// </param>
+    /// <returns>
+    ///     Http request message object
+    /// </returns>
     public virtual async Task<HttpRequestMessage> SetupAuthRequestMessageAsync(
         ServiceRequest request, 
         Uri serviceUri,
@@ -33,6 +54,19 @@ public class AuthenticationRequestMode : IAuthServiceRequestMode
         return hrm;
     }
 
+    /// <summary>
+    ///     Implementation of template method pattern
+    ///     Configure request message uri and other common things...
+    /// </summary>
+    /// <param name="httpRequestMessage">
+    ///     Configuring request message
+    /// </param>
+    /// <param name="serviceUri">
+    ///     URI of service
+    /// </param>
+    /// <param name="request">
+    ///     Service request
+    /// </param>
     protected virtual void ConfigureCommon(
         HttpRequestMessage httpRequestMessage, 
         Uri serviceUri,
@@ -48,6 +82,16 @@ public class AuthenticationRequestMode : IAuthServiceRequestMode
 
         httpRequestMessage.RequestUri = new Uri(uri);
     }
+    /// <summary>
+    ///     Implementation of template method pattern
+    ///     Configure request message header
+    /// </summary>
+    /// <param name="httpRequestMessage">
+    ///     Configuring request message
+    /// </param>
+    /// <param name="request">
+    ///     Service request
+    /// </param>
     protected virtual void ConfigureHead(
         HttpRequestMessage httpRequestMessage,
         ServiceRequest request)
@@ -58,6 +102,16 @@ public class AuthenticationRequestMode : IAuthServiceRequestMode
             .Add(new MediaTypeWithQualityHeaderValue("application/json"));
         httpRequestMessage.Method = request.Method;
     }
+    /// <summary>
+    ///     Implementation of template method pattern
+    ///     Configure request message body
+    /// </summary>
+    /// <param name="httpRequestMessage">
+    ///     Configuring request message
+    /// </param>
+    /// <param name="request">
+    ///     Service request
+    /// </param>
     protected virtual void ConfigureBody(
         HttpRequestMessage httpRequestMessage,
         ServiceRequest request)
@@ -71,6 +125,16 @@ public class AuthenticationRequestMode : IAuthServiceRequestMode
                 mediaType: new MediaTypeHeaderValue("application/json"));
         }
     }
+    /// <summary>
+    ///     Implementation of template method pattern
+    ///     Configure request message header
+    /// </summary>
+    /// <param name="httpRequestMessage">
+    ///     Configuring request message
+    /// </param>
+    /// <param name="authOptions">
+    ///     Authentication options object
+    /// </param>
     protected virtual async Task ConfigureAuthentication(
         HttpRequestMessage httpRequestMessage,
         AuthenticationOptions authOptions)
@@ -95,6 +159,15 @@ public class AuthenticationRequestMode : IAuthServiceRequestMode
         httpRequestMessage.SetBearerToken(tokenResponse.AccessToken);
     }
 
+    /// <summary>
+    ///     Get authentication options object from options action
+    /// </summary>
+    /// <param name="options">
+    ///     Authentication action options
+    /// </param>
+    /// <returns>
+    ///     Authentication options object
+    /// </returns>
     private AuthenticationOptions GetOptions(
         Action<AuthenticationOptions> options)
     {

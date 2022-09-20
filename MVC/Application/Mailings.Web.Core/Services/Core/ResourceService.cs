@@ -1,4 +1,5 @@
-﻿using Mailings.Web.Shared.StaticData;
+﻿using Mailings.Web.Core.Services.Interfaces;
+using Mailings.Web.Shared.StaticData;
 
 namespace Mailings.Web.Core.Services.Core;
 

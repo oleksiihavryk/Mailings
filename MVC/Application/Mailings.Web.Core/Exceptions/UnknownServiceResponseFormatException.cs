@@ -1,6 +1,9 @@
 ﻿using System.Runtime.Serialization;
 
 namespace Mailings.Web.Core.Exceptions;
+/// <summary>
+///     Unknown service response format exception model
+/// </summary>
 [Serializable]
 public sealed class UnknownServiceResponseFormatException : Exception
 {

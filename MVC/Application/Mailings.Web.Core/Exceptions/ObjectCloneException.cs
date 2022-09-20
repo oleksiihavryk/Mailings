@@ -4,10 +4,19 @@ using Mailings.Web.Core.Cloner;
 using Mailings.Web.Shared.Extensions;
 
 namespace Mailings.Web.Core.Exceptions;
+/// <summary>
+///     Object clone exception model
+/// </summary>
 [Serializable]
 public sealed class ObjectCloneException : Exception
 {
+    /// <summary>
+    ///     Object what will be cloned
+    /// </summary>
     private readonly object? _object;
+    /// <summary>
+    ///     Cloning service
+    /// </summary>
     private readonly IDeepCloner _deepCloner;
 
     public override IDictionary Data => new Dictionary<string, object?>()
@@ -15,7 +24,6 @@ public sealed class ObjectCloneException : Exception
         ["cloning object"] = _object,
         ["cloner"] = _deepCloner
     };
-
     public override string Message => base.Message ??
                                       "Error occurred when trying to clone object in " +
                                       $"{_deepCloner.GetType()} cloner. " +

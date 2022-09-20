@@ -1,4 +1,7 @@
 ﻿namespace Mailings.Web.Core.Exceptions;
+/// <summary>
+///     Object not found exception model
+/// </summary>
 [Serializable]
 public class ObjectNotFoundException : Exception
 {

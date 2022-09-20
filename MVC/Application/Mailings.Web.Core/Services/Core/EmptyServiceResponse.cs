@@ -1,4 +1,7 @@
 ﻿namespace Mailings.Web.Core.Services.Core;
+/// <summary>
+///     Service response object with not object in body
+/// </summary>
 public class EmptyServiceResponse : ServiceResponse<object>
 {
     public EmptyServiceResponse()

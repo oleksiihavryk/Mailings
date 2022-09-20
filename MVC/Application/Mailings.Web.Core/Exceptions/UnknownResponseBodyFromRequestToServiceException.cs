@@ -3,16 +3,21 @@ using System.Runtime.Serialization;
 using Mailings.Web.Shared.Extensions;
 
 namespace Mailings.Web.Core.Exceptions;
+/// <summary>
+///     Unknown body response from request exception model
+/// </summary>
 [Serializable]
 public sealed class UnknownResponseBodyFromRequestToServiceException : Exception
 {
+    /// <summary>
+    ///     Service name
+    /// </summary>
     private readonly string _nameOfService;
 
     public override IDictionary Data => new Dictionary<string, object>()
     {
         ["service name"] = _nameOfService
     };
-
     public override string Message => base.Message ??
                                       $"Unknown body response from service {_nameOfService}";
 
