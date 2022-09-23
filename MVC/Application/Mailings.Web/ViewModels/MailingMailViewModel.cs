@@ -13,9 +13,9 @@ public sealed class MailingMailViewModel
     /// <summary>
     ///     Mail theme
     /// </summary>
-    [Required] public string Theme { get; set; } = string.Empty;
+    public string Theme { get; set; } = string.Empty;
     /// <summary>
     ///     Mail type
     /// </summary>
-    [Required] public string Type { get; set; } = string.Empty;
+    public string Type { get; set; } = string.Empty;
 }

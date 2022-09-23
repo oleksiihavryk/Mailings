@@ -21,7 +21,7 @@
                 <select asp-for="Mail.Id"
                         asp-items="@(new SelectList(
                                        items: ViewData["Mails"] as 
-                                            IEnumerable<MailingMailViewModel>, 
+                                           IEnumerable<MailingMailViewModel>, 
                                        dataValueField: nameof(MailingMailViewModel.Id),
                                        dataTextField: nameof(MailingMailViewModel.Theme)))">
                 </select>
