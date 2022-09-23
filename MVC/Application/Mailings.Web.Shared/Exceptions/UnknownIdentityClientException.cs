@@ -1,6 +1,7 @@
-﻿using System.Runtime.Serialization;
-
-namespace Mailings.Web.Shared.Exceptions;
+﻿namespace Mailings.Web.Shared.Exceptions;
+/// <summary>
+///     Unknown identity client exception model
+/// </summary>
 [Serializable]
 public sealed class UnknownIdentityClientException : Exception
 {
